@@ -1,0 +1,4 @@
+result_id,user_id,lesson_id,score,completed_at
+R1,U1,L1,80,2025-11-09T10:00:00Z
+R2,U2,L2,90,2025-11-09T10:30:00Z
+R3,U3,L3,100,2025-11-09T11:00:00Z

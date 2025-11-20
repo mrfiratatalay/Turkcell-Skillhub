@@ -1,0 +1,4 @@
+user_id,name,city,university,skill_level,total_points,badge_count
+U1,Ayşe,Istanbul,ITU,Beginner,120,2
+U2,Ali,Ankara,METU,Intermediate,250,3
+U3,Deniz,Izmir,Ege University,Advanced,400,4
