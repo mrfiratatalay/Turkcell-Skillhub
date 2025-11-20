@@ -14,11 +14,9 @@ import {
   Avatar,
   Chip,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   alpha,
-  Grid,
 } from '@mui/material';
 import {
   EmojiEvents as TrophyIcon,
@@ -33,11 +31,14 @@ import { LeaderboardSkeleton } from '../components/LoadingSkeletons';
 const Leaderboard = () => {
   const { user } = useAuth();
   const [cityFilter, setCityFilter] = useState<string>('');
-  const { data: leaderboard, isLoading } = useLeaderboard(
-    cityFilter ? { city: cityFilter } : undefined
-  );
+  
+  // Backend'den tüm veriyi al (filtreyi frontend'de yapacağız)
+  const { data: leaderboard, isLoading } = useLeaderboard();
 
-  const cities = ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Antalya'];
+  // Backend'den gelen unique şehirleri al
+  const cities = Array.from(
+    new Set(leaderboard?.map((entry) => entry.city).filter(Boolean))
+  ).sort();
 
   const getRankGradient = (rank: number) => {
     switch (rank) {
@@ -70,9 +71,16 @@ const Leaderboard = () => {
   }
 
   // Backend'den duplicate veriler gelebiliyor - unique yap (userId bazlı)
-  const uniqueLeaderboard = leaderboard?.filter((entry, index, self) =>
-    index === self.findIndex((e) => e.userId === entry.userId)
-  ).sort((a, b) => (a.rank || 0) - (b.rank || 0));
+  const uniqueLeaderboard = leaderboard
+    ?.filter((entry, index, self) =>
+      index === self.findIndex((e) => e.userId === entry.userId)
+    )
+    // City filter uygula (case-insensitive)
+    .filter((entry) => {
+      if (!cityFilter) return true;
+      return entry.city?.toLowerCase() === cityFilter.toLowerCase();
+    })
+    .sort((a, b) => (a.rank || 0) - (b.rank || 0));
 
   const userRank = uniqueLeaderboard?.findIndex((entry) => entry.userId === user?.userId);
   const userEntry = userRank !== undefined && userRank >= 0 ? uniqueLeaderboard?.[userRank] : null;
@@ -219,58 +227,61 @@ const Leaderboard = () => {
         </Card>
       )}
 
-      {/* Filter */}
-      <Card
-        elevation={0}
-        sx={{
-          mb: 3,
-          borderRadius: 4,
-          border: `2px solid ${alpha('#000', 0.08)}`,
-        }}
-      >
-        <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <FilterIcon sx={{ fontSize: 22, color: '#FFF' }} />
-                </Box>
-                <Typography variant="h6" fontWeight="700">
-                  Filtreleme
-                </Typography>
+      {/* Filter - Compact Modern Design */}
+      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <FilterIcon sx={{ fontSize: 24, color: 'text.secondary' }} />
+          <Typography variant="body1" fontWeight="600" color="text.secondary">
+            Filtrele:
+          </Typography>
+        </Box>
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <Select
+            value={cityFilter}
+            onChange={(e) => setCityFilter(e.target.value)}
+            displayEmpty
+            sx={{
+              borderRadius: 3,
+              bgcolor: '#FFF',
+              boxShadow: `0 2px 8px ${alpha('#000', 0.08)}`,
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: `2px solid ${alpha('#000', 0.08)}`,
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                border: `2px solid ${alpha('#003D7A', 0.3)}`,
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                border: `2px solid #003D7A`,
+              },
+            }}
+          >
+            <MenuItem value="">
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <LeaderboardIconMui sx={{ fontSize: 18 }} />
+                <Typography fontWeight={600}>Tüm Şehirler</Typography>
               </Box>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Şehir Seç</InputLabel>
-                <Select
-                  value={cityFilter}
-                  label="Şehir Seç"
-                  onChange={(e) => setCityFilter(e.target.value)}
-                  sx={{ borderRadius: 2 }}
-                >
-                  <MenuItem value="">Tüm Şehirler</MenuItem>
-                  {cities.map((city) => (
-                    <MenuItem key={city} value={city}>
-                      {city}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+            </MenuItem>
+            {cities.map((city) => (
+              <MenuItem key={city} value={city}>
+                <Typography fontWeight={600}>
+                  📍 {city?.charAt(0).toUpperCase() + city?.slice(1)}
+                </Typography>
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {cityFilter && (
+          <Chip
+            label={`${uniqueLeaderboard?.length || 0} sonuç`}
+            size="small"
+            sx={{
+              bgcolor: alpha('#003D7A', 0.1),
+              color: '#003D7A',
+              fontWeight: 700,
+            }}
+          />
+        )}
+      </Box>
 
       {/* Leaderboard Table */}
       <Card
