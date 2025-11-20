@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Check if user is already logged in (from localStorage)
     const currentUser = getCurrentUser();
     if (currentUser) {
-      setUser(currentUser);
+    setUser(currentUser);
     }
     
     setIsLoading(false);

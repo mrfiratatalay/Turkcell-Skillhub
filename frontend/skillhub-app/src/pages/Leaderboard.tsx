@@ -20,7 +20,12 @@ import {
   alpha,
   Grid,
 } from '@mui/material';
-import { EmojiEvents as TrophyIcon, Leaderboard as LeaderboardIconMui } from '@mui/icons-material';
+import {
+  EmojiEvents as TrophyIcon,
+  Leaderboard as LeaderboardIconMui,
+  FilterList as FilterIcon,
+  Star as StarIcon,
+} from '@mui/icons-material';
 import { useLeaderboard } from '../hooks/useQueries';
 import { useAuth } from '../contexts/AuthContext';
 import { LeaderboardSkeleton } from '../components/LoadingSkeletons';
@@ -34,16 +39,16 @@ const Leaderboard = () => {
 
   const cities = ['Istanbul', 'Ankara', 'Izmir', 'Bursa', 'Antalya'];
 
-  const getRankColor = (rank: number) => {
+  const getRankGradient = (rank: number) => {
     switch (rank) {
       case 1:
-        return '#FFD700'; // Gold
+        return 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)'; // Gold
       case 2:
-        return '#C0C0C0'; // Silver
+        return 'linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%)'; // Silver
       case 3:
-        return '#CD7F32'; // Bronze
+        return 'linear-gradient(135deg, #CD7F32 0%, #B8753F 100%)'; // Bronze
       default:
-        return alpha('#757575', 0.1);
+        return 'linear-gradient(135deg, #64748B 0%, #475569 100%)';
     }
   };
 
@@ -56,7 +61,7 @@ const Leaderboard = () => {
       case 3:
         return '🥉';
       default:
-        return `${rank}`;
+        return null;
     }
   };
 
@@ -64,286 +69,349 @@ const Leaderboard = () => {
     return <LeaderboardSkeleton />;
   }
 
-  const userRank = leaderboard?.findIndex((entry) => entry.userId === user?.userId);
-  const userEntry = userRank !== undefined && userRank >= 0 ? leaderboard?.[userRank] : null;
+  // Backend'den duplicate veriler gelebiliyor - unique yap (userId bazlı)
+  const uniqueLeaderboard = leaderboard?.filter((entry, index, self) =>
+    index === self.findIndex((e) => e.userId === entry.userId)
+  ).sort((a, b) => (a.rank || 0) - (b.rank || 0));
+
+  const userRank = uniqueLeaderboard?.findIndex((entry) => entry.userId === user?.userId);
+  const userEntry = userRank !== undefined && userRank >= 0 ? uniqueLeaderboard?.[userRank] : null;
 
   return (
     <Box sx={{ pb: 4 }}>
-      <Box sx={{ mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <LeaderboardIconMui sx={{ fontSize: 32, color: 'primary.main', mr: 1.5 }} />
-          <Typography 
-            variant="h4" 
-            fontWeight="bold"
-            sx={{ fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' } }}
-          >
-            Liderlik Tablosu
-          </Typography>
+      {/* Modern Header */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 3, sm: 4 },
+          mb: 4,
+          borderRadius: 5,
+          background: 'linear-gradient(135deg, #003D7A 0%, #1565C0 100%)',
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '40%',
+            height: '100%',
+            background: `radial-gradient(circle at center, ${alpha('#FFC900', 0.2)}, transparent)`,
+          },
+        }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
+            <Box
+              sx={{
+                width: { xs: 48, sm: 56 },
+                height: { xs: 48, sm: 56 },
+                borderRadius: 3,
+                background: 'linear-gradient(135deg, #FFC900 0%, #FFD740 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 8px 24px rgba(255, 201, 0, 0.35)',
+                mr: 2,
+              }}
+            >
+              <TrophyIcon sx={{ fontSize: { xs: 28, sm: 32 }, color: '#000' }} />
+            </Box>
+            <Box>
+              <Typography
+                variant="h3"
+                fontWeight="800"
+                sx={{
+                  color: '#FFF',
+                  fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.5rem' },
+                  lineHeight: 1.2,
+                }}
+              >
+                Liderlik Tablosu
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  color: alpha('#FFF', 0.9),
+                  fontWeight: 500,
+                  fontSize: { xs: '0.9rem', sm: '1rem' },
+                }}
+              >
+                En başarılı kullanıcılar • {uniqueLeaderboard?.length || 0} yarışmacı
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-        <Typography 
-          variant="body1" 
-          color="text.secondary"
-          sx={{ 
-            ml: { xs: 0, sm: 5.5 },
-            fontSize: { xs: '0.875rem', sm: '1rem' },
-          }}
-        >
-          En başarılı kullanıcılar ve puanları
-        </Typography>
-      </Box>
+      </Paper>
 
       {/* User's Rank Card */}
       {userEntry && (
         <Card
+          elevation={0}
           sx={{
-            mb: 3,
-            background: `linear-gradient(135deg, #FFC900 0%, #FFD740 100%)`,
-            color: '#000',
-            boxShadow: '0 8px 24px rgba(255, 201, 0, 0.3)',
-            borderRadius: 3,
+            mb: 4,
+            borderRadius: 4,
+            overflow: 'hidden',
+            border: `3px solid #FFC900`,
+            background: alpha('#FFC900', 0.08),
           }}
         >
           <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item>
-                <Avatar
+            <Typography variant="overline" fontWeight={700} color="text.secondary" sx={{ mb: 1 }}>
+              Senin Sıralaman: #{userEntry.rank || '?'}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box
+                sx={{
+                  minWidth: { xs: 60, sm: 70 },
+                  height: { xs: 60, sm: 70 },
+                  borderRadius: 3,
+                  background: getRankGradient(userEntry.rank || 99),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                <Typography variant="h4" fontWeight="900" color="#FFF">
+                  {getRankEmoji(userEntry.rank || 99) || userEntry.rank}
+                </Typography>
+              </Box>
+
+              <Avatar
+                sx={{
+                  width: { xs: 50, sm: 60 },
+                  height: { xs: 50, sm: 60 },
+                  bgcolor: '#003D7A',
+                  fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                  fontWeight: 700,
+                  border: `3px solid ${alpha('#003D7A', 0.2)}`,
+                }}
+              >
+                {userEntry.userId?.charAt(1)?.toUpperCase() || 'U'}
+              </Avatar>
+
+              <Box sx={{ flex: 1 }}>
+                <Typography variant="h6" fontWeight="700" gutterBottom>
+                  {userEntry.userId} (Sen)
+                </Typography>
+                <Chip
+                  label={userEntry.city || 'Bilinmiyor'}
+                  size="small"
                   sx={{
-                    width: { xs: 56, sm: 64 },
-                    height: { xs: 56, sm: 64 },
-                    bgcolor: 'rgba(0, 0, 0, 0.1)',
-                    color: '#000',
-                    fontSize: { xs: '1.25rem', sm: '1.5rem' },
-                    fontWeight: 'bold',
-                    border: '3px solid rgba(0, 0, 0, 0.1)',
+                    bgcolor: alpha('#003D7A', 0.1),
+                    color: '#003D7A',
+                    fontWeight: 600,
                   }}
-                >
-                  {getRankEmoji(userEntry.rank)}
-                </Avatar>
-              </Grid>
-              <Grid item xs>
-                <Typography 
-                  variant="h6" 
-                  fontWeight="bold"
-                  sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
-                >
-                  Senin Sıran
+                />
+              </Box>
+
+              <Box sx={{ textAlign: 'right' }}>
+                <Typography variant="h4" fontWeight="900" color="primary">
+                  {userEntry.totalPoints || 0}
                 </Typography>
-                <Typography 
-                  variant="body2"
-                  sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
-                >
-                  {userEntry.rank}. sıradasın! Toplam {userEntry.totalPoints} puan
+                <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                  Puan
                 </Typography>
-              </Grid>
-              <Grid item>
-                <TrophyIcon sx={{ fontSize: { xs: 40, sm: 48 } }} />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </CardContent>
         </Card>
       )}
 
-      {/* Filters */}
-      <Card sx={{ 
-        mb: 3,
-        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-        borderRadius: 3,
-      }}>
-        <CardContent sx={{ p: { xs: 2, sm: 2.5 } }}>
+      {/* Filter */}
+      <Card
+        elevation={0}
+        sx={{
+          mb: 3,
+          borderRadius: 4,
+          border: `2px solid ${alpha('#000', 0.08)}`,
+        }}
+      >
+        <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} sm={4}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Şehir Filtrele</InputLabel>
-                <Select
-                  value={cityFilter}
-                  label="Şehir Filtrele"
-                  onChange={(e) => setCityFilter(e.target.value)}
+            <Grid item xs={12} sm={6}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <Box
                   sx={{
-                    borderRadius: 1.5,
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: alpha('#FFC900', 0.2),
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: alpha('#FFC900', 0.4),
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#FFC900',
-                    },
+                    width: 40,
+                    height: 40,
+                    borderRadius: 2,
+                    background: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <MenuItem value="">
-                    <em>Tüm Şehirler</em>
-                  </MenuItem>
+                  <FilterIcon sx={{ fontSize: 22, color: '#FFF' }} />
+                </Box>
+                <Typography variant="h6" fontWeight="700">
+                  Filtreleme
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Şehir Seç</InputLabel>
+                <Select
+                  value={cityFilter}
+                  label="Şehir Seç"
+                  onChange={(e) => setCityFilter(e.target.value)}
+                  sx={{ borderRadius: 2 }}
+                >
+                  <MenuItem value="">Tüm Şehirler</MenuItem>
                   {cities.map((city) => (
                     <MenuItem key={city} value={city}>
-                      📍 {city}
+                      {city}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={8}>
-              <Chip
-                label={
-                  cityFilter
-                    ? `${cityFilter} şehrindeki sıralama gösteriliyor`
-                    : 'Tüm kullanıcılar gösteriliyor'
-                }
-                sx={{
-                  bgcolor: alpha('#FFC900', 0.1),
-                  color: '#000',
-                  fontWeight: 600,
-                  fontSize: { xs: '0.8125rem', sm: '0.875rem' },
-                  height: { xs: 28, sm: 32 },
-                }}
-              />
             </Grid>
           </Grid>
         </CardContent>
       </Card>
 
       {/* Leaderboard Table */}
-      <Card sx={{ 
-        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-        borderRadius: 3,
-        overflow: 'hidden',
-      }}>
-        <TableContainer component={Paper} elevation={0}>
+      <Card
+        elevation={0}
+        sx={{
+          borderRadius: 4,
+          overflow: 'hidden',
+          border: `2px solid ${alpha('#000', 0.08)}`,
+        }}
+      >
+        <TableContainer>
           <Table>
             <TableHead>
-              <TableRow sx={{ bgcolor: alpha('#FFC900', 0.08) }}>
-                <TableCell sx={{ py: { xs: 1.5, sm: 2 } }}>
-                  <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                    Sıra
-                  </Typography>
-                </TableCell>
-                <TableCell sx={{ py: { xs: 1.5, sm: 2 } }}>
-                  <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                    Kullanıcı
-                  </Typography>
-                </TableCell>
-                <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' }, py: { xs: 1.5, sm: 2 } }}>
-                  <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: '0.875rem' }}>
-                    Şehir
-                  </Typography>
-                </TableCell>
-                <TableCell align="right" sx={{ py: { xs: 1.5, sm: 2 } }}>
-                  <Typography variant="subtitle2" fontWeight="bold" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                    Toplam Puan
-                  </Typography>
+              <TableRow sx={{ bgcolor: alpha('#003D7A', 0.05) }}>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.875rem' }}>Sıra</TableCell>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.875rem' }}>Kullanıcı ID</TableCell>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.875rem' }}>Şehir</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, fontSize: '0.875rem' }}>
+                  Puan
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {leaderboard?.map((entry, index) => (
-                <TableRow
-                  key={entry.userId}
-                  sx={{
-                    bgcolor: entry.userId === user?.userId 
-                      ? alpha('#FFC900', 0.15)
-                      : index < 3 
-                      ? alpha(getRankColor(entry.rank), 0.1)
-                      : 'transparent',
-                    borderLeft: entry.user_id === user?.user_id ? '4px solid' : 'none',
-                    borderLeftColor: '#FFC900',
-                    transition: 'all 0.2s',
-                    '&:hover': {
-                      bgcolor: entry.userId === user?.userId 
-                        ? alpha('#FFC900', 0.2)
-                        : alpha('#f5f5f5', 0.8),
-                      transform: 'translateX(4px)',
-                    },
-                  }}
-                >
-                  <TableCell sx={{ py: { xs: 1.5, sm: 2 } }}>
-                    <Avatar
-                      sx={{
-                        bgcolor: getRankColor(entry.rank),
-                        color: entry.rank <= 3 ? '#000' : '#757575',
-                        width: { xs: 36, sm: 44 },
-                        height: { xs: 36, sm: 44 },
-                        fontWeight: 'bold',
-                        fontSize: { xs: '0.875rem', sm: '1rem' },
-                        border: entry.rank <= 3 ? '2px solid rgba(0,0,0,0.1)' : 'none',
-                      }}
-                    >
-                      {entry.rank <= 3 ? getRankEmoji(entry.rank) : entry.rank}
-                    </Avatar>
-                  </TableCell>
-                  <TableCell sx={{ py: { xs: 1.5, sm: 2 } }}>
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                        <Typography 
-                          fontWeight={entry.userId === user?.userId ? 700 : 600}
-                          sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}
-                        >
-                          {entry.name}
-                        </Typography>
-                        {entry.userId === user?.userId && (
-                          <Chip 
-                            label="Sen" 
-                            size="small" 
-                            sx={{
-                              bgcolor: '#FFC900',
-                              color: '#000',
-                              fontWeight: 700,
-                              height: 22,
-                              fontSize: '0.7rem',
-                            }}
-                          />
-                        )}
-                      </Box>
-                      <Typography 
-                        variant="caption" 
-                        color="text.secondary"
-                        sx={{ 
-                          display: { xs: 'block', sm: 'none' },
-                          fontSize: '0.75rem',
-                          mt: 0.5,
+              {uniqueLeaderboard?.map((entry) => {
+                const isCurrentUser = entry.userId === user?.userId;
+                const rankEmoji = getRankEmoji(entry.rank || 99);
+
+                return (
+                  <TableRow
+                    key={entry.userId}
+                    sx={{
+                      bgcolor: isCurrentUser ? alpha('#FFC900', 0.08) : 'transparent',
+                      borderLeft: isCurrentUser ? `4px solid #FFC900` : 'none',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        bgcolor: isCurrentUser
+                          ? alpha('#FFC900', 0.12)
+                          : alpha('#003D7A', 0.04),
+                      },
+                    }}
+                  >
+                    <TableCell>
+                      <Box
+                        sx={{
+                          width: 48,
+                          height: 48,
+                          borderRadius: 2.5,
+                          background: getRankGradient(entry.rank || 99),
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: (entry.rank || 99) <= 3 ? '0 4px 12px rgba(0, 0, 0, 0.2)' : 'none',
                         }}
                       >
-                        📍 {entry.city}
-                      </Typography>
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' }, py: 2 }}>
-                    <Typography variant="body2" color="text.secondary">
-                      📍 {entry.city}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right" sx={{ py: { xs: 1.5, sm: 2 } }}>
-                    <Chip
-                      icon={<TrophyIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />}
-                      label={`${entry.totalPoints}`}
-                      sx={{
-                        bgcolor: entry.rank <= 3 
-                          ? alpha('#FFC900', 0.2)
-                          : alpha('#757575', 0.08),
-                        color: entry.rank <= 3 ? '#000' : 'text.secondary',
-                        fontWeight: 700,
-                        fontSize: { xs: '0.75rem', sm: '0.8125rem' },
-                        height: { xs: 26, sm: 30 },
-                        border: entry.rank <= 3 ? `1px solid ${alpha('#FFC900', 0.3)}` : 'none',
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
+                        <Typography variant="h6" fontWeight="900" color="#FFF">
+                          {rankEmoji || entry.rank}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <Avatar
+                          sx={{
+                            width: 44,
+                            height: 44,
+                            bgcolor: (entry.rank || 99) <= 3 ? '#003D7A' : alpha('#64748B', 0.2),
+                            fontSize: '1.125rem',
+                            fontWeight: 700,
+                            border: (entry.rank || 99) <= 3 ? `2px solid ${alpha('#003D7A', 0.2)}` : 'none',
+                          }}
+                        >
+                          {entry.userId?.charAt(1)?.toUpperCase() || 'U'}
+                        </Avatar>
+                        <Box>
+                          <Typography variant="body1" fontWeight={700}>
+                            {entry.userId}
+                            {isCurrentUser && (
+                              <Chip
+                                label="Sen"
+                                size="small"
+                                sx={{
+                                  ml: 1,
+                                  bgcolor: '#FFC900',
+                                  color: '#000',
+                                  fontWeight: 700,
+                                  fontSize: '0.7rem',
+                                  height: 20,
+                                }}
+                              />
+                            )}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" fontWeight={500}>
+                            Rank: {entry.rank}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+
+                    <TableCell>
+                      <Chip
+                        label={entry.city || 'Bilinmiyor'}
+                        size="small"
+                        sx={{
+                          bgcolor: alpha('#3B82F6', 0.1),
+                          color: '#3B82F6',
+                          fontWeight: 600,
+                          fontSize: '0.875rem',
+                        }}
+                      />
+                    </TableCell>
+
+                    <TableCell align="right">
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 0.5 }}>
+                        <StarIcon sx={{ fontSize: 20, color: '#FFC900' }} />
+                        <Typography variant="h6" fontWeight="800" color="primary">
+                          {entry.totalPoints || 0}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
-      </Card>
 
-      {leaderboard?.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant="h3" sx={{ mb: 2 }}>
-            🏅
-          </Typography>
-          <Typography variant="h6" color="text.secondary" fontWeight={500}>
-            Henüz sıralama bulunmuyor
-          </Typography>
-        </Box>
-      )}
+        {uniqueLeaderboard?.length === 0 && (
+          <Box sx={{ p: 8, textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ mb: 2 }}>
+              🏆
+            </Typography>
+            <Typography variant="h6" fontWeight={700} gutterBottom>
+              Henüz yarışmacı yok
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              İlk sıralamaya giren sen olabilirsin!
+            </Typography>
+          </Box>
+        )}
+      </Card>
     </Box>
   );
 };

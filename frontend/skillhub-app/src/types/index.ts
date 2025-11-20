@@ -48,9 +48,10 @@ export interface Badge {
 export interface LeaderboardEntry {
   userId: string;
   rank: number;
-  name: string;
+  name: string; // Backend'den "name" olarak geliyor (userName değil!)
   totalPoints: number;
   city: string;
+  // NOT: university field'ı backend'de YOK!
 }
 
 // Backend UserProgressResponse.UserBasicInfo

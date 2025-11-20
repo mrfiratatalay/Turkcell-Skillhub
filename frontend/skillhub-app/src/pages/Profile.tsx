@@ -18,6 +18,8 @@ import {
   LocationOn as LocationIcon,
   EmojiEvents as TrophyIcon,
   TrendingUp as TrendingUpIcon,
+  Star as StarIcon,
+  LocalFireDepartment as FireIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress, useBadges } from '../hooks/useQueries';
@@ -31,13 +33,13 @@ const Profile = () => {
   const getSkillLevelColor = (level: string) => {
     switch (level) {
       case 'Beginner':
-        return 'success';
+        return '#10B981';
       case 'Intermediate':
-        return 'warning';
+        return '#F59E0B';
       case 'Advanced':
-        return 'error';
+        return '#EF4444';
       default:
-        return 'default';
+        return '#64748B';
     }
   };
 
@@ -65,167 +67,242 @@ const Profile = () => {
     return <ProfileSkeleton />;
   }
 
+  const levelProgress = ((userProgress?.totalPoints || 0) % 100);
+
   return (
     <Box sx={{ pb: 4 }}>
-      <Box sx={{ mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-          <PersonIcon sx={{ fontSize: 32, color: 'primary.main', mr: 1.5 }} />
-          <Typography 
-            variant="h4" 
-            fontWeight="bold"
-            sx={{ fontSize: { xs: '1.75rem', sm: '2rem', md: '2.125rem' } }}
-          >
-            Profilim
-          </Typography>
-        </Box>
-        <Typography 
-          variant="body1" 
-          color="text.secondary"
+      {/* Modern Header */}
+      <Paper
+        elevation={0}
           sx={{ 
-            ml: { xs: 0, sm: 5.5 },
-            fontSize: { xs: '0.875rem', sm: '1rem' },
-          }}
-        >
-          Öğrenme istatistiklerin ve başarıların
-        </Typography>
-      </Box>
-
-      <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-        {/* Profile Card */}
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
+          p: { xs: 3, sm: 4 },
+          mb: 4,
+          borderRadius: 5,
+          background: `linear-gradient(135deg, ${getSkillLevelColor(user?.level || 'Beginner')} 0%, ${alpha(getSkillLevelColor(user?.level || 'Beginner'), 0.7)} 100%)`,
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: '40%',
             height: '100%',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-            borderRadius: 3,
-          }}>
-            <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
-              <Box sx={{ textAlign: 'center', mb: 3 }}>
+            background: `radial-gradient(circle at center, ${alpha('#FFF', 0.15)}, transparent)`,
+          },
+        }}
+      >
+        <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 3 }}>
                 <Avatar
                   sx={{
-                    width: { xs: 90, sm: 100 },
-                    height: { xs: 90, sm: 100 },
-                    mx: 'auto',
-                    mb: 2,
-                    background: `linear-gradient(135deg, #FFC900 0%, #FFD740 100%)`,
+              width: { xs: 80, sm: 100 },
+              height: { xs: 80, sm: 100 },
+              bgcolor: '#FFF',
+              color: getSkillLevelColor(user?.level || 'Beginner'),
                     fontSize: { xs: '2rem', sm: '2.5rem' },
-                    fontWeight: 'bold',
-                    color: '#000',
-                    boxShadow: '0 8px 24px rgba(255, 201, 0, 0.3)',
+              fontWeight: 800,
+              border: `4px solid ${alpha('#FFF', 0.3)}`,
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
                   }}
                 >
-                  {user?.name.charAt(0).toUpperCase()}
+            {user?.name?.charAt(0).toUpperCase() || 'U'}
                 </Avatar>
+          <Box sx={{ flex: 1 }}>
                 <Typography 
-                  variant="h5" 
-                  fontWeight="bold"
+              variant="h3"
+              fontWeight="800"
                   sx={{ 
+                color: '#FFF',
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '2.25rem' },
                     mb: 1,
-                    fontSize: { xs: '1.25rem', sm: '1.5rem' },
                   }}
                 >
                   {user?.name}
                 </Typography>
+            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+              <Chip
+                label={getSkillLevelText(user?.level || 'Beginner')}
+                sx={{
+                  bgcolor: alpha('#FFF', 0.25),
+                  color: '#FFF',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  backdropFilter: 'blur(10px)',
+                  border: `2px solid ${alpha('#FFF', 0.3)}`,
+                }}
+              />
                 <Chip
-                  label={getSkillLevelText(user?.skillLevel || '')}
-                  color={getSkillLevelColor(user?.skillLevel || '') as any}
+                icon={<FireIcon sx={{ color: '#FFF !important' }} />}
+                label={`${userProgress?.totalPoints || 0} Puan`}
                   sx={{ 
-                    fontWeight: 600,
-                    fontSize: '0.8125rem',
+                  bgcolor: alpha('#FFF', 0.25),
+                  color: '#FFF',
+                  fontWeight: 700,
+                  fontSize: '0.875rem',
+                  backdropFilter: 'blur(10px)',
+                  border: `2px solid ${alpha('#FFF', 0.3)}`,
                   }}
                 />
               </Box>
+          </Box>
+        </Box>
+      </Paper>
 
-              <Divider sx={{ my: 2.5 }} />
+      <Grid container spacing={{ xs: 2.5, sm: 3 }}>
+        {/* Left - User Info Card */}
+        <Grid item xs={12} md={4}>
+          <Card
+            elevation={0}
+            sx={{
+              height: '100%',
+              borderRadius: 4,
+              border: `2px solid ${alpha('#000', 0.08)}`,
+            }}
+          >
+            <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+              <Typography variant="h6" fontWeight="700" gutterBottom sx={{ mb: 3 }}>
+                Profil Bilgileri
+              </Typography>
 
-              <Stack spacing={2}>
+              <Stack spacing={2.5}>
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
                 <Box 
                   sx={{ 
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        background: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)',
                     display: 'flex', 
                     alignItems: 'center',
-                    p: 1.5,
-                    bgcolor: alpha('#f5f5f5', 0.6),
-                    borderRadius: 1.5,
+                        justifyContent: 'center',
                   }}
                 >
-                  <LocationIcon sx={{ mr: 1.5, color: 'text.secondary', fontSize: 20 }} />
-                  <Typography variant="body2" fontWeight={500}>
-                    {user?.city}
+                      <PersonIcon sx={{ fontSize: 22, color: '#FFF' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                        Kullanıcı ID
+                      </Typography>
+                      <Typography variant="body2" fontWeight={700}>
+                        {user?.userId}
                   </Typography>
+                    </Box>
+                  </Box>
                 </Box>
 
+                <Divider />
+
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
                 <Box 
                   sx={{ 
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
                     display: 'flex', 
                     alignItems: 'center',
-                    p: 1.5,
-                    bgcolor: alpha('#f5f5f5', 0.6),
-                    borderRadius: 1.5,
+                        justifyContent: 'center',
                   }}
                 >
-                  <SchoolIcon sx={{ mr: 1.5, color: 'text.secondary', fontSize: 20 }} />
-                  <Typography variant="body2" fontWeight={500}>
+                      <SchoolIcon sx={{ fontSize: 22, color: '#FFF' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                        Üniversite
+                      </Typography>
+                      <Typography variant="body2" fontWeight={700}>
                     {user?.university}
                   </Typography>
+                    </Box>
+                  </Box>
                 </Box>
 
+                <Divider />
+
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
                 <Box 
                   sx={{ 
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        background: 'linear-gradient(135deg, #EF4444 0%, #F87171 100%)',
                     display: 'flex', 
                     alignItems: 'center',
-                    p: 1.5,
-                    bgcolor: alpha('#FFC900', 0.1),
-                    borderRadius: 1.5,
-                    border: `1px solid ${alpha('#FFC900', 0.2)}`,
+                        justifyContent: 'center',
                   }}
                 >
-                  <TrophyIcon sx={{ mr: 1.5, color: '#FFC900', fontSize: 20 }} />
-                  <Typography variant="body2" fontWeight={600} color="#FFC900">
-                    {user?.badgeCount} Rozet
+                      <LocationIcon sx={{ fontSize: 22, color: '#FFF' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                        Şehir
+                      </Typography>
+                      <Typography variant="body2" fontWeight={700}>
+                        {user?.city}
                   </Typography>
+                    </Box>
+                  </Box>
                 </Box>
               </Stack>
+
+              <Divider sx={{ my: 3 }} />
+
+              {/* Level Progress */}
+              <Box>
+                <Typography variant="body2" fontWeight={700} gutterBottom>
+                  Seviye İlerlemesi
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant="caption" fontWeight={600}>
+                      {getSkillLevelText(user?.level || 'Beginner')}
+                    </Typography>
+                    <Typography variant="caption" fontWeight={600} color="primary">
+                      {levelProgress}%
+                    </Typography>
+                  </Box>
+                  <LinearProgress
+                    variant="determinate"
+                    value={levelProgress}
+                    sx={{
+                      height: 10,
+                      borderRadius: 5,
+                      bgcolor: alpha(getSkillLevelColor(user?.level || 'Beginner'), 0.15),
+                      '& .MuiLinearProgress-bar': {
+                        borderRadius: 5,
+                        background: `linear-gradient(90deg, ${getSkillLevelColor(user?.level || 'Beginner')} 0%, ${alpha(getSkillLevelColor(user?.level || 'Beginner'), 0.7)} 100%)`,
+                      },
+                    }}
+                  />
+                </Box>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Stats and Badges */}
+        {/* Right - Stats & Badges */}
         <Grid item xs={12} md={8}>
-          <Stack spacing={{ xs: 2, sm: 2.5, md: 3 }}>
-            {/* Stats Card */}
-            <Card sx={{ 
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              borderRadius: 3,
-            }}>
-              <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  📊 İstatistikler
-                </Typography>
-
-                <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mt: 0.5 }}>
+          {/* Stats Cards */}
+          <Grid container spacing={{ xs: 2, sm: 2.5 }} sx={{ mb: 3 }}>
                   <Grid item xs={6} sm={3}>
                     <Paper 
                       elevation={0}
                       sx={{ 
-                        p: { xs: 1.5, sm: 2 },
+                  p: 2.5,
+                  borderRadius: 4,
+                  background: 'linear-gradient(135deg, #FFC900 0%, #FFD740 100%)',
+                  border: `2px solid ${alpha('#FFC900', 0.3)}`,
                         textAlign: 'center', 
-                        background: `linear-gradient(135deg, #FFC900 0%, #FFD740 100%)`,
-                        color: '#000',
-                        borderRadius: 2.5,
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                          transform: 'translateY(-4px)',
-                        },
-                      }}
+                }}
                     >
-                      <TrophyIcon sx={{ fontSize: { xs: 28, sm: 32 }, mb: 0.5 }} />
-                      <Typography 
-                        variant="h5" 
-                        fontWeight="bold"
-                        sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
-                      >
-                        {user?.totalPoints}
+                <TrophyIcon sx={{ fontSize: 36, color: '#000', mb: 1 }} />
+                <Typography variant="h4" fontWeight="800" color="#000">
+                  {userProgress?.totalPoints || 0}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
+                <Typography variant="caption" fontWeight={600} color={alpha('#000', 0.7)}>
                         Toplam Puan
                       </Typography>
                     </Paper>
@@ -235,27 +312,19 @@ const Profile = () => {
                     <Paper 
                       elevation={0}
                       sx={{ 
-                        p: { xs: 1.5, sm: 2 },
+                  p: 2.5,
+                  borderRadius: 4,
+                  background: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)',
+                  border: `2px solid ${alpha('#10B981', 0.3)}`,
                         textAlign: 'center', 
-                        bgcolor: '#4CAF50',
-                        color: 'white',
-                        borderRadius: 2.5,
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                          transform: 'translateY(-4px)',
-                        },
                       }}
                     >
-                      <SchoolIcon sx={{ fontSize: { xs: 28, sm: 32 }, mb: 0.5 }} />
-                      <Typography 
-                        variant="h5" 
-                        fontWeight="bold"
-                        sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
-                      >
-                        {userProgress?.completedLessons}
+                <StarIcon sx={{ fontSize: 36, color: '#FFF', mb: 1 }} />
+                <Typography variant="h4" fontWeight="800" color="#FFF">
+                  {userProgress?.completedLessons || 0}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
-                        Tamamlanan Ders
+                <Typography variant="caption" fontWeight={600} color={alpha('#FFF', 0.9)}>
+                  Tamamlanan
                       </Typography>
                     </Paper>
                   </Grid>
@@ -264,27 +333,19 @@ const Profile = () => {
                     <Paper 
                       elevation={0}
                       sx={{ 
-                        p: { xs: 1.5, sm: 2 },
+                  p: 2.5,
+                  borderRadius: 4,
+                  background: 'linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)',
+                  border: `2px solid ${alpha('#3B82F6', 0.3)}`,
                         textAlign: 'center', 
-                        bgcolor: '#003D7A',
-                        color: 'white',
-                        borderRadius: 2.5,
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                          transform: 'translateY(-4px)',
-                        },
                       }}
                     >
-                      <TrendingUpIcon sx={{ fontSize: { xs: 28, sm: 32 }, mb: 0.5 }} />
-                      <Typography 
-                        variant="h5" 
-                        fontWeight="bold"
-                        sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
-                      >
-                        {Math.round(userProgress?.averageScore || 0)}%
+                <TrendingUpIcon sx={{ fontSize: 36, color: '#FFF', mb: 1 }} />
+                <Typography variant="h4" fontWeight="800" color="#FFF">
+                  {userProgress?.quizResults?.length || 0}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
-                        Ortalama Başarı
+                <Typography variant="caption" fontWeight={600} color={alpha('#FFF', 0.9)}>
+                  Quiz Sayısı
                       </Typography>
                     </Paper>
                   </Grid>
@@ -293,124 +354,99 @@ const Profile = () => {
                     <Paper 
                       elevation={0}
                       sx={{ 
-                        p: { xs: 1.5, sm: 2 },
+                  p: 2.5,
+                  borderRadius: 4,
+                  background: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)',
+                  border: `2px solid ${alpha('#8B5CF6', 0.3)}`,
                         textAlign: 'center', 
-                        bgcolor: '#FF9800',
-                        color: 'white',
-                        borderRadius: 2.5,
-                        transition: 'transform 0.3s',
-                        '&:hover': {
-                          transform: 'translateY(-4px)',
-                        },
                       }}
                     >
-                      <TrophyIcon sx={{ fontSize: { xs: 28, sm: 32 }, mb: 0.5 }} />
-                      <Typography 
-                        variant="h5" 
-                        fontWeight="bold"
-                        sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
-                      >
-                        {user?.badgeCount}
+                <Box sx={{ fontSize: 36, mb: 1 }}>🏆</Box>
+                <Typography variant="h4" fontWeight="800" color="#FFF">
+                  {badges?.length || 0}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
+                <Typography variant="caption" fontWeight={600} color={alpha('#FFF', 0.9)}>
                         Rozet
                       </Typography>
                     </Paper>
                   </Grid>
                 </Grid>
 
-                <Box sx={{ mt: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Typography variant="body2" fontWeight="600">
-                      Tamamlama Oranı
-                    </Typography>
-                    <Chip
-                      label={`${Math.round(userProgress?.completionRate || 0)}%`}
-                      size="small"
+          {/* Badges Section */}
+          <Card
+            elevation={0}
                       sx={{
-                        bgcolor: alpha('#FFC900', 0.1),
-                        color: '#FFC900',
-                        fontWeight: 700,
-                      }}
-                    />
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={userProgress?.completionRate || 0}
-                    sx={{ 
-                      height: 10, 
-                      borderRadius: 5,
-                      bgcolor: alpha('#FFC900', 0.1),
-                      '& .MuiLinearProgress-bar': {
-                        borderRadius: 5,
-                        background: 'linear-gradient(90deg, #FFC900 0%, #FFD740 100%)',
-                      },
+              borderRadius: 4,
+              border: `2px solid ${alpha('#000', 0.08)}`,
                     }}
-                  />
-                </Box>
-              </CardContent>
-            </Card>
-
-            {/* Badges Card */}
-            <Card sx={{ 
-              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-              borderRadius: 3,
-            }}>
-              <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  🏆 Rozetlerim
+          >
+            <CardContent sx={{ p: { xs: 3, sm: 4 } }}>
+              <Typography variant="h6" fontWeight="700" gutterBottom sx={{ mb: 3 }}>
+                Kazanılan Rozetler 🏆
                 </Typography>
 
                 {badges && badges.length > 0 ? (
-                  <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mt: 0.5 }}>
+                <Grid container spacing={2.5}>
                     {badges.map((badge) => (
-                      <Grid item xs={6} sm={4} key={badge.badgeId}>
+                    <Grid item xs={6} sm={4} md={3} key={badge.badgeId}>
                         <Paper
                           elevation={0}
                           sx={{
-                            p: { xs: 2, sm: 2.5 },
+                          p: 2.5,
                             textAlign: 'center',
-                            background: `linear-gradient(135deg, #FFC900 0%, #FFD740 100%)`,
-                            color: '#000',
-                            borderRadius: 2.5,
-                            transition: 'all 0.3s',
-                            border: '2px solid transparent',
+                          borderRadius: 3,
+                          border: `2px solid ${alpha('#FFC900', 0.3)}`,
+                          background: alpha('#FFC900', 0.05),
+                          transition: 'all 0.3s ease',
                             '&:hover': {
-                              transform: 'translateY(-6px) scale(1.02)',
-                              boxShadow: '0 12px 32px rgba(255, 201, 0, 0.4)',
-                              border: '2px solid #FFD740',
-                            },
+                            transform: 'translateY(-4px)',
+                            boxShadow: `0 8px 24px ${alpha('#FFC900', 0.25)}`,
+                            borderColor: '#FFC900',
+                          },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            fontSize: 48,
+                            mb: 1,
+                            filter: 'drop-shadow(0 4px 8px rgba(255, 201, 0, 0.3))',
                           }}
                         >
-                          <Typography sx={{ fontSize: { xs: 40, sm: 48 }, mb: 1 }}>
                             {getBadgeIcon(badge.name)}
-                          </Typography>
-                          <Typography variant="body2" fontWeight="bold" sx={{ mb: 0.5 }}>
+                        </Box>
+                        <Typography variant="body2" fontWeight={700} gutterBottom>
                             {badge.name}
                           </Typography>
-                          <Typography variant="caption" color="rgba(0,0,0,0.6)">
-                            {new Date(badge.awardedAt).toLocaleDateString('tr-TR')}
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                          {badge.description}
                           </Typography>
                         </Paper>
                       </Grid>
                     ))}
                   </Grid>
                 ) : (
-                  <Box sx={{ textAlign: 'center', py: { xs: 3, sm: 4 } }}>
-                    <Typography variant="h2" sx={{ mb: 1.5, fontSize: { xs: '3rem', sm: '4rem' } }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 5,
+                    textAlign: 'center',
+                    borderRadius: 3,
+                    border: `2px dashed ${alpha('#000', 0.1)}`,
+                  }}
+                >
+                  <Typography variant="h2" sx={{ mb: 1 }}>
                       🏆
                     </Typography>
-                    <Typography variant="body1" color="text.secondary" fontWeight={500} sx={{ mb: 0.5 }}>
-                      Henüz rozet kazanmadın
+                  <Typography variant="h6" fontWeight={700} gutterBottom>
+                    Henüz rozet yok
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Dersleri tamamlayarak rozetler kazan!
+                    Dersleri tamamlayıp quiz'leri çözerek rozet kazanabilirsin!
                     </Typography>
-                  </Box>
+                </Paper>
                 )}
               </CardContent>
             </Card>
-          </Stack>
         </Grid>
       </Grid>
     </Box>
