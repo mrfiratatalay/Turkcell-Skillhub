@@ -1,13 +1,28 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '../types';
-import { authAPI } from '../services/api';
+import { showInfo } from '../utils/toast';
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getCurrentUser,
+  initializeDemoUsers,
+} from '../utils/mockAuth';
+
+interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  city: string;
+  university: string;
+}
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (userData: Partial<User>) => Promise<void>;
+  register: (userData: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -18,25 +33,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const currentUser = authAPI.getCurrentUser();
-    setUser(currentUser);
+    // Initialize demo users for testing
+    initializeDemoUsers();
+
+    // Check if user is already logged in (from localStorage)
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
+    }
+    
     setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
-    const { user } = await authAPI.login(email, password);
-    setUser(user);
+    // Mock delay to simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const loggedInUser = loginUser(email, password);
+    setUser(loggedInUser);
   };
 
-  const register = async (userData: Partial<User>) => {
-    const { user } = await authAPI.register(userData);
-    setUser(user);
+  const register = async (userData: RegisterData) => {
+    // Mock delay to simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const newUser = registerUser(userData);
+    setUser(newUser);
   };
 
   const logout = async () => {
-    await authAPI.logout();
+    logoutUser();
     setUser(null);
+    showInfo('Başarıyla çıkış yaptınız. Görüşmek üzere! 👋');
   };
 
   return (

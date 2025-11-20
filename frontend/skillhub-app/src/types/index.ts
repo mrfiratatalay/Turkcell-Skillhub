@@ -1,62 +1,70 @@
-// Type definitions for Turkcell SkillHub
+// Type definitions for Turkcell SkillHub - Backend API Uyumlu
 
-export interface User {
-  user_id: string;
-  name: string;
-  city: string;
-  university: string;
-  skill_level: 'Beginner' | 'Intermediate' | 'Advanced';
-  total_points: number;
-  badge_count: number;
-}
-
+// Backend CategoryDTO
 export interface Category {
-  category_id: string;
+  categoryId: string;
   name: string;
   description: string;
 }
 
+// Backend LessonDTO
 export interface Lesson {
-  lesson_id: string;
-  category_id: string;
+  lessonId: string;
+  categoryId: string;
   title: string;
-  duration_min: number;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  video_url?: string;
+  durationMin: number;
+  difficulty: string;
+  videoUrl?: string;
   description?: string;
 }
 
+// Backend QuizQuestionDTO
 export interface QuizQuestion {
-  question_id: string;
-  lesson_id: string;
-  question_text: string;
-  correct_answer: string;
+  questionId: string;
+  lessonId: string;
+  questionText: string;
+  correctAnswer?: string; // Sadece sonuçta döner
   options: string[];
 }
 
+// Backend QuizResultDTO
 export interface QuizResult {
-  result_id: string;
-  user_id: string;
-  lesson_id: string;
+  resultId: string;
+  userId: string;
+  lessonId: string;
   score: number;
-  completed_at: string;
+  completedAt: string;
 }
 
+// Backend BadgeDTO
 export interface Badge {
-  badge_id: string;
-  user_id: string;
+  badgeId: string;
+  userId: string;
   name: string;
-  awarded_at: string;
+  awardedAt: string;
 }
 
+// Backend LeaderboardEntryDTO
 export interface LeaderboardEntry {
-  user_id: string;
+  userId: string;
   rank: number;
-  total_points: number;
+  name: string;
+  totalPoints: number;
   city: string;
-  name?: string;
 }
 
+// Backend UserProgressResponse.UserBasicInfo
+export interface User {
+  userId: string;
+  name: string;
+  city: string;
+  university: string;
+  skillLevel: string;
+  totalPoints: number;
+  badgeCount: number;
+}
+
+// Backend UserProgressResponse
 export interface UserProgress {
   user: User;
   completedLessons: number;
@@ -65,4 +73,28 @@ export interface UserProgress {
   averageScore: number;
   recentQuizResults: QuizResult[];
   badges: Badge[];
+}
+
+// Backend QuizSubmitRequest.QuizAnswer
+export interface QuizAnswer {
+  questionId: string;
+  answer: string;
+}
+
+// Backend QuizSubmitRequest
+export interface QuizSubmitRequest {
+  userId: string;
+  lessonId: string;
+  answers: QuizAnswer[];
+}
+
+// Backend QuizSubmitResponse
+export interface QuizSubmitResponse {
+  resultId: string;
+  score: number;
+  correctAnswers: number;
+  totalQuestions: number;
+  pointsEarned: number;
+  newBadges: Badge[];
+  message: string;
 }

@@ -17,13 +17,13 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  CircularProgress,
   alpha,
   Grid,
 } from '@mui/material';
 import { EmojiEvents as TrophyIcon, Leaderboard as LeaderboardIconMui } from '@mui/icons-material';
 import { useLeaderboard } from '../hooks/useQueries';
 import { useAuth } from '../contexts/AuthContext';
+import { LeaderboardSkeleton } from '../components/LoadingSkeletons';
 
 const Leaderboard = () => {
   const { user } = useAuth();
@@ -61,14 +61,10 @@ const Leaderboard = () => {
   };
 
   if (isLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
-        <CircularProgress size={60} />
-      </Box>
-    );
+    return <LeaderboardSkeleton />;
   }
 
-  const userRank = leaderboard?.findIndex((entry) => entry.user_id === user?.user_id);
+  const userRank = leaderboard?.findIndex((entry) => entry.userId === user?.userId);
   const userEntry = userRank !== undefined && userRank >= 0 ? leaderboard?.[userRank] : null;
 
   return (
@@ -136,7 +132,7 @@ const Leaderboard = () => {
                   variant="body2"
                   sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
                 >
-                  {userEntry.rank}. sıradasın! Toplam {userEntry.total_points} puan
+                  {userEntry.rank}. sıradasın! Toplam {userEntry.totalPoints} puan
                 </Typography>
               </Grid>
               <Grid item>
@@ -241,9 +237,9 @@ const Leaderboard = () => {
             <TableBody>
               {leaderboard?.map((entry, index) => (
                 <TableRow
-                  key={entry.user_id}
+                  key={entry.userId}
                   sx={{
-                    bgcolor: entry.user_id === user?.user_id 
+                    bgcolor: entry.userId === user?.userId 
                       ? alpha('#FFC900', 0.15)
                       : index < 3 
                       ? alpha(getRankColor(entry.rank), 0.1)
@@ -252,7 +248,7 @@ const Leaderboard = () => {
                     borderLeftColor: '#FFC900',
                     transition: 'all 0.2s',
                     '&:hover': {
-                      bgcolor: entry.user_id === user?.user_id 
+                      bgcolor: entry.userId === user?.userId 
                         ? alpha('#FFC900', 0.2)
                         : alpha('#f5f5f5', 0.8),
                       transform: 'translateX(4px)',
@@ -278,12 +274,12 @@ const Leaderboard = () => {
                     <Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                         <Typography 
-                          fontWeight={entry.user_id === user?.user_id ? 700 : 600}
+                          fontWeight={entry.userId === user?.userId ? 700 : 600}
                           sx={{ fontSize: { xs: '0.875rem', sm: '0.9375rem' } }}
                         >
                           {entry.name}
                         </Typography>
-                        {entry.user_id === user?.user_id && (
+                        {entry.userId === user?.userId && (
                           <Chip 
                             label="Sen" 
                             size="small" 
@@ -318,7 +314,7 @@ const Leaderboard = () => {
                   <TableCell align="right" sx={{ py: { xs: 1.5, sm: 2 } }}>
                     <Chip
                       icon={<TrophyIcon sx={{ fontSize: { xs: 14, sm: 16 } }} />}
-                      label={`${entry.total_points}`}
+                      label={`${entry.totalPoints}`}
                       sx={{
                         bgcolor: entry.rank <= 3 
                           ? alpha('#FFC900', 0.2)

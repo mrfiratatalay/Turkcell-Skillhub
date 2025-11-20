@@ -20,13 +20,13 @@ import {
 interface QuizResultProps {
   result: {
     score: number;
-    correctCount: number;
+    correctAnswers: number;
     totalQuestions: number;
-    earnedPoints: number;
+    pointsEarned: number;
     newBadges: Array<{
-      badge_id: string;
+      badgeId: string;
       name: string;
-      awarded_at: string;
+      awardedAt: string;
     }>;
   };
   lessonId: string;
@@ -34,7 +34,7 @@ interface QuizResultProps {
 
 const QuizResult = ({ result, lessonId }: QuizResultProps) => {
   const navigate = useNavigate();
-  const { score, correctCount, totalQuestions, earnedPoints, newBadges } = result;
+  const { score, correctAnswers, totalQuestions, pointsEarned, newBadges } = result;
 
   const getPerformanceMessage = () => {
     if (score >= 90) return { text: 'Mükemmel! 🎉', color: 'success.main' };
@@ -81,7 +81,7 @@ const QuizResult = ({ result, lessonId }: QuizResultProps) => {
         <Grid item xs={12} sm={6}>
           <Paper sx={{ p: 3, textAlign: 'center', bgcolor: 'background.paper' }}>
             <Typography variant="h2" fontWeight="bold" color="primary">
-              +{earnedPoints}
+              +{pointsEarned}
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Kazandığın Puan
@@ -110,7 +110,7 @@ const QuizResult = ({ result, lessonId }: QuizResultProps) => {
                     Doğru Cevap
                   </Typography>
                   <Typography variant="h6" fontWeight="bold" color="success.main">
-                    {correctCount}
+                    {correctAnswers}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -118,7 +118,7 @@ const QuizResult = ({ result, lessonId }: QuizResultProps) => {
                     Yanlış Cevap
                   </Typography>
                   <Typography variant="h6" fontWeight="bold" color="error.main">
-                    {totalQuestions - correctCount}
+                    {totalQuestions - correctAnswers}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -126,7 +126,7 @@ const QuizResult = ({ result, lessonId }: QuizResultProps) => {
                     Kazanılan Puan
                   </Typography>
                   <Typography variant="h6" fontWeight="bold" color="primary.main">
-                    {earnedPoints}
+                    {pointsEarned}
                   </Typography>
                 </Grid>
               </Grid>
@@ -152,7 +152,7 @@ const QuizResult = ({ result, lessonId }: QuizResultProps) => {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                   {newBadges.map((badge) => (
                     <Chip
-                      key={badge.badge_id}
+                      key={badge.badgeId}
                       label={badge.name}
                       icon={<TrophyIcon />}
                       sx={{

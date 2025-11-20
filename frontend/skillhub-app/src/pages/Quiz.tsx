@@ -22,6 +22,7 @@ import {
 import { useQuiz, useSubmitQuiz, useLesson } from '../hooks/useQueries';
 import { useAuth } from '../contexts/AuthContext';
 import QuizResult from '../components/quiz/QuizResult';
+import { showQuizComplete, showBadgeEarned, showLoading, dismissToast, showError } from '../utils/toast';
 
 const Quiz = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -58,21 +59,48 @@ const Quiz = () => {
   const handleSubmit = async () => {
     if (!user || !lessonId) return;
 
+    const loadingToast = showLoading('Quiz değerlendiriliyor...');
+
     try {
+      // Backend QuizSubmitRequest formatına uygun şekilde hazırla
+      const answersArray = Object.entries(answers).map(([questionId, answer]) => ({
+        questionId,
+        answer,
+      }));
+
       const result = await submitQuizMutation.mutateAsync({
-        userId: user.user_id,
+        userId: user.userId,
         lessonId,
-        answers,
+        answers: answersArray,
       });
+      
+      dismissToast(loadingToast);
+      
+      // Show success message
+      showQuizComplete(result.score);
+      
+      // Show badge earned if any
+      if (result.newBadges && result.newBadges.length > 0) {
+        setTimeout(() => {
+          result.newBadges.forEach((badge, index) => {
+            setTimeout(() => {
+              showBadgeEarned(badge.name);
+            }, index * 500);
+          });
+        }, 1000);
+      }
+      
       setQuizResult(result);
       setShowResult(true);
     } catch (error) {
+      dismissToast(loadingToast);
+      showError('Quiz gönderilemedi. Lütfen tekrar deneyin.');
       console.error('Quiz submission failed:', error);
     }
   };
 
-  const isAnswered = currentQuestion ? !!answers[currentQuestion.question_id] : false;
-  const allAnswered = questions?.every((q) => !!answers[q.question_id]);
+  const isAnswered = currentQuestion ? !!answers[currentQuestion.questionId] : false;
+  const allAnswered = questions?.every((q) => !!answers[q.questionId]);
 
   if (isLoading) {
     return (
@@ -128,14 +156,14 @@ const Quiz = () => {
           {currentQuestion && (
             <Paper sx={{ p: 4, bgcolor: 'grey.50', borderRadius: 3 }}>
               <Typography variant="h6" fontWeight="bold" gutterBottom>
-                {currentQuestion.question_text}
+                {currentQuestion.questionText}
               </Typography>
 
               <FormControl component="fieldset" sx={{ width: '100%', mt: 3 }}>
                 <RadioGroup
-                  value={answers[currentQuestion.question_id] || ''}
+                  value={answers[currentQuestion.questionId] || ''}
                   onChange={(e) =>
-                    handleAnswerChange(currentQuestion.question_id, e.target.value)
+                    handleAnswerChange(currentQuestion.questionId, e.target.value)
                   }
                 >
                   {currentQuestion.options.map((option, index) => (

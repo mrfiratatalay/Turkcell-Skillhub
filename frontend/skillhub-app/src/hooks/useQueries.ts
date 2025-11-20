@@ -70,15 +70,8 @@ export const useSubmitQuiz = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({
-      userId,
-      lessonId,
-      answers,
-    }: {
-      userId: string;
-      lessonId: string;
-      answers: Record<string, string>;
-    }) => quizAPI.submitQuiz(userId, lessonId, answers),
+    mutationFn: (request: { userId: string; lessonId: string; answers: { questionId: string; answer: string }[] }) => 
+      quizAPI.submitQuiz(request),
     onSuccess: (_, variables) => {
       // Invalidate relevant queries to refetch updated data
       queryClient.invalidateQueries({ queryKey: ['userProgress', variables.userId] });

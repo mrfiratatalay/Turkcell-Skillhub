@@ -23,7 +23,7 @@ const LessonDetail = () => {
   const { data: lesson, isLoading } = useLesson(lessonId || '');
   const { data: categories } = useCategories();
 
-  const category = categories?.find((c) => c.category_id === lesson?.category_id);
+  const category = categories?.find((c) => c.categoryId === lesson?.categoryId);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -77,7 +77,7 @@ const LessonDetail = () => {
               />
               <Chip
                 icon={<TimerIcon />}
-                label={`${lesson.duration_min} dakika`}
+                label={`${lesson.durationMin} dakika`}
                 variant="outlined"
               />
             </Box>
@@ -109,7 +109,7 @@ const LessonDetail = () => {
               }}
             >
               <iframe
-                src={lesson.video_url}
+                src={lesson.videoUrl}
                 title={lesson.title}
                 style={{
                   position: 'absolute',
@@ -148,7 +148,7 @@ const LessonDetail = () => {
               variant="contained"
               size="large"
               startIcon={<QuizIcon />}
-              onClick={() => navigate(`/quiz/${lesson.lesson_id}`)}
+              onClick={() => navigate(`/quiz/${lesson.lessonId}`)}
               sx={{
                 bgcolor: 'white',
                 color: 'primary.main',

@@ -8,7 +8,6 @@ import {
   Avatar,
   LinearProgress,
   Divider,
-  CircularProgress,
   Stack,
   alpha,
   Grid,
@@ -22,11 +21,12 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress, useBadges } from '../hooks/useQueries';
+import { ProfileSkeleton } from '../components/LoadingSkeletons';
 
 const Profile = () => {
   const { user } = useAuth();
-  const { data: userProgress, isLoading: progressLoading } = useUserProgress(user?.user_id || '');
-  const { data: badges, isLoading: badgesLoading } = useBadges(user?.user_id || '');
+  const { data: userProgress, isLoading: progressLoading } = useUserProgress(user?.userId || '');
+  const { data: badges, isLoading: badgesLoading } = useBadges(user?.userId || '');
 
   const getSkillLevelColor = (level: string) => {
     switch (level) {
@@ -62,11 +62,7 @@ const Profile = () => {
   };
 
   if (progressLoading || badgesLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
-        <CircularProgress size={60} />
-      </Box>
-    );
+    return <ProfileSkeleton />;
   }
 
   return (
@@ -130,8 +126,8 @@ const Profile = () => {
                   {user?.name}
                 </Typography>
                 <Chip
-                  label={getSkillLevelText(user?.skill_level || '')}
-                  color={getSkillLevelColor(user?.skill_level || '') as any}
+                  label={getSkillLevelText(user?.skillLevel || '')}
+                  color={getSkillLevelColor(user?.skillLevel || '') as any}
                   sx={{ 
                     fontWeight: 600,
                     fontSize: '0.8125rem',
@@ -184,7 +180,7 @@ const Profile = () => {
                 >
                   <TrophyIcon sx={{ mr: 1.5, color: '#FFC900', fontSize: 20 }} />
                   <Typography variant="body2" fontWeight={600} color="#FFC900">
-                    {user?.badge_count} Rozet
+                    {user?.badgeCount} Rozet
                   </Typography>
                 </Box>
               </Stack>
@@ -227,7 +223,7 @@ const Profile = () => {
                         fontWeight="bold"
                         sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
                       >
-                        {user?.total_points}
+                        {user?.totalPoints}
                       </Typography>
                       <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
                         Toplam Puan
@@ -314,7 +310,7 @@ const Profile = () => {
                         fontWeight="bold"
                         sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }}
                       >
-                        {user?.badge_count}
+                        {user?.badgeCount}
                       </Typography>
                       <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
                         Rozet
@@ -368,7 +364,7 @@ const Profile = () => {
                 {badges && badges.length > 0 ? (
                   <Grid container spacing={{ xs: 1.5, sm: 2 }} sx={{ mt: 0.5 }}>
                     {badges.map((badge) => (
-                      <Grid item xs={6} sm={4} key={badge.badge_id}>
+                      <Grid item xs={6} sm={4} key={badge.badgeId}>
                         <Paper
                           elevation={0}
                           sx={{
@@ -393,7 +389,7 @@ const Profile = () => {
                             {badge.name}
                           </Typography>
                           <Typography variant="caption" color="rgba(0,0,0,0.6)">
-                            {new Date(badge.awarded_at).toLocaleDateString('tr-TR')}
+                            {new Date(badge.awardedAt).toLocaleDateString('tr-TR')}
                           </Typography>
                         </Paper>
                       </Grid>

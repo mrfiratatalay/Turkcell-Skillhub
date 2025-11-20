@@ -1,232 +1,239 @@
-// Mock API service layer
+// Backend API Service - Turkcell SkillHub
+import axios, { AxiosError } from 'axios';
 import {
-  mockUsers,
-  mockCategories,
-  mockLessons,
-  mockQuizzes,
-  mockQuizResults,
-  mockBadges,
-  mockLeaderboard,
-} from '../data/mockData';
-import { User, Category, Lesson, QuizQuestion, QuizResult, Badge, LeaderboardEntry, UserProgress } from '../types';
+  User,
+  Category,
+  Lesson,
+  QuizQuestion,
+  QuizResult,
+  Badge,
+  LeaderboardEntry,
+  UserProgress,
+  QuizSubmitRequest,
+  QuizSubmitResponse,
+} from '../types';
+import { showError, showWarning } from '../utils/toast';
 
-// Simulating API delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// Backend Base URL - application.yml'den
+const API_BASE_URL = 'http://localhost:8080/api';
 
-// Auth API
-export const authAPI = {
-  login: async (email: string, password: string): Promise<{ user: User; token: string }> => {
-    await delay(500);
-    // For demo, return first user
-    const user = mockUsers[0];
-    localStorage.setItem('currentUserId', user.user_id);
-    localStorage.setItem('authToken', 'mock-token-123');
-    return { user, token: 'mock-token-123' };
+// Axios instance with default config
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+  timeout: 30000, // 30 second timeout
+});
+
+// Request interceptor - Auth token eklemek için
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor - Gelişmiş hata yönetimi
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    // Network error
+    if (!error.response) {
+      if (error.code === 'ECONNABORTED') {
+        showError('İstek zaman aşımına uğradı. Lütfen tekrar deneyin.');
+      } else if (error.message === 'Network Error') {
+        showError('Bağlantı hatası! Backend çalışıyor mu kontrol edin.');
+      } else {
+        showError('Bir hata oluştu. Lütfen tekrar deneyin.');
+      }
+      return Promise.reject(error);
+    }
+
+    // HTTP error responses
+    const status = error.response.status;
+    const data: any = error.response.data;
+
+    switch (status) {
+      case 400:
+        showError(data?.message || 'Geçersiz istek!');
+        break;
+      case 401:
+        showWarning('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUserId');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+        break;
+      case 403:
+        showError('Bu işlem için yetkiniz yok!');
+        break;
+      case 404:
+        showError(data?.message || 'İstenen kaynak bulunamadı!');
+        break;
+      case 409:
+        showWarning(data?.message || 'Çakışma hatası!');
+        break;
+      case 500:
+        showError('Sunucu hatası! Lütfen daha sonra tekrar deneyin.');
+        break;
+      case 503:
+        showError('Servis şu an kullanılamıyor. Lütfen daha sonra deneyin.');
+        break;
+      default:
+        showError(data?.message || `Hata: ${status}`);
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// ==================== Category API ====================
+// GET /categories
+export const categoryAPI = {
+  getAllCategories: async (): Promise<Category[]> => {
+    const response = await apiClient.get<Category[]>('/categories');
+    return response.data;
   },
 
-  register: async (userData: Partial<User>): Promise<{ user: User; token: string }> => {
-    await delay(500);
-    const newUser: User = {
-      user_id: `U${mockUsers.length + 1}`,
-      name: userData.name || 'New User',
-      city: userData.city || 'Istanbul',
-      university: userData.university || 'University',
-      skill_level: userData.skill_level || 'Beginner',
-      total_points: 0,
-      badge_count: 0,
+  // GET /categories/{categoryId}
+  getCategoryById: async (categoryId: string): Promise<Category> => {
+    const response = await apiClient.get<Category>(`/categories/${categoryId}`);
+    return response.data;
+  },
+};
+
+// ==================== Lesson API ====================
+export const lessonAPI = {
+  // GET /lessons?categoryId={categoryId}
+  getAllLessons: async (categoryId?: string): Promise<Lesson[]> => {
+    const params = categoryId ? { categoryId } : {};
+    const response = await apiClient.get<Lesson[]>('/lessons', { params });
+    return response.data;
+  },
+
+  // GET /lessons?categoryId={categoryId}
+  getLessonsByCategory: async (categoryId: string): Promise<Lesson[]> => {
+    const response = await apiClient.get<Lesson[]>('/lessons', {
+      params: { categoryId },
+    });
+    return response.data;
+  },
+
+  // GET /lessons/{lessonId}
+  getLessonById: async (lessonId: string): Promise<Lesson> => {
+    const response = await apiClient.get<Lesson>(`/lessons/${lessonId}`);
+    return response.data;
+  },
+};
+
+// ==================== Quiz API ====================
+export const quizAPI = {
+  // GET /quiz/lesson/{lessonId}
+  getQuizByLesson: async (lessonId: string): Promise<QuizQuestion[]> => {
+    const response = await apiClient.get<QuizQuestion[]>(`/quiz/lesson/${lessonId}`);
+    return response.data;
+  },
+
+  // POST /quiz/submit
+  submitQuiz: async (request: QuizSubmitRequest): Promise<QuizSubmitResponse> => {
+    const response = await apiClient.post<QuizSubmitResponse>('/quiz/submit', request);
+    return response.data;
+  },
+};
+
+// ==================== User API ====================
+export const userAPI = {
+  // GET /users/{userId}/progress
+  getUserProgress: async (userId: string): Promise<UserProgress> => {
+    const response = await apiClient.get<UserProgress>(`/users/${userId}/progress`);
+    return response.data;
+  },
+};
+
+// ==================== Leaderboard API ====================
+export const leaderboardAPI = {
+  // GET /leaderboard?city={city}
+  getLeaderboard: async (city?: string): Promise<LeaderboardEntry[]> => {
+    const params = city ? { city } : {};
+    const response = await apiClient.get<LeaderboardEntry[]>('/leaderboard', { params });
+    return response.data;
+  },
+};
+
+// ==================== Badge API ====================
+export const badgeAPI = {
+  // Kullanıcı rozetleri UserProgress'ten gelir, ancak gerekirse:
+  getUserBadges: async (userId: string): Promise<Badge[]> => {
+    // Backend'de ayrı bir endpoint yoksa, UserProgress'ten alınır
+    const progress = await userAPI.getUserProgress(userId);
+    return progress.badges;
+  },
+};
+
+// ==================== Auth API (Mock - Backend'de yok) ====================
+// NOT: Backend'de auth endpoint'leri yok, bu yüzden mock olarak bırakıyoruz
+// Gerçek projede backend'e auth endpoint'leri eklenmeli
+export const authAPI = {
+  login: async (email: string, password: string): Promise<{ user: User; token: string }> => {
+    // MOCK: Backend'de auth endpoint'i olmadığı için demo amaçlı U1 kullanıcısını döndürüyoruz
+    try {
+      const progress = await userAPI.getUserProgress('U1');
+      const token = 'mock-token-' + Date.now();
+      localStorage.setItem('currentUserId', progress.user.userId);
+      localStorage.setItem('authToken', token);
+      return { user: progress.user, token };
+    } catch (error) {
+      throw new Error('Login failed');
+    }
+  },
+
+  register: async (userData: {
+    name: string;
+    email: string;
+    password: string;
+    city: string;
+    university: string;
+  }): Promise<{ user: User; token: string }> => {
+    // MOCK: Backend'de register endpoint'i olmadığı için demo amaçlı user döndürüyoruz
+    const mockUser: User = {
+      userId: 'U_NEW_' + Date.now(),
+      name: userData.name,
+      city: userData.city,
+      university: userData.university,
+      skillLevel: 'BEGINNER',
+      totalPoints: 0,
+      badgeCount: 0,
     };
-    mockUsers.push(newUser);
-    localStorage.setItem('currentUserId', newUser.user_id);
-    localStorage.setItem('authToken', 'mock-token-123');
-    return { user: newUser, token: 'mock-token-123' };
+    const token = 'mock-token-' + Date.now();
+    localStorage.setItem('currentUserId', mockUser.userId);
+    localStorage.setItem('authToken', token);
+    return { user: mockUser, token };
   },
 
   logout: async (): Promise<void> => {
-    await delay(300);
     localStorage.removeItem('currentUserId');
     localStorage.removeItem('authToken');
   },
 
-  getCurrentUser: (): User | null => {
+  getCurrentUser: async (): Promise<User | null> => {
     const userId = localStorage.getItem('currentUserId');
     if (!userId) return null;
-    return mockUsers.find((u) => u.user_id === userId) || null;
-  },
-};
-
-// User API
-export const userAPI = {
-  getUserProgress: async (userId: string): Promise<UserProgress> => {
-    await delay(500);
-    const user = mockUsers.find((u) => u.user_id === userId) || mockUsers[0];
-    const userResults = mockQuizResults.filter((r) => r.user_id === userId);
-    const userBadges = mockBadges.filter((b) => b.user_id === userId);
-    
-    const completedLessons = userResults.length;
-    const totalLessons = mockLessons.length;
-    const completionRate = (completedLessons / totalLessons) * 100;
-    const averageScore = userResults.length > 0
-      ? userResults.reduce((sum, r) => sum + r.score, 0) / userResults.length
-      : 0;
-
-    return {
-      user,
-      completedLessons,
-      totalLessons,
-      completionRate,
-      averageScore,
-      recentQuizResults: userResults.slice(-5),
-      badges: userBadges,
-    };
-  },
-};
-
-// Categories API
-export const categoryAPI = {
-  getAllCategories: async (): Promise<Category[]> => {
-    await delay(300);
-    return mockCategories;
-  },
-
-  getCategoryById: async (categoryId: string): Promise<Category | undefined> => {
-    await delay(300);
-    return mockCategories.find((c) => c.category_id === categoryId);
-  },
-};
-
-// Lessons API
-export const lessonAPI = {
-  getAllLessons: async (): Promise<Lesson[]> => {
-    await delay(400);
-    return mockLessons;
-  },
-
-  getLessonsByCategory: async (categoryId: string): Promise<Lesson[]> => {
-    await delay(400);
-    return mockLessons.filter((l) => l.category_id === categoryId);
-  },
-
-  getLessonById: async (lessonId: string): Promise<Lesson | undefined> => {
-    await delay(300);
-    return mockLessons.find((l) => l.lesson_id === lessonId);
-  },
-};
-
-// Quiz API
-export const quizAPI = {
-  getQuizByLesson: async (lessonId: string): Promise<QuizQuestion[]> => {
-    await delay(500);
-    return mockQuizzes.filter((q) => q.lesson_id === lessonId);
-  },
-
-  submitQuiz: async (
-    userId: string,
-    lessonId: string,
-    answers: Record<string, string>
-  ): Promise<{
-    score: number;
-    correctCount: number;
-    totalQuestions: number;
-    earnedPoints: number;
-    newBadges: Badge[];
-  }> => {
-    await delay(700);
-    
-    const questions = mockQuizzes.filter((q) => q.lesson_id === lessonId);
-    let correctCount = 0;
-    
-    questions.forEach((q) => {
-      if (answers[q.question_id] === q.correct_answer) {
-        correctCount++;
-      }
-    });
-    
-    const score = Math.round((correctCount / questions.length) * 100);
-    const earnedPoints = score;
-    
-    // Add result to mock data
-    const newResult: QuizResult = {
-      result_id: `R${mockQuizResults.length + 1}`,
-      user_id: userId,
-      lesson_id: lessonId,
-      score,
-      completed_at: new Date().toISOString(),
-    };
-    mockQuizResults.push(newResult);
-    
-    // Update user points
-    const user = mockUsers.find((u) => u.user_id === userId);
-    if (user) {
-      user.total_points += earnedPoints;
+    try {
+      const progress = await userAPI.getUserProgress(userId);
+      return progress.user;
+    } catch (error) {
+      return null;
     }
-    
-    // Check for new badges
-    const newBadges: Badge[] = [];
-    const userResults = mockQuizResults.filter((r) => r.user_id === userId);
-    const userBadges = mockBadges.filter((b) => b.user_id === userId);
-    
-    // Motivasyon Rozeti: 3 ders tamamlama
-    if (userResults.length >= 3 && !userBadges.find((b) => b.name === 'Motivasyon Rozeti')) {
-      const badge: Badge = {
-        badge_id: `B${mockBadges.length + 1}`,
-        user_id: userId,
-        name: 'Motivasyon Rozeti',
-        awarded_at: new Date().toISOString(),
-      };
-      mockBadges.push(badge);
-      newBadges.push(badge);
-      if (user) user.badge_count++;
-    }
-    
-    // Uzman Rozeti: 10 quizden %80 üzeri
-    const highScoreCount = userResults.filter((r) => r.score >= 80).length;
-    if (highScoreCount >= 3 && !userBadges.find((b) => b.name === 'Uzman Rozeti')) {
-      const badge: Badge = {
-        badge_id: `B${mockBadges.length + 1}`,
-        user_id: userId,
-        name: 'Uzman Rozeti',
-        awarded_at: new Date().toISOString(),
-      };
-      mockBadges.push(badge);
-      newBadges.push(badge);
-      if (user) user.badge_count++;
-    }
-    
-    return {
-      score,
-      correctCount,
-      totalQuestions: questions.length,
-      earnedPoints,
-      newBadges,
-    };
   },
 };
 
-// Leaderboard API
-export const leaderboardAPI = {
-  getLeaderboard: async (filters?: { city?: string; university?: string }): Promise<LeaderboardEntry[]> => {
-    await delay(400);
-    
-    let filteredLeaderboard = [...mockLeaderboard];
-    
-    if (filters?.city) {
-      filteredLeaderboard = filteredLeaderboard.filter((entry) => entry.city === filters.city);
-    }
-    
-    // Re-rank after filtering
-    filteredLeaderboard = filteredLeaderboard
-      .sort((a, b) => b.total_points - a.total_points)
-      .map((entry, index) => ({ ...entry, rank: index + 1 }));
-    
-    return filteredLeaderboard;
-  },
-};
-
-// Badges API
-export const badgeAPI = {
-  getUserBadges: async (userId: string): Promise<Badge[]> => {
-    await delay(300);
-    return mockBadges.filter((b) => b.user_id === userId);
-  },
-};
-
+export default apiClient;

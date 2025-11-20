@@ -10,12 +10,12 @@ import {
   CardActions,
   Button,
   Chip,
-  CircularProgress,
   alpha,
   Grid,
 } from '@mui/material';
 import { Timer as TimerIcon, PlayArrow as PlayIcon, School as SchoolIcon } from '@mui/icons-material';
 import { useCategories, useLessons } from '../hooks/useQueries';
+import { LessonsListSkeleton } from '../components/LoadingSkeletons';
 
 const Lessons = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Lessons = () => {
   const filteredLessons =
     selectedCategory === 'all'
       ? lessons
-      : lessons?.filter((lesson) => lesson.category_id === selectedCategory);
+      : lessons?.filter((lesson) => lesson.categoryId === selectedCategory);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -52,11 +52,7 @@ const Lessons = () => {
   };
 
   if (categoriesLoading || lessonsLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
-        <CircularProgress size={60} />
-      </Box>
-    );
+    return <LessonsListSkeleton />;
   }
 
   return (
@@ -131,9 +127,9 @@ const Lessons = () => {
             };
             return (
               <Tab 
-                key={category.category_id} 
-                label={`${icons[category.category_id] || '📚'} ${category.name}`}
-                value={category.category_id} 
+                key={category.categoryId} 
+                label={`${icons[category.categoryId] || '📚'} ${category.name}`}
+                value={category.categoryId} 
               />
             );
           })}
@@ -142,10 +138,10 @@ const Lessons = () => {
 
       <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
         {filteredLessons?.map((lesson) => {
-          const category = categories?.find((c) => c.category_id === lesson.category_id);
+          const category = categories?.find((c) => c.categoryId === lesson.categoryId);
           
           return (
-            <Grid item xs={12} sm={6} md={4} key={lesson.lesson_id}>
+            <Grid item xs={12} sm={6} md={4} key={lesson.lessonId}>
               <Card
                 sx={{
                   height: '100%',
@@ -159,14 +155,14 @@ const Lessons = () => {
                   '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
-                    borderColor: getCategoryColor(lesson.category_id),
+                    borderColor: getCategoryColor(lesson.categoryId),
                   },
                 }}
               >
                 <Box
                   sx={{
                     height: 6,
-                    background: `linear-gradient(90deg, ${getCategoryColor(lesson.category_id)}, ${alpha(getCategoryColor(lesson.category_id), 0.6)})`,
+                    background: `linear-gradient(90deg, ${getCategoryColor(lesson.categoryId)}, ${alpha(getCategoryColor(lesson.categoryId), 0.6)})`,
                     borderRadius: '12px 12px 0 0',
                   }}
                 />
@@ -176,12 +172,12 @@ const Lessons = () => {
                       label={category?.name}
                       size="small"
                       sx={{
-                        bgcolor: alpha(getCategoryColor(lesson.category_id), 0.1),
-                        color: getCategoryColor(lesson.category_id),
+                        bgcolor: alpha(getCategoryColor(lesson.categoryId), 0.1),
+                        color: getCategoryColor(lesson.categoryId),
                         fontWeight: 600,
                         fontSize: '0.75rem',
                         height: 26,
-                        border: `1px solid ${alpha(getCategoryColor(lesson.category_id), 0.2)}`,
+                        border: `1px solid ${alpha(getCategoryColor(lesson.categoryId), 0.2)}`,
                       }}
                     />
                     <Chip
@@ -246,7 +242,7 @@ const Lessons = () => {
                       fontWeight={600}
                       sx={{ fontSize: '0.75rem' }}
                     >
-                      {lesson.duration_min} dakika
+                      {lesson.durationMin} dakika
                     </Typography>
                   </Box>
                 </CardContent>
@@ -256,7 +252,7 @@ const Lessons = () => {
                     fullWidth
                     variant="contained"
                     startIcon={<PlayIcon />}
-                    onClick={() => navigate(`/lesson/${lesson.lesson_id}`)}
+                    onClick={() => navigate(`/lesson/${lesson.lessonId}`)}
                     sx={{
                       borderRadius: 2,
                       textTransform: 'none',

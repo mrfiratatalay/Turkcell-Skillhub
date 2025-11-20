@@ -1,4 +1,0 @@
-question_id,lesson_id,question_text,correct_answer,options
-Q1,L1,What is Python used for?,All of the above,Web|Data Science|Automation|All of the above
-Q2,L2,Which library is used for ML?,scikit-learn,TensorFlow|scikit-learn|Flask|NumPy
-Q3,L3,What does a firewall do?,Monitors network traffic,Encrypts files|Monitors network traffic|Deletes viruses|Runs programs

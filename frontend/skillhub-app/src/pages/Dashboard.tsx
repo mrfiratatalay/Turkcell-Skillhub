@@ -1,21 +1,18 @@
-import { Box, Typography, CircularProgress, Grid } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
 import { useUserProgress, useLeaderboard } from '../hooks/useQueries';
 import ActiveLessons from '../components/dashboard/ActiveLessons';
 import ProgressPanel from '../components/dashboard/ProgressPanel';
 import BadgesPanel from '../components/dashboard/BadgesPanel';
+import { DashboardSkeleton } from '../components/LoadingSkeletons';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { data: userProgress, isLoading: progressLoading } = useUserProgress(user?.user_id || '');
+  const { data: userProgress, isLoading: progressLoading } = useUserProgress(user?.userId || '');
   const { data: leaderboard, isLoading: leaderboardLoading } = useLeaderboard();
 
   if (progressLoading || leaderboardLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '70vh' }}>
-        <CircularProgress size={60} />
-      </Box>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (

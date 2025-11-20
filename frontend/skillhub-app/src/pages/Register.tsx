@@ -7,12 +7,12 @@ import {
   TextField,
   Button,
   Typography,
-  Alert,
   CircularProgress,
   MenuItem,
   Grid,
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
+import { showSuccess, showError } from '../utils/toast';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,21 +23,52 @@ const Register = () => {
     password: '',
     city: 'Istanbul',
     university: '',
-    skill_level: 'Beginner' as 'Beginner' | 'Intermediate' | 'Advanced',
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+
+    // Validation
+    if (!formData.name.trim()) {
+      showError('Lütfen adınızı soyadınızı girin');
+      return;
+    }
+    if (formData.name.length < 3) {
+      showError('Ad soyad en az 3 karakter olmalı');
+      return;
+    }
+    if (!formData.email.trim()) {
+      showError('Lütfen e-posta adresinizi girin');
+      return;
+    }
+    if (!formData.email.includes('@')) {
+      showError('Lütfen geçerli bir e-posta adresi girin');
+      return;
+    }
+    if (!formData.password.trim()) {
+      showError('Lütfen bir şifre belirleyin');
+      return;
+    }
+    if (formData.password.length < 6) {
+      showError('Şifre en az 6 karakter olmalı');
+      return;
+    }
+    if (!formData.university.trim()) {
+      showError('Lütfen üniversitenizi girin');
+      return;
+    }
+
     setLoading(true);
 
     try {
       await register(formData);
-      navigate('/dashboard');
+      showSuccess('Kayıt başarılı! Hoş geldiniz 🎉');
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 500);
     } catch (err) {
-      setError('Kayıt başarısız. Lütfen tekrar deneyin.');
+      showError('Kayıt başarısız. Lütfen tekrar deneyin.');
     } finally {
       setLoading(false);
     }
@@ -134,27 +165,7 @@ const Register = () => {
                   required
                 />
               </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Beceri Seviyesi"
-                  value={formData.skill_level}
-                  onChange={(e) => handleChange('skill_level', e.target.value)}
-                >
-                  <MenuItem value="Beginner">Başlangıç</MenuItem>
-                  <MenuItem value="Intermediate">Orta</MenuItem>
-                  <MenuItem value="Advanced">İleri</MenuItem>
-                </TextField>
-              </Grid>
             </Grid>
-
-            {error && (
-              <Alert severity="error" sx={{ mt: 2 }}>
-                {error}
-              </Alert>
-            )}
 
             <Button
               type="submit"

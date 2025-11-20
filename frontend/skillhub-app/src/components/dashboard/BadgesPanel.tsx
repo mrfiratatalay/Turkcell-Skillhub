@@ -37,7 +37,7 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
     return '🏆';
   };
 
-  const userRank = leaderboard.findIndex((entry) => entry.user_id === currentUser?.user_id) + 1;
+  const userRank = leaderboard.findIndex((entry) => entry.userId === currentUser?.userId) + 1;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, sm: 2.5, md: 3 } }}>
@@ -57,7 +57,7 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
           {userProgress?.badges && userProgress.badges.length > 0 ? (
             <Grid container spacing={1.5}>
               {userProgress.badges.map((badge) => (
-                <Grid item xs={6} key={badge.badge_id}>
+                <Grid item xs={6} key={badge.badgeId}>
                   <Paper
                     elevation={0}
                     sx={{
@@ -182,15 +182,15 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
           <List disablePadding>
             {leaderboard.slice(0, 5).map((entry, index) => (
               <ListItem
-                key={entry.user_id}
+                key={entry.userId}
                 sx={{
                   bgcolor: index < 3 ? alpha('#f5f5f5', 0.6) : 'transparent',
                   borderRadius: 1.5,
                   mb: 1,
                   px: { xs: 1, sm: 1.5 },
                   py: { xs: 0.75, sm: 1 },
-                  border: entry.user_id === currentUser?.user_id ? '2px solid' : '1px solid',
-                  borderColor: entry.user_id === currentUser?.user_id ? 'primary.main' : 'transparent',
+                  border: entry.userId === currentUser?.userId ? '2px solid' : '1px solid',
+                  borderColor: entry.userId === currentUser?.userId ? 'primary.main' : 'transparent',
                 }}
               >
                 <ListItemAvatar>
@@ -227,7 +227,7 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
                   }
                 />
                 <Chip
-                  label={`${entry.total_points}`}
+                  label={`${entry.totalPoints}`}
                   size="small"
                   icon={<TrophyIcon sx={{ fontSize: 14 }} />}
                   sx={{

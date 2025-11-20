@@ -1,0 +1,28 @@
+question_id,lesson_id,question_text,correct_answer,options
+Q1,L1,What is Python used for?,All of the above,Web|Data Science|Automation|All of the above
+Q2,L2,Which library is used for ML?,scikit-learn,TensorFlow|scikit-learn|Flask|NumPy
+Q3,L3,What does a firewall do?,Monitors network traffic,Encrypts files|Monitors network traffic|Deletes viruses|Runs programs
+Q4,L1,Which keyword is used to define a function in Python?,def,function|def|func|define
+Q5,L1,What is the output of print(2**3)?,8,6|8|9|16
+Q6,L2,What is supervised learning?,Learning with labeled data,Learning without data|Learning with labeled data|Learning without labels|Random learning
+Q7,L2,Which algorithm is used for classification?,Decision Tree,Linear Regression|K-Means|Decision Tree|PCA
+Q8,L3,What is encryption?,Converting data to secure format,Deleting data|Converting data to secure format|Copying data|Compressing data
+Q9,L3,What is two-factor authentication?,Extra security layer,Single password|Extra security layer|No password|Biometric only
+Q10,L4,What is MVP?,Minimum Viable Product,Maximum Value Product|Minimum Viable Product|Most Valuable Player|Main Virtual Platform
+Q11,L4,What is a pivot in startups?,Major business change,Small adjustment|Major business change|Funding round|Marketing strategy
+Q12,L5,What are decorators in Python?,Functions that modify other functions,Class methods|Functions that modify other functions|Variables|Loops
+Q13,L5,What is a generator in Python?,Iterator that yields values,List creator|Iterator that yields values|Function caller|Class instance
+Q14,L6,What is Django?,Web framework,Database|Web framework|Programming language|Cloud service
+Q15,L6,What is ORM in Django?,Object-Relational Mapping,Online Resource Manager|Object-Relational Mapping|Optical Recognition Model|Operating Resource Module
+Q16,L7,What is a neural network?,Interconnected nodes like neurons,Single algorithm|Interconnected nodes like neurons|Database structure|Web server
+Q17,L7,What is backpropagation?,Training algorithm for neural networks,Data storage method|Training algorithm for neural networks|Web protocol|Security technique
+Q18,L8,What is Pandas used for?,Data manipulation and analysis,Web scraping only|Data manipulation and analysis|Game development|Mobile apps
+Q19,L8,What is a DataFrame?,2D data structure,1D array|2D data structure|Database|File format
+Q20,L9,What is penetration testing?,Security testing to find vulnerabilities,Software development|Security testing to find vulnerabilities|Network installation|Data backup
+Q21,L9,What is social engineering?,Manipulating people for security breaches,Building networks|Manipulating people for security breaches|Programming|Database design
+Q22,L10,What is a VPN?,Virtual Private Network,Video Processing Node|Virtual Private Network|Virus Protection Network|Visual Programming Network
+Q23,L10,What is DDoS attack?,Distributed Denial of Service,Direct Data Operation System|Distributed Denial of Service|Digital Database of Services|Dynamic Data Output Stream
+Q24,L11,What is SEO?,Search Engine Optimization,Social Event Organization|Search Engine Optimization|Secure Email Operation|Software Engineering Optimization
+Q25,L11,What is content marketing?,Creating valuable content to attract customers,Selling products directly|Creating valuable content to attract customers|Email spam|Cold calling
+Q26,L12,What are the key building blocks of Business Model Canvas?,9 blocks,5 blocks|7 blocks|9 blocks|12 blocks
+Q27,L12,What is a value proposition?,Value offered to customers,Company profit|Value offered to customers|Marketing budget|Sales target

@@ -21,8 +21,8 @@ const ActiveLessons = ({ userProgress }: ActiveLessonsProps) => {
   const navigate = useNavigate();
   const { data: allLessons } = useLessons();
 
-  const completedLessonIds = userProgress?.recentQuizResults.map((r) => r.lesson_id) || [];
-  const activeLessons = allLessons?.filter((lesson) => !completedLessonIds.includes(lesson.lesson_id)) || [];
+  const completedLessonIds = userProgress?.recentQuizResults.map((r) => r.lessonId) || [];
+  const activeLessons = allLessons?.filter((lesson) => !completedLessonIds.includes(lesson.lessonId)) || [];
 
   const getCategoryColor = (categoryId: string) => {
     const colors: Record<string, string> = {
@@ -70,7 +70,7 @@ const ActiveLessons = ({ userProgress }: ActiveLessonsProps) => {
         <Stack spacing={2}>
           {activeLessons.slice(0, 4).map((lesson) => (
             <Card
-              key={lesson.lesson_id}
+              key={lesson.lessonId}
               sx={{
                 borderRadius: 2.5,
                 border: '1px solid',
@@ -79,25 +79,25 @@ const ActiveLessons = ({ userProgress }: ActiveLessonsProps) => {
                 '&:hover': {
                   boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
                   transform: 'translateY(-4px)',
-                  borderColor: getCategoryColor(lesson.category_id),
+                  borderColor: getCategoryColor(lesson.categoryId),
                 },
               }}
             >
               <Box
                 sx={{
                   height: 4,
-                  background: `linear-gradient(90deg, ${getCategoryColor(lesson.category_id)}, ${alpha(getCategoryColor(lesson.category_id), 0.6)})`,
+                  background: `linear-gradient(90deg, ${getCategoryColor(lesson.categoryId)}, ${alpha(getCategoryColor(lesson.categoryId), 0.6)})`,
                   borderRadius: '8px 8px 0 0',
                 }}
               />
               <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
                 <Box sx={{ display: 'flex', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
                   <Chip
-                    label={getCategoryName(lesson.category_id)}
+                    label={getCategoryName(lesson.categoryId)}
                     size="small"
                     sx={{
-                      bgcolor: alpha(getCategoryColor(lesson.category_id), 0.1),
-                      color: getCategoryColor(lesson.category_id),
+                      bgcolor: alpha(getCategoryColor(lesson.categoryId), 0.1),
+                      color: getCategoryColor(lesson.categoryId),
                       fontWeight: 600,
                       fontSize: '0.75rem',
                       height: 24,
@@ -130,7 +130,7 @@ const ActiveLessons = ({ userProgress }: ActiveLessonsProps) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
                   <TimerIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
                   <Typography variant="caption" color="text.secondary">
-                    {lesson.duration_min} dakika
+                    {lesson.durationMin} dakika
                   </Typography>
                 </Box>
 
@@ -138,7 +138,7 @@ const ActiveLessons = ({ userProgress }: ActiveLessonsProps) => {
                   fullWidth
                   variant="contained"
                   startIcon={<PlayIcon />}
-                  onClick={() => navigate(`/lesson/${lesson.lesson_id}`)}
+                  onClick={() => navigate(`/lesson/${lesson.lessonId}`)}
                   size="small"
                   sx={{
                     borderRadius: 1.5,

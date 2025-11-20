@@ -65,7 +65,7 @@ const ProgressPanel = ({ userProgress }: ProgressPanelProps) => {
                   fontWeight="bold"
                   sx={{ fontSize: { xs: '1.75rem', sm: '2rem' } }}
                 >
-                  {userProgress?.user.total_points || 0}
+                  {userProgress?.user.totalPoints || 0}
                 </Typography>
                 <Typography variant="caption" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>
                   Toplam Puan

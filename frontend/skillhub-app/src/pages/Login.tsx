@@ -7,10 +7,10 @@ import {
   TextField,
   Button,
   Typography,
-  Alert,
   CircularProgress,
 } from '@mui/material';
 import { useAuth } from '../contexts/AuthContext';
+import { showSuccess, showError } from '../utils/toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,18 +18,34 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    
+    // Basic validation
+    if (!email.trim()) {
+      showError('Lütfen e-posta adresinizi girin');
+      return;
+    }
+    if (!password.trim()) {
+      showError('Lütfen şifrenizi girin');
+      return;
+    }
+    if (password.length < 3) {
+      showError('Şifre en az 3 karakter olmalı');
+      return;
+    }
+
     setLoading(true);
 
     try {
       await login(email, password);
-      navigate('/dashboard');
+      showSuccess('Giriş başarılı! Yönlendiriliyorsunuz...');
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 500);
     } catch (err) {
-      setError('Giriş başarısız. Lütfen tekrar deneyin.');
+      showError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
     } finally {
       setLoading(false);
     }
@@ -81,12 +97,6 @@ const Login = () => {
               margin="normal"
               required
             />
-
-            {error && (
-              <Alert severity="error" sx={{ mt: 2 }}>
-                {error}
-              </Alert>
-            )}
 
             <Button
               type="submit"
