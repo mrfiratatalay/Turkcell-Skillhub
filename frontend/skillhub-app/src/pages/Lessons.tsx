@@ -20,6 +20,7 @@ import {
 } from '@mui/icons-material';
 import { useCategories, useLessons } from '../hooks/useQueries';
 import { LessonsListSkeleton } from '../components/LoadingSkeletons';
+import { getLessonDescription } from '../utils/lessonDescriptions';
 
 const Lessons = () => {
   const navigate = useNavigate();
@@ -138,13 +139,13 @@ const Lessons = () => {
           const category = categories?.find((c) => c.categoryId === lesson.categoryId);
           
           return (
-            <Grid item xs={12} sm={12} md={6} lg={3} key={lesson.lessonId}>
+            <Grid item xs={12} md={6} key={lesson.lessonId}>
               <Card
                 elevation={0}
                 sx={{
                   width: '100%',
-                  minHeight: 280,
-                  maxHeight: 280,
+                  height: 'auto', // ✅ İçeriğe göre ayarla!
+                  minHeight: 'auto',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
@@ -159,10 +160,10 @@ const Lessons = () => {
                   },
                 }}
               >
-                {/* Üst Kısım: Etiketler + Başlık + Süre */}
-                <CardContent sx={{ p: 2.5, pb: 1.5 }}>
+                {/* Üst Kısım: Etiketler + Başlık + Description + Süre */}
+                <CardContent sx={{ p: 2.5, pb: 1 }}> {/* Minimal bottom padding */}
                   {/* Etiketler - Tek Satır */}
-                  <Box sx={{ mb: 1.5, display: 'flex', gap: 0.75, height: 22, overflow: 'hidden' }}>
+                  <Box sx={{ mb: 1, display: 'flex', gap: 0.75, height: 22, overflow: 'hidden' }}> {/* mb azaltıldı */}
                     <Chip
                       label={category?.name}
                       size="small"
@@ -198,7 +199,7 @@ const Lessons = () => {
                     sx={{
                       fontSize: '1rem',
                       lineHeight: 1.4,
-                      mb: 2,
+                      mb: 1, // Azaltıldı
                       color: '#1A1A1A',
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
@@ -208,6 +209,24 @@ const Lessons = () => {
                     }}
                   >
                     {lesson.title}
+                  </Typography>
+
+                  {/* Description Preview - Uzun */}
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontSize: '0.875rem',
+                      lineHeight: 1.6,
+                      mb: 1, // Minimal margin
+                      color: '#64748B',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3, // Max 3 satır (uzun açıklama)
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      height: '4.2em', // 3 satır için (1.6 * 3 = 4.8em ama biraz kısalttık)
+                    }}
+                  >
+                    {getLessonDescription(lesson.lessonId)}
                   </Typography>
 
                   {/* Süre */}
@@ -223,8 +242,8 @@ const Lessons = () => {
                   </Box>
                 </CardContent>
 
-                {/* Alt Kısım: Buton - Her Zaman En Altta */}
-                <CardActions sx={{ p: 2.5, pt: 0, mt: 'auto' }}>
+                {/* Alt Kısım: Buton */}
+                <CardActions sx={{ px: 2.5, pb: 2, pt: 1 }}> {/* mt:'auto' kaldırıldı - gap yok artık! */}
                   <Button
                     fullWidth
                     variant="contained"

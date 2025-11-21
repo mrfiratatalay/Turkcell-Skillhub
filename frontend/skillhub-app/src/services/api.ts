@@ -68,7 +68,7 @@ apiClient.interceptors.response.use(
       case 401:
         showWarning('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
         localStorage.removeItem('authToken');
-        localStorage.removeItem('currentUserId');
+    localStorage.removeItem('currentUserId');
         setTimeout(() => {
           window.location.href = '/login';
         }, 1500);

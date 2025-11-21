@@ -16,6 +16,8 @@ import {
   ArrowBack as BackIcon,
 } from '@mui/icons-material';
 import { useLesson, useCategories } from '../hooks/useQueries';
+import { getLessonDescription } from '../utils/lessonDescriptions';
+import { getLessonVideo } from '../utils/lessonVideos';
 
 const LessonDetail = () => {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -24,6 +26,12 @@ const LessonDetail = () => {
   const { data: categories } = useCategories();
 
   const category = categories?.find((c) => c.categoryId === lesson?.categoryId);
+  
+  // Description: Backend'den gelirse onu kullan, yoksa custom map'ten al
+  const description = lesson ? (lesson.description || getLessonDescription(lesson.lessonId)) : '';
+  
+  // Video: Backend'den gelirse onu kullan, yoksa custom map'ten al
+  const videoUrl = lesson ? (lesson.videoUrl || getLessonVideo(lesson.lessonId)) : '';
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -86,8 +94,8 @@ const LessonDetail = () => {
               {lesson.title}
             </Typography>
 
-            <Typography variant="body1" color="text.secondary" paragraph>
-              {lesson.description}
+            <Typography variant="body1" color="text.secondary" paragraph sx={{ lineHeight: 1.7 }}>
+              {description}
             </Typography>
           </Box>
 
@@ -95,21 +103,34 @@ const LessonDetail = () => {
 
           {/* Video Player */}
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
-              📺 Ders Videosu
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+              <Typography variant="h6" fontWeight="bold">
+                📺 Ders Videosu
+              </Typography>
+              <Chip 
+                label="YouTube" 
+                size="small" 
+                sx={{ 
+                  bgcolor: '#FF0000', 
+                  color: '#FFF', 
+                  fontWeight: 600,
+                  fontSize: '0.75rem'
+                }} 
+              />
+            </Box>
             <Paper
               elevation={0}
               sx={{
                 position: 'relative',
-                paddingTop: '56.25%',
+                paddingTop: '56.25%', // 16:9 aspect ratio
                 bgcolor: 'grey.900',
                 borderRadius: 2,
                 overflow: 'hidden',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               }}
             >
               <iframe
-                src={lesson.videoUrl}
+                src={videoUrl}
                 title={lesson.title}
                 style={{
                   position: 'absolute',
@@ -119,10 +140,21 @@ const LessonDetail = () => {
                   height: '100%',
                   border: 'none',
                 }}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
             </Paper>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                display: 'block', 
+                mt: 1, 
+                color: 'text.secondary',
+                fontStyle: 'italic'
+              }}
+            >
+              💡 İpucu: Videoyu tam ekran modunda izleyebilirsiniz
+            </Typography>
           </Box>
 
           <Divider sx={{ my: 3 }} />
