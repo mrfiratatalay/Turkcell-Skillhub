@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -15,17 +15,45 @@ import {
   Place as PlaceIcon,
   FilterList as FilterIcon,
 } from '@mui/icons-material';
-import { useLeaderboard } from '../hooks/useQueries';
+import { useLeaderboard, useUserProgress } from '../hooks/useQueries';
 import { useAuth } from '../contexts/AuthContext';
 import { LeaderboardSkeleton } from '../components/LoadingSkeletons';
 import { getDisplayName, getAvatarLetter } from '../utils/mockNames';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Leaderboard = () => {
   const { user } = useAuth();
   const [cityFilter, setCityFilter] = useState<string>('');
+  const queryClient = useQueryClient();
   
   // Backend'den tüm veriyi al (filtreyi frontend'de yapacağız)
-  const { data: leaderboard, isLoading } = useLeaderboard();
+  const { data: leaderboard, isLoading, refetch } = useLeaderboard();
+  // Kullanıcının güncel progress'ini al (Dashboard'da olduğu gibi)
+  const { data: userProgress } = useUserProgress(user?.userId || '');
+
+  // Sayfa focus olduğunda veya mount olduğunda refetch yap
+  useEffect(() => {
+    const handleFocus = () => {
+      // Invalidate and refetch leaderboard when window gains focus
+      queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
+      refetch();
+    };
+    
+    // Polling: Her 5 saniyede bir leaderboard'ı güncelle
+    const intervalId = setInterval(() => {
+      queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
+      refetch();
+    }, 5000); // 5 saniye
+    
+    window.addEventListener('focus', handleFocus);
+    // Initial refetch on mount
+    refetch();
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      clearInterval(intervalId);
+    };
+  }, [queryClient, refetch]);
 
   // Backend'den gelen unique şehirleri al
   const cities = Array.from(
@@ -76,6 +104,10 @@ const Leaderboard = () => {
 
   const userRank = uniqueLeaderboard?.findIndex((entry) => entry.userId === user?.userId);
   const userEntry = userRank !== undefined && userRank >= 0 ? uniqueLeaderboard?.[userRank] : null;
+  
+  // Kullanıcının güncel puanını userProgress'ten al (DB'den anlık)
+  const currentUserPoints = userProgress?.user?.totalPoints ?? userEntry?.totalPoints ?? 0;
+  const currentUserRank = userEntry?.rank ?? (userRank !== undefined && userRank >= 0 ? userRank + 1 : null);
 
   return (
     <Box sx={{ pb: 6, bgcolor: '#F5F7FA', minHeight: '100vh' }}>
@@ -116,7 +148,7 @@ const Leaderboard = () => {
       </Box>
 
       {/* USER RANK CARD - CLEAN & PROFESSIONAL */}
-      {userEntry && (
+      {(userEntry || user) && (
         <Card
           elevation={0}
           sx={{
@@ -148,7 +180,7 @@ const Leaderboard = () => {
                   width: 44,
                   height: 44,
                   borderRadius: '8px',
-                  bgcolor: getRankColor(userEntry.rank || 99),
+                  bgcolor: getRankColor(currentUserRank || 99),
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -156,7 +188,7 @@ const Leaderboard = () => {
                 }}
               >
                 <Typography variant="h6" fontWeight="700" sx={{ color: '#FFF', fontSize: '1.125rem' }}>
-                  {getRankIcon(userEntry.rank || 99)}
+                  {getRankIcon(currentUserRank || 99)}
                 </Typography>
               </Box>
 
@@ -170,21 +202,21 @@ const Leaderboard = () => {
                   fontSize: '1rem',
                 }}
               >
-                {getAvatarLetter(userEntry.name, userEntry.userId)}
+                {user?.name?.charAt(0)?.toUpperCase() || getAvatarLetter(userEntry?.name, user?.userId || '')}
               </Avatar>
 
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography variant="body1" fontWeight="700" sx={{ color: '#1A1A1A', fontSize: '0.9375rem' }}>
-                  {getDisplayName(userEntry.name, userEntry.userId)}
+                  {user?.name || getDisplayName(userEntry?.name, user?.userId || '')}
                 </Typography>
                 <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.8125rem' }}>
-                  {userEntry.city || 'Bilinmiyor'}
+                  {userEntry?.city || user?.city || 'Bilinmiyor'}
                 </Typography>
               </Box>
 
               <Box sx={{ textAlign: 'right' }}>
                 <Typography variant="h6" fontWeight="700" sx={{ color: '#003D7A', fontSize: '1.25rem' }}>
-                  {userEntry.totalPoints || 0}
+                  {currentUserPoints}
                 </Typography>
                 <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.75rem' }}>
                   puan
@@ -342,22 +374,23 @@ const Leaderboard = () => {
 
                     {/* User Info */}
                     <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography
-                        variant="body1"
-                        fontWeight="700"
-                        sx={{
-                          color: '#1A1A1A',
-                          fontSize: '0.9375rem',
-                          mb: 0.25,
-                        }}
-                      >
-                        {getDisplayName(entry.name, entry.userId)}
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.25 }}>
+                        <Typography
+                          variant="body1"
+                          component="span"
+                          fontWeight="700"
+                          sx={{
+                            color: '#1A1A1A',
+                            fontSize: '0.9375rem',
+                          }}
+                        >
+                          {getDisplayName(entry.name, entry.userId)}
+                        </Typography>
                         {isCurrentUser && (
                           <Chip
                             label="Sen"
                             size="small"
                             sx={{
-                              ml: 1,
                               bgcolor: '#003D7A',
                               color: '#FFF',
                               fontWeight: 700,
@@ -366,7 +399,7 @@ const Leaderboard = () => {
                             }}
                           />
                         )}
-                      </Typography>
+                      </Box>
                       <Typography
                         variant="caption"
                         sx={{
@@ -388,7 +421,7 @@ const Leaderboard = () => {
                           fontSize: '1.125rem',
                         }}
                       >
-                        {entry.totalPoints || 0}
+                        {isCurrentUser ? currentUserPoints : (entry.totalPoints || 0)}
                       </Typography>
                       <Typography
                         variant="caption"

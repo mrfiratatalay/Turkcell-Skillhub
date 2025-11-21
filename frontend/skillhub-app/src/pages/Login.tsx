@@ -224,13 +224,16 @@ const Login = () => {
               }}
             >
               <Typography variant="caption" color="text.secondary" display="block" gutterBottom fontWeight={600}>
-                🔑 Demo Hesap:
+                🔑 Demo Hesaplar (Database Kullanıcıları):
+              </Typography>
+              <Typography variant="body2" fontWeight={500} color="text.primary" sx={{ mb: 0.5 }}>
+                <strong>Zeynep:</strong> zeynep@skillhub.com / 123456
+              </Typography>
+              <Typography variant="body2" fontWeight={500} color="text.primary" sx={{ mb: 0.5 }}>
+                <strong>Ayşe:</strong> ayse@skillhub.com / 123456
               </Typography>
               <Typography variant="body2" fontWeight={500} color="text.primary">
-                E-posta: <strong>ahmet@test.com</strong>
-              </Typography>
-              <Typography variant="body2" fontWeight={500} color="text.primary">
-                Şifre: <strong>123456</strong>
+                <strong>Can:</strong> can@skillhub.com / 123456
               </Typography>
             </Paper>
 

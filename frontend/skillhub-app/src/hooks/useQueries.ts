@@ -74,9 +74,19 @@ export const useSubmitQuiz = () => {
       quizAPI.submitQuiz(request),
     onSuccess: (_, variables) => {
       // Invalidate relevant queries to refetch updated data
-      queryClient.invalidateQueries({ queryKey: ['userProgress', variables.userId] });
-      queryClient.invalidateQueries({ queryKey: ['leaderboard'] });
-      queryClient.invalidateQueries({ queryKey: ['badges', variables.userId] });
+      queryClient.invalidateQueries({ 
+        queryKey: ['userProgress', variables.userId],
+        refetchType: 'active', // Force immediate refetch
+      });
+      // Invalidate ALL leaderboard queries (with or without filters)
+      queryClient.invalidateQueries({ 
+        queryKey: ['leaderboard'],
+        refetchType: 'active', // Force refetch active queries immediately
+      });
+      queryClient.invalidateQueries({ 
+        queryKey: ['badges', variables.userId],
+        refetchType: 'active',
+      });
     },
   });
 };
@@ -86,6 +96,10 @@ export const useLeaderboard = (filters?: { city?: string; university?: string })
   return useQuery({
     queryKey: ['leaderboard', filters],
     queryFn: () => leaderboardAPI.getLeaderboard(filters),
+    refetchOnMount: 'always', // Always refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window gains focus
+    staleTime: 0, // Data is always considered stale, so it refetches
+    refetchInterval: 10000, // Auto-refetch every 10 seconds when component is active
   });
 };
 

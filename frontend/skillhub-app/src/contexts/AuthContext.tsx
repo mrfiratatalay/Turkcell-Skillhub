@@ -33,16 +33,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize demo users for testing
-    initializeDemoUsers();
+    try {
+      // Initialize demo users for testing
+      initializeDemoUsers();
 
-    // Check if user is already logged in (from localStorage)
-    const currentUser = getCurrentUser();
-    if (currentUser) {
-    setUser(currentUser);
+      // Check if user is already logged in (from localStorage)
+      const currentUser = getCurrentUser();
+      if (currentUser) {
+        setUser(currentUser);
+      }
+    } catch (error) {
+      console.error('Error initializing auth:', error);
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {

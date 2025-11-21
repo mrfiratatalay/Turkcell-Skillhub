@@ -55,6 +55,7 @@ export interface LeaderboardEntry {
 }
 
 // Backend UserProgressResponse.UserBasicInfo
+// Extended with email and password for mock authentication
 export interface User {
   userId: string;
   name: string;
@@ -63,6 +64,8 @@ export interface User {
   skillLevel: string;
   totalPoints: number;
   badgeCount: number;
+  email?: string; // For mock authentication only
+  password?: string; // For mock authentication only
 }
 
 // Backend UserProgressResponse

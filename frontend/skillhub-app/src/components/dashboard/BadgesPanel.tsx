@@ -223,7 +223,7 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
                 <ListItemText
                   primary={
                     <Typography variant="body2" fontWeight="600" sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
-                      {entry.name}
+                      {getDisplayName(entry.name, entry.userId)}
                     </Typography>
                   }
                   secondary={
