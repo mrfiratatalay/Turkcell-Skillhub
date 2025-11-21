@@ -62,8 +62,8 @@ const Lessons = () => {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
           <SchoolIcon sx={{ fontSize: 28, color: '#003D7A' }} />
-          <Typography
-            variant="h4"
+          <Typography 
+            variant="h4" 
             fontWeight="700"
             sx={{
               color: '#1A1A1A',
@@ -73,9 +73,9 @@ const Lessons = () => {
             Eğitim Kataloğu
           </Typography>
         </Box>
-        <Typography
+        <Typography 
           variant="body2"
-          sx={{
+          sx={{ 
             color: '#64748B',
             fontSize: '0.9375rem',
             fontWeight: 500,
@@ -86,8 +86,8 @@ const Lessons = () => {
       </Box>
 
       {/* MINIMAL FILTER BAR */}
-      <Box
-        sx={{
+      <Box 
+        sx={{ 
           bgcolor: '#FFF',
           p: 2,
           mb: 3,
@@ -124,11 +124,11 @@ const Lessons = () => {
         >
           <Tab label="Tümü" value="all" />
           {categories?.map((category) => (
-            <Tab 
+              <Tab 
               key={category.categoryId}
               label={category.name}
               value={category.categoryId}
-            />
+              />
           ))}
         </Tabs>
       </Box>
@@ -180,7 +180,7 @@ const Lessons = () => {
                     <Chip
                       label={lesson.difficulty}
                       size="small"
-                      sx={{
+                      sx={{ 
                         bgcolor: '#F1F5F9',
                         color: '#64748B',
                         fontWeight: 600,
@@ -212,9 +212,9 @@ const Lessons = () => {
                   </Typography>
 
                   {/* Description Preview - Uzun */}
-                  <Typography
-                    variant="body2"
-                    sx={{
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
                       fontSize: '0.875rem',
                       lineHeight: 1.6,
                       mb: 1, // Minimal margin

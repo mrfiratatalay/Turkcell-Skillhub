@@ -18,6 +18,7 @@ import {
 import { useLeaderboard } from '../hooks/useQueries';
 import { useAuth } from '../contexts/AuthContext';
 import { LeaderboardSkeleton } from '../components/LoadingSkeletons';
+import { getDisplayName, getAvatarLetter } from '../utils/mockNames';
 
 const Leaderboard = () => {
   const { user } = useAuth();
@@ -169,12 +170,12 @@ const Leaderboard = () => {
                   fontSize: '1rem',
                 }}
               >
-                {userEntry.userId?.charAt(1)?.toUpperCase() || 'U'}
+                {getAvatarLetter(userEntry.name, userEntry.userId)}
               </Avatar>
 
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography variant="body1" fontWeight="700" sx={{ color: '#1A1A1A', fontSize: '0.9375rem' }}>
-                  {userEntry.userId}
+                  {getDisplayName(userEntry.name, userEntry.userId)}
                 </Typography>
                 <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.8125rem' }}>
                   {userEntry.city || 'Bilinmiyor'}
@@ -336,7 +337,7 @@ const Leaderboard = () => {
                         fontSize: '0.9375rem',
                       }}
                     >
-                      {entry.userId?.charAt(1)?.toUpperCase() || 'U'}
+                      {getAvatarLetter(entry.name, entry.userId)}
                     </Avatar>
 
                     {/* User Info */}
@@ -350,7 +351,7 @@ const Leaderboard = () => {
                           mb: 0.25,
                         }}
                       >
-                        {entry.userId}
+                        {getDisplayName(entry.name, entry.userId)}
                         {isCurrentUser && (
                           <Chip
                             label="Sen"

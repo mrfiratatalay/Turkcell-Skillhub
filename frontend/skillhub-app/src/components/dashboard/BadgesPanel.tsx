@@ -20,6 +20,7 @@ import {
   Leaderboard as LeaderboardIcon,
 } from '@mui/icons-material';
 import { UserProgress, LeaderboardEntry, User } from '../../types';
+import { getDisplayName, getAvatarLetter } from '../../utils/mockNames';
 
 interface BadgesPanelProps {
   userProgress?: UserProgress;
