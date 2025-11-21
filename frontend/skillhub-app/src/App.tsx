@@ -11,6 +11,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AIAssistant from './pages/AIAssistant';
 import Lessons from './pages/Lessons';
 import LessonDetail from './pages/LessonDetail';
 import Quiz from './pages/Quiz';
@@ -53,6 +54,7 @@ function App() {
               >
                 <Route index element={<Navigate to="/dashboard" replace />} />
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="ai-assistant" element={<AIAssistant />} />
                 <Route path="lessons" element={<Lessons />} />
                 <Route path="lesson/:lessonId" element={<LessonDetail />} />
                 <Route path="quiz/:lessonId" element={<Quiz />} />

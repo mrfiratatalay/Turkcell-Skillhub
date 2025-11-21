@@ -184,8 +184,15 @@ const ProgressPanel = ({ userProgress }: ProgressPanelProps) => {
 
           {chartData.length > 0 ? (
             <>
-              <Box sx={{ width: '100%', height: { xs: 180, sm: 200 }, mt: 2, minHeight: 180 }}>
-                <ResponsiveContainer width="100%" height="100%" minHeight={180}>
+              <Box 
+                sx={{ 
+                  width: '100%', 
+                  height: 200, // Sabit height (recharts için gerekli)
+                  mt: 2,
+                  position: 'relative',
+                }}
+              >
+                <ResponsiveContainer width="100%" height={200}>
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis 

@@ -37,7 +37,12 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
     return '🏆';
   };
 
-  const userRank = leaderboard.findIndex((entry) => entry.userId === currentUser?.userId) + 1;
+  // Backend'den duplicate veriler gelebiliyor - unique yap
+  const uniqueLeaderboard = leaderboard.filter(
+    (entry, index, self) => index === self.findIndex((e) => e.userId === entry.userId)
+  );
+
+  const userRank = uniqueLeaderboard.findIndex((entry) => entry.userId === currentUser?.userId) + 1;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, sm: 2.5, md: 3 } }}>
@@ -180,9 +185,9 @@ const BadgesPanel = ({ userProgress, leaderboard, currentUser }: BadgesPanelProp
           </Typography>
 
           <List disablePadding>
-            {leaderboard.slice(0, 5).map((entry, index) => (
+            {uniqueLeaderboard.slice(0, 5).map((entry, index) => (
               <ListItem
-                key={entry.userId}
+                key={`${entry.userId}-${index}`}
                 sx={{
                   bgcolor: index < 3 ? alpha('#f5f5f5', 0.6) : 'transparent',
                   borderRadius: 1.5,

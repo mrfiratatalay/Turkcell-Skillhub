@@ -27,6 +27,7 @@ import {
   Person as PersonIcon,
   Leaderboard as LeaderboardIcon,
   Logout as LogoutIcon,
+  Psychology as BrainIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -61,6 +62,7 @@ const DashboardLayout = () => {
 
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { text: 'AI Asistan', icon: <BrainIcon />, path: '/ai-assistant' },
     { text: 'Eğitimler', icon: <SchoolIcon />, path: '/lessons' },
     { text: 'Rozetlerim', icon: <TrophyIcon />, path: '/profile' },
     { text: 'Liderlik Tablosu', icon: <LeaderboardIcon />, path: '/leaderboard' },

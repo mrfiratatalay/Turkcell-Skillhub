@@ -82,10 +82,13 @@ const Dashboard = () => {
       </Box>
       </Paper>
 
-      {/* Stats Cards Grid */}
-      <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
+      {/* Stats Cards Grid - 3 EQUAL COLUMNS */}
+      <Grid 
+        container 
+        spacing={3}
+      >
         {/* Left Panel - Active Lessons */}
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} md={4}>
           <Box
             sx={{
               height: '100%',
@@ -124,7 +127,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Middle Panel - Progress & Quiz Results */}
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} md={4}>
           <Box
             sx={{
               height: '100%',
@@ -163,7 +166,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Right Panel - Badges & Leaderboard */}
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} md={4}>
           <Box
             sx={{
               height: '100%',
