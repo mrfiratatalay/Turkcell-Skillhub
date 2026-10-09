@@ -4,10 +4,13 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useLocation } from 'react-router';
 import { glass, gold, neon } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { useSession } from '@/shared/auth/useSession';
+import { isDemoMode } from '@/shared/config/runtime';
 import { formatNumber, initials } from '@/shared/lib/format';
 import { Logo } from '@/shared/ui/Logo';
 import { activeNav, NAV_ITEMS } from './navigation';
@@ -34,8 +37,15 @@ export function MobileTopBar() {
         boxShadow: `0 1px 0 ${glass.hairline}`,
       }}
     >
-      <Box component={RouterLink} to="/gokyuzu" sx={{ textDecoration: 'none', color: 'inherit', mr: 'auto' }}>
+      <Box component={RouterLink} to="/gokyuzu" sx={{ textDecoration: 'none', color: 'inherit', mr: 'auto', minWidth: 0 }}>
         <Logo size={19} />
+        {isDemoMode && (
+          <Tooltip title="Kurgusal örnek veriler. İlerlemen bu tarayıcıda saklanır.">
+            <Typography sx={{ color: neon[100], fontSize: 9, lineHeight: 1.2, letterSpacing: 1.5, mt: 0.25 }}>
+              DEMO
+            </Typography>
+          </Tooltip>
+        )}
       </Box>
       {progress && progress.streakDays > 0 && (
         <Chip

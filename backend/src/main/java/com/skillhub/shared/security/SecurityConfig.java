@@ -28,7 +28,8 @@ class SecurityConfig {
 
     @Bean
     SecurityFilterChain apiSecurity(HttpSecurity http, ProblemJsonEntryPoint entryPoint) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login").permitAll()

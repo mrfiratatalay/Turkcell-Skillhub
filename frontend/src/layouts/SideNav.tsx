@@ -2,6 +2,7 @@ import LogoutRounded from '@mui/icons-material/LogoutRounded';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
+import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -9,6 +10,7 @@ import { Link as RouterLink, useLocation } from 'react-router';
 import { glass, glow, gold, ink, neon, night } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { useSession } from '@/shared/auth/useSession';
+import { isDemoMode } from '@/shared/config/runtime';
 import { formatNumber, initials } from '@/shared/lib/format';
 import { Logo } from '@/shared/ui/Logo';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
@@ -76,6 +78,14 @@ export function SideNav() {
         })}
       </Box>
       <Box sx={{ mt: 'auto', display: 'grid', gap: 2 }}>
+        {isDemoMode && (
+          <Box sx={{ px: 0.5 }}>
+            <Chip label="Etkileşimli demo" size="small" variant="outlined" sx={{ color: neon[100], borderColor: glass.hairline }} />
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75, fontSize: 12 }}>
+              Örnek veriler. İlerlemen bu tarayıcıda saklanır.
+            </Typography>
+          </Box>
+        )}
         {clock && me.data && (
           <Box
             component={RouterLink}

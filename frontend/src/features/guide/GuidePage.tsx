@@ -7,6 +7,7 @@ import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { gold, ink, neon } from '@/app/theme/tokens';
+import { isDemoMode } from '@/shared/config/runtime';
 import { relativeTime } from '@/shared/lib/format';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { PageHeader } from '@/shared/ui/PageHeader';
@@ -40,7 +41,9 @@ export default function GuidePage() {
       <PageHeader
         title="Gece"
         highlight="Rehberi"
-        subtitle="Gerçek ilerlemene bakıp sıradaki en değerli adımı önerir. Uydurma yok: her öneri senin verine dayanır."
+        subtitle={isDemoMode
+          ? 'Demo ilerlemene göre sıradaki yıldızını seç. Quiz çözdükçe önerilerin de değişir.'
+          : 'Gerçek ilerlemene bakıp sıradaki en değerli adımı önerir. Uydurma yok: her öneri senin verine dayanır.'}
         actions={
           <Button variant="outlined" startIcon={<RefreshRounded />} onClick={onRefresh} disabled={refresh.isPending}>
             {refresh.isPending ? 'Düşünüyor…' : 'Yenile'}
@@ -69,9 +72,16 @@ export default function GuidePage() {
             <Card sx={{ p: 3, mt: 4, display: 'flex', gap: 2, alignItems: 'flex-start' }}>
               <AutoAwesomeRounded sx={{ color: neon[300], mt: 0.25 }} />
               <Typography variant="body2" color="text.secondary">
-                Rehber; tamamladığın dersleri, skorlarını, serini ve açık yıldızlarını kullanır. Yapay zekâ etkinse
-                modele yalnızca ilk adın ve ilerleme verin gider; önerdiği her ders sunucuda doğrulanır.
-                {!data.aiConfigured && ' Şu an kural tabanlı rehber çalışıyor; bir Anthropic API anahtarı eklendiğinde öneriler Claude ile üretilir.'}
+                {isDemoMode ? (
+                  'Bu demoda rehber; tamamladığın dersler, skorların ve serin üzerinden öneri sunar. '
+                  + 'Öneriler örnek profilindeki ilerlemeyle güncellenir; yapay zekâ servisine bağlanılmaz.'
+                ) : (
+                  <>
+                    Rehber; tamamladığın dersleri, skorlarını, serini ve açık yıldızlarını kullanır. Yapay zekâ etkinse
+                    modele yalnızca ilk adın ve ilerleme verin gider; önerdiği her ders sunucuda doğrulanır.
+                    {!data.aiConfigured && ' Şu an kural tabanlı rehber çalışıyor; bir Anthropic API anahtarı eklendiğinde öneriler Claude ile üretilir.'}
+                  </>
+                )}
               </Typography>
             </Card>
           </>

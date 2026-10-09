@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { fonts, gold, ink, neon } from '@/app/theme/tokens';
+import { isDemoMode } from '@/shared/config/runtime';
 import type { Sky, Star } from './api';
 import { SkyStar } from './SkyStar';
 
@@ -118,7 +119,7 @@ export function SkyLegend() {
   const items = [
     { label: 'Yanan yıldız', color: gold, glow: true },
     { label: 'Keşfe açık', color: '#fff', glow: true },
-    { label: 'Kilitli', color: 'rgba(132,148,196,.6)', glow: false },
+    ...(!isDemoMode ? [{ label: 'Kilitli', color: 'rgba(132,148,196,.6)', glow: false }] : []),
   ];
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2.5 }}>

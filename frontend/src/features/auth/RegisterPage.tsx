@@ -9,6 +9,7 @@ import { type FormEvent, useState } from 'react';
 import { Link as RouterLink } from 'react-router';
 import { neon } from '@/app/theme/tokens';
 import { ApiError } from '@/shared/api/ApiError';
+import { isDemoMode } from '@/shared/config/runtime';
 import { useDocumentTitle } from '@/shared/lib/useDocumentTitle';
 import { useRegister } from './api';
 import { AuthLayout } from './AuthLayout';
@@ -42,16 +43,18 @@ export default function RegisterPage() {
       <Card component="form" onSubmit={onSubmit} noValidate sx={{ p: { xs: 3, sm: 4 }, display: 'grid', gap: 2.25 }}>
         <Box>
           <Typography variant="h4" component="h1">
-            Gökyüzüne katıl
+            {isDemoMode ? 'Demo profilini oluştur' : 'Gökyüzüne katıl'}
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 0.5 }}>
-            İlk yıldızını yakmana bir form kaldı. Saat 17:00, gece yeni başlıyor.
+            {isDemoMode
+              ? 'Bu profil yalnızca bu tarayıcıda saklanır. Gerçek ad, e-posta veya kişisel şifreni kullanmana gerek yok.'
+              : 'İlk yıldızını yakmana bir form kaldı. Saat 17:00, gece yeni başlıyor.'}
           </Typography>
         </Box>
         {showGeneralError && <Alert severity="error">{register.error?.message}</Alert>}
         <TextField
-          label="Ad soyad"
-          autoComplete="name"
+          label={isDemoMode ? 'Görünen ad' : 'Ad soyad'}
+          autoComplete={isDemoMode ? 'off' : 'name'}
           value={form.displayName}
           onChange={(e) => setForm({ ...form, displayName: e.target.value })}
           error={Boolean(errors.displayName)}
@@ -59,9 +62,9 @@ export default function RegisterPage() {
           required
         />
         <TextField
-          label="E-posta"
+          label={isDemoMode ? 'Örnek e-posta' : 'E-posta'}
           type="email"
-          autoComplete="email"
+          autoComplete={isDemoMode ? 'off' : 'email'}
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           error={Boolean(errors.email)}
@@ -70,11 +73,11 @@ export default function RegisterPage() {
         />
         <PasswordField
           label="Şifre"
-          autoComplete="new-password"
+          autoComplete={isDemoMode ? 'off' : 'new-password'}
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           error={Boolean(errors.password)}
-          helperText={errors.password ?? 'En az 8 karakter.'}
+          helperText={errors.password ?? (isDemoMode ? 'En az 8 karakter. Günlük kullandığın şifreyi yazma.' : 'En az 8 karakter.')}
           required
         />
         <CityAutocomplete value={form.cityId} onChange={(cityId) => setForm({ ...form, cityId })} error={errors.cityId} />
@@ -86,7 +89,7 @@ export default function RegisterPage() {
           helperText={errors.university}
         />
         <Button type="submit" variant="contained" size="large" disabled={register.isPending} fullWidth>
-          {register.isPending ? 'Gökyüzün hazırlanıyor…' : 'İlk yıldızımı yak'}
+          {register.isPending ? 'Gökyüzün hazırlanıyor…' : isDemoMode ? 'Demo profilimi oluştur' : 'İlk yıldızımı yak'}
         </Button>
         <Typography sx={{ textAlign: 'center' }} color="text.secondary">
           Zaten hesabın var mı?{' '}

@@ -28,6 +28,7 @@ services:
       DB_USER: skillhub
       DB_PASSWORD: ${DB_PASSWORD:-skillhub}
       JWT_SECRET: ${JWT_SECRET:-compose-local-secret-change-me-in-production-32+}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       DEMO_DATA_ENABLED: ${DEMO_DATA_ENABLED:-true}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
     depends_on:

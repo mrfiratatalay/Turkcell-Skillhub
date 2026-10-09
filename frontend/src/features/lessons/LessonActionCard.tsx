@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
 import { glow, gold, ink, neon } from '@/app/theme/tokens';
+import { isDemoMode } from '@/shared/config/runtime';
 import type { LessonRef } from '@/shared/domain/types';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
 import { StatusChip } from '@/shared/ui/LessonChips';
@@ -88,8 +89,13 @@ export function LessonActionCard({ lesson }: { lesson: LessonDetail }) {
           </Button>
         </>
       )}
-      <RefList title="Ön koşullar" items={lesson.prerequisites} />
-      <RefList title="Bu yıldız şunları açar" items={lesson.unlocks} />
+      <RefList title={isDemoMode ? 'Önerilen önceki dersler' : 'Ön koşullar'} items={lesson.prerequisites} />
+      <RefList title={isDemoMode ? 'Sonraki yıldızlar' : 'Bu yıldız şunları açar'} items={lesson.unlocks} />
+      {isDemoMode && (
+        <Typography variant="body2" color="text.secondary">
+          Demoda tüm ders ve quizler açık. İstediğin yıldızdan başlayabilirsin.
+        </Typography>
+      )}
       <Typography variant="body2" sx={{ color: ink.muted, textAlign: 'center' }}>
         XP yalnızca en iyi skorunu geçtiğinde artar.
       </Typography>

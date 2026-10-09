@@ -2,7 +2,7 @@ import { fileURLToPath, URL } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
-// Same-origin in every environment: Vite proxies /api in dev, nginx does it in Docker.
+// API mode can use the local backend through this proxy; demo mode never calls it.
 export default defineConfig({
   plugins: [react()],
   resolve: {

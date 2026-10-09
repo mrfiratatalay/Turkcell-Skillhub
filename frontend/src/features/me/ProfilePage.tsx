@@ -17,6 +17,7 @@ import { gold, neon, night } from '@/app/theme/tokens';
 import { useSession } from '@/shared/auth/useSession';
 import { formatDate, formatNumber, initials } from '@/shared/lib/format';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
+import { DemoControls } from '@/shared/ui/DemoControls';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
 import { PageHeader } from '@/shared/ui/PageHeader';
 import { SectionTitle } from '@/shared/ui/SectionTitle';
@@ -67,6 +68,7 @@ export default function ProfilePage() {
         {(data) => (
           <Box sx={{ display: 'grid', gap: 4 }}>
             <ProfileCard me={data} onEdit={() => setEditing(true)} onSignOut={signOut} />
+            <DemoControls />
             <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' } }}>
               <StatTile icon={<BoltRounded />} value={formatNumber(data.progress.totalXp)} label="Toplam XP" accent="gold" />
               <StatTile icon={<LocalFireDepartmentRounded />} value={data.progress.longestStreak} label="En uzun seri" />

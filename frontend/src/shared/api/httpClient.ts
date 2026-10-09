@@ -1,7 +1,6 @@
 import { sessionStore } from '@/shared/auth/sessionStore';
+import { apiBaseUrl, isDemoMode } from '@/shared/config/runtime';
 import { ApiError } from './ApiError';
-
-const BASE_URL = '/api/v1';
 
 interface RequestOptions {
   method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
@@ -20,6 +19,12 @@ async function toApiError(response: Response): Promise<ApiError> {
 }
 
 async function request<T>(path: string, { method = 'GET', body, signal }: RequestOptions = {}): Promise<T> {
+  // Choose the transport before making any request: demo mode never contacts the API.
+  if (isDemoMode) {
+    const { handleDemoRequest } = await import('@/demo/handler');
+    return handleDemoRequest<T>(path, { method, body, signal });
+  }
+
   const headers = new Headers({ Accept: 'application/json' });
   const token = sessionStore.get()?.token;
   if (token) headers.set('Authorization', `Bearer ${token}`);
@@ -27,7 +32,7 @@ async function request<T>(path: string, { method = 'GET', body, signal }: Reques
 
   let response: Response;
   try {
-    response = await fetch(BASE_URL + path, {
+    response = await fetch(apiBaseUrl + path, {
       method,
       headers,
       signal,
