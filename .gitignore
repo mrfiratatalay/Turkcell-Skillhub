@@ -1,0 +1,19 @@
+# Dependencies & builds
+node_modules/
+dist/
+target/
+*.log
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# IDE & OS
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Official Turkcell Code Night visuals: local design reference only, never published
+tasarim/referanslar/
