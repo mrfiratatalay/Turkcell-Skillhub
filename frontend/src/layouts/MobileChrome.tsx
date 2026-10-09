@@ -1,9 +1,12 @@
 import LocalFireDepartmentRounded from '@mui/icons-material/LocalFireDepartmentRounded';
+import MenuOpenRounded from '@mui/icons-material/MenuOpenRounded';
+import MenuRounded from '@mui/icons-material/MenuRounded';
 import Avatar from '@mui/material/Avatar';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useLocation } from 'react-router';
@@ -14,9 +17,19 @@ import { isDemoMode } from '@/shared/config/runtime';
 import { formatNumber, initials } from '@/shared/lib/format';
 import { Logo } from '@/shared/ui/Logo';
 import { activeNav, NAV_ITEMS } from './navigation';
+import { DRAWER_DURATION, SIDEBAR_WIDTH } from './SideNav';
 
-/** Phone layout: slim top bar with live stats, thumb-friendly bottom navigation. */
-export function MobileTopBar() {
+interface AppTopBarProps {
+  open: boolean;
+  desktopOpen: boolean;
+  onMenuToggle: () => void;
+}
+
+/** The menu toggle stays reachable even when the desktop sidebar is hidden. */
+export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
+  const { pathname } = useLocation();
+  const active = activeNav(pathname);
+  const pageTitle = NAV_ITEMS.find((item) => item.to === active)?.label ?? 'SkillHub';
   const { user } = useSession();
   const me = useMe();
   const progress = me.data?.progress;
@@ -24,21 +37,41 @@ export function MobileTopBar() {
     <Box
       component="header"
       sx={{
-        display: { xs: 'flex', md: 'none' },
+        display: 'flex',
         position: 'fixed',
-        inset: '0 0 auto 0',
-        zIndex: 10,
-        height: 64,
-        px: 2,
+        top: 0,
+        right: 0,
+        left: { xs: 0, md: desktopOpen ? SIDEBAR_WIDTH : 0 },
+        zIndex: (theme) => theme.zIndex.appBar,
+        height: 'calc(64px + env(safe-area-inset-top))',
+        pt: 'env(safe-area-inset-top)',
+        px: { xs: 1.5, sm: 2, md: 3 },
         alignItems: 'center',
         gap: 1,
         background: 'rgba(1, 11, 75, 0.78)',
         backdropFilter: 'blur(16px)',
         boxShadow: `0 1px 0 ${glass.hairline}`,
+        transition: (theme) => theme.transitions.create('left', { duration: DRAWER_DURATION }),
+        '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
       }}
     >
-      <Box component={RouterLink} to="/gokyuzu" sx={{ textDecoration: 'none', color: 'inherit', mr: 'auto', minWidth: 0 }}>
-        <Logo size={19} />
+      <Tooltip title={open ? 'Menüyü gizle' : 'Menüyü aç'}>
+        <IconButton
+          onClick={onMenuToggle}
+          aria-label={open ? 'Menüyü gizle' : 'Menüyü aç'}
+          aria-expanded={open}
+          aria-controls="app-navigation"
+          sx={{
+            width: 44, height: 44, flexShrink: 0, borderRadius: '14px',
+            color: neon[100], background: glass.surface, border: `1px solid ${glass.hairline}`,
+            '&:hover': { background: glass.raised, borderColor: neon[300] },
+          }}
+        >
+          {open ? <MenuOpenRounded /> : <MenuRounded />}
+        </IconButton>
+      </Tooltip>
+      <Box component={RouterLink} to="/gokyuzu" sx={{ display: { xs: 'block', md: 'none' }, textDecoration: 'none', color: 'inherit', mr: 'auto', minWidth: 0 }}>
+        <Logo size={18} />
         {isDemoMode && (
           <Tooltip title="Kurgusal örnek veriler. İlerlemen bu tarayıcıda saklanır.">
             <Typography sx={{ color: neon[100], fontSize: 9, lineHeight: 1.2, letterSpacing: 1.5, mt: 0.25 }}>
@@ -47,16 +80,19 @@ export function MobileTopBar() {
           </Tooltip>
         )}
       </Box>
+      <Typography noWrap sx={{ display: { xs: 'none', md: 'block' }, fontWeight: 700, color: 'text.secondary', mr: 'auto' }}>
+        {pageTitle}
+      </Typography>
       {progress && progress.streakDays > 0 && (
         <Chip
           size="small"
           icon={<LocalFireDepartmentRounded />}
           label={progress.streakDays}
-          sx={{ '& .MuiChip-icon': { color: '#FF9F43' }, fontWeight: 800 }}
+          sx={{ display: { xs: 'none', sm: 'inline-flex' }, '& .MuiChip-icon': { color: '#FF9F43' }, fontWeight: 800 }}
         />
       )}
       {progress && (
-        <Chip size="small" label={`${formatNumber(progress.totalXp)} XP`} sx={{ color: gold, fontWeight: 800 }} />
+        <Chip size="small" label={`${formatNumber(progress.totalXp)} XP`} sx={{ display: { xs: 'none', sm: 'inline-flex' }, color: gold, fontWeight: 800 }} />
       )}
       {user && (
         <Avatar
