@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: skillhub-api
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/skillhub}
+    username: ${DB_USER:skillhub}
+    password: ${DB_PASSWORD:skillhub}
+  flyway:
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+  shutdown: graceful
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /api/v3/api-docs
+  swagger-ui:
+    path: /api/docs
+    operations-sorter: method
+    tags-sorter: alpha
+
+app:
+  security:
+    # Local default only; docker-compose and production must inject JWT_SECRET.
+    jwt-secret: ${JWT_SECRET:local-dev-secret-change-me-please-32-bytes-minimum}
+    token-ttl: 12h
+  demo-data:
+    enabled: ${DEMO_DATA_ENABLED:true}
+  guide:
+    anthropic-api-key: ${ANTHROPIC_API_KEY:}
+    model: ${GUIDE_MODEL:claude-opus-5-5}
+    timeout: 60s
+    cache-ttl: 10m
+    refresh-limit-per-hour: 6
+
+logging:
+  level:
+    com.skillhub: INFO

@@ -1,0 +1,54 @@
+# SkillHub: one command brings up the whole system.
+#   docker compose up --build
+# then open http://localhost:3000 (Swagger: http://localhost:3000/api/docs)
+name: skillhub
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: skillhub
+      POSTGRES_USER: skillhub
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-skillhub}
+    ports:
+      - "127.0.0.1:5433:5432" # local tooling only (DBeaver, psql); never exposed publicly
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skillhub -d skillhub"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/skillhub
+      DB_USER: skillhub
+      DB_PASSWORD: ${DB_PASSWORD:-skillhub}
+      JWT_SECRET: ${JWT_SECRET:-compose-local-secret-change-me-in-production-32+}
+      DEMO_DATA_ENABLED: ${DEMO_DATA_ENABLED:-true}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health/readiness"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+      start_period: 20s
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  db-data:
