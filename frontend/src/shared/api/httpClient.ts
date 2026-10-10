@@ -1,5 +1,5 @@
 import { sessionStore } from '@/shared/auth/sessionStore';
-import { apiBaseUrl, isDemoMode } from '@/shared/config/runtime';
+import { apiBaseUrl } from '@/shared/config/runtime';
 import { ApiError } from './ApiError';
 
 interface RequestOptions {
@@ -19,8 +19,9 @@ async function toApiError(response: Response): Promise<ApiError> {
 }
 
 async function request<T>(path: string, { method = 'GET', body, signal }: RequestOptions = {}): Promise<T> {
-  // Choose the transport before making any request: demo mode never contacts the API.
-  if (isDemoMode) {
+  // Choose the transport before making any request: demo mode never contacts the API. The check reads the
+  // build-time constant directly, so API builds drop the browser demo adapter from the bundle entirely.
+  if (import.meta.env.VITE_DATA_MODE !== 'api') {
     const { handleDemoRequest } = await import('@/demo/handler');
     return handleDemoRequest<T>(path, { method, body, signal });
   }

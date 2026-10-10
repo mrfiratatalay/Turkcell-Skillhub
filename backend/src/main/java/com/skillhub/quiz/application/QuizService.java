@@ -60,6 +60,11 @@ public class QuizService {
                 catalog.forLearner(userId).bestScore(lesson.id()), questions);
     }
 
+    /**
+     * Transactional here as well: {@link #submitAt} is called on {@code this}, which bypasses Spring's proxy,
+     * so its own annotation would not open a transaction for web requests.
+     */
+    @Transactional
     public AttemptResult submit(UUID userId, String slug, List<Answer> answers) {
         return submitAt(userId, slug, answers, Instant.now(clock));
     }
@@ -67,6 +72,9 @@ public class QuizService {
     /** Grades, stores and rewards one attempt atomically. {@code at} is explicit so demo data can replay history. */
     @Transactional
     public AttemptResult submitAt(UUID userId, String slug, List<Answer> answers, Instant at) {
+        // A double-click must not pay the same improvement twice: the learner's attempts run one at a time,
+        // and every read below already sees the previous attempt's committed score and XP.
+        quizzes.lockLearner(userId);
         Lesson lesson = catalog.requireUnlocked(userId, slug);
         LearnerCatalog before = catalog.forLearner(userId);
         List<Question> questions = quizzes.questionsFor(lesson.id());

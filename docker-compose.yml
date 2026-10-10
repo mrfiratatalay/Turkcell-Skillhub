@@ -1,6 +1,7 @@
 # SkillHub: one command brings up the whole system.
 #   docker compose up --build
 # then open http://localhost:3000 (Swagger: http://localhost:3000/api/docs)
+# Optional settings: copy .env.example to .env.
 name: skillhub
 
 services:
@@ -31,6 +32,9 @@ services:
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       DEMO_DATA_ENABLED: ${DEMO_DATA_ENABLED:-true}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GUIDE_MODEL: ${GUIDE_MODEL:-claude-opus-5-5}
+    ports:
+      - "127.0.0.1:8080:8080" # local only: lets `npm run dev` (VITE_DATA_MODE=api) use this API
     depends_on:
       db:
         condition: service_healthy

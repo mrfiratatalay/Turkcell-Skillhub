@@ -50,6 +50,11 @@ class JdbcQuizRepository implements QuizRepository {
     }
 
     @Override
+    public void lockLearner(UUID userId) {
+        jdbc.sql("SELECT id FROM users WHERE id = :userId FOR UPDATE").param("userId", userId).query(UUID.class).list();
+    }
+
+    @Override
     public UUID saveAttempt(UUID userId, int lessonId, GradedQuiz graded, Instant completedAt) {
         UUID attemptId = jdbc.sql("""
                         INSERT INTO quiz_attempts (user_id, lesson_id, score, correct_count, question_count, passed, completed_at)

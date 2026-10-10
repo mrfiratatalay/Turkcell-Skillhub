@@ -3,6 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
+import { onGold } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { AppBackdrop } from '@/shared/ui/AppBackdrop';
 import { AppTopBar, BottomNav } from './MobileChrome';
@@ -48,6 +49,11 @@ export function AppShell() {
 
   return (
     <Box sx={{ minHeight: '100vh', position: 'relative' }}>
+      <Box component="a" href="#icerik"
+        sx={{ position: 'fixed', left: 16, top: -64, zIndex: (t) => t.zIndex.tooltip, px: 2, py: 1, borderRadius: '10px',
+          bgcolor: 'primary.main', color: onGold, fontWeight: 700, textDecoration: 'none', '&:focus': { top: 12 } }}>
+        İçeriğe geç
+      </Box>
       <AppBackdrop dawn={me.data?.progress.nightClock.nightProgress ?? 0} withBottomNav />
       <SideNav
         open={drawerOpen}
@@ -59,6 +65,8 @@ export function AppShell() {
       <AppTopBar open={drawerOpen} desktopOpen={desktopOpen} onMenuToggle={toggleDrawer} />
       <Box
         component="main"
+        id="icerik"
+        tabIndex={-1}
         sx={{
           position: 'relative',
           zIndex: 1,
@@ -68,6 +76,7 @@ export function AppShell() {
           pb: { xs: 14, md: 8 },
           transition: theme.transitions.create('margin-left', { duration: DRAWER_DURATION }),
           '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
+          '&:focus': { outline: 'none' },
         }}
       >
         <Box sx={{ maxWidth: 1200, mx: 'auto' }}>

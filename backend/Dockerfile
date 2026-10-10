@@ -11,7 +11,11 @@ RUN --mount=type=cache,target=/root/.m2 ./mvnw -B -q -DskipTests package \
 
 # ---- runtime: slim JRE, non-root user ----
 FROM eclipse-temurin:25-jre
-RUN groupadd --system skillhub && useradd --system --gid skillhub --home /app skillhub
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --system skillhub \
+    && useradd --system --gid skillhub --home /app skillhub
 WORKDIR /app
 COPY --from=build /workspace/app.jar app.jar
 USER skillhub

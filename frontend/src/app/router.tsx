@@ -1,6 +1,7 @@
 import { type ComponentType, lazy, type LazyExoticComponent, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { AppShell } from '@/layouts/AppShell';
+import { RouteErrorPage } from '@/pages/RouteErrorPage';
 import { RedirectIfAuthenticated, RequireAuth } from '@/shared/auth/RequireAuth';
 import { PageLoader } from '@/shared/ui/PageLoader';
 
@@ -23,7 +24,10 @@ const page = (Page: LazyExoticComponent<ComponentType>) => (
   </Suspense>
 );
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter([{
+  // Any rendering error below lands on one calm page instead of a blank screen.
+  errorElement: <RouteErrorPage />,
+  children: [
   { path: '/', element: <Navigate to="/gokyuzu" replace /> },
   { path: '/giris', element: <RedirectIfAuthenticated>{page(LoginPage)}</RedirectIfAuthenticated> },
   { path: '/kayit', element: <RedirectIfAuthenticated>{page(RegisterPage)}</RedirectIfAuthenticated> },
@@ -46,4 +50,5 @@ export const router = createBrowserRouter([
     ],
   },
   { path: '*', element: page(NotFoundPage) },
-]);
+  ],
+}]);

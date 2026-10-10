@@ -16,8 +16,11 @@ export function DemoControls() {
   const reset = async () => {
     setResetting(true);
     try {
-      const { resetDemoData } = await import('@/demo/state');
-      resetDemoData();
+      // The build-time constant (not isDemoMode) lets API builds drop the demo state module entirely.
+      if (import.meta.env.VITE_DATA_MODE !== 'api') {
+        const { resetDemoData } = await import('@/demo/state');
+        resetDemoData();
+      }
       signOut();
       toast('Demo başlangıç durumuna döndü. Yeniden keşfedebilirsin.');
     } catch {

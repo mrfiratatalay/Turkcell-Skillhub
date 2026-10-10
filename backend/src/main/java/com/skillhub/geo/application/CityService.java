@@ -26,6 +26,7 @@ public class CityService {
     }
 
     public City require(int id) {
-        return cities.findById(id).orElseThrow(() -> new DomainException.Invalid("Geçerli bir şehir seçmelisin."));
+        return cities.findById(id)
+                .orElseThrow(() -> new DomainException.Invalid("Geçerli bir şehir seçmelisin.", "cityId"));
     }
 }

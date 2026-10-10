@@ -10,6 +10,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.Optional;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,12 +44,17 @@ public class AuthService {
     public Session register(Registration request) {
         String email = normalizeEmail(request.email());
         if (users.existsByEmail(email)) {
-            throw new DomainException.Conflict("Bu e-posta adresiyle zaten bir hesap var.");
+            throw emailTaken();
         }
         City city = cities.require(request.cityId());
-        User user = users.insert(new NewUser(email, passwords.hash(request.password()),
-                request.displayName().strip(), city.id(), blankToNull(request.university()), Instant.now(clock)));
-        return new Session(user, city, tokens.issue(user));
+        try {
+            User user = users.insert(new NewUser(email, passwords.hash(request.password()),
+                    request.displayName().strip(), city.id(), blankToNull(request.university()), Instant.now(clock)));
+            return new Session(user, city, tokens.issue(user));
+        } catch (DuplicateKeyException race) {
+            // Two sign-ups with the same address at the same moment: the unique index decides the winner.
+            throw emailTaken();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -60,6 +66,10 @@ public class AuthService {
             throw new DomainException.Unauthorized("E-posta veya şifre hatalı.");
         }
         return new Session(user.get(), cities.require(user.get().cityId()), tokens.issue(user.get()));
+    }
+
+    private static DomainException emailTaken() {
+        return new DomainException.Conflict("Bu e-posta adresiyle zaten bir hesap var.", "email");
     }
 
     public static String normalizeEmail(String email) {

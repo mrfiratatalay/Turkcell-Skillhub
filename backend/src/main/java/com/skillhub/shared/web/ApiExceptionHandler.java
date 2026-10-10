@@ -35,6 +35,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         };
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, ex.getMessage());
         problem.setTitle(ex.title());
+        if (!ex.fieldErrors().isEmpty()) {
+            // Same shape as bean-validation errors, so the client shows it under the right form field.
+            problem.setProperty("errors", ex.fieldErrors());
+        }
         return problem;
     }
 

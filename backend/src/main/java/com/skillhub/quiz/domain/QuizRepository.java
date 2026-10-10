@@ -8,6 +8,9 @@ public interface QuizRepository {
 
     List<Question> questionsFor(int lessonId);
 
+    /** Holds the learner until the surrounding transaction ends, so concurrent attempts are serialized. */
+    void lockLearner(UUID userId);
+
     UUID saveAttempt(UUID userId, int lessonId, GradedQuiz graded, Instant completedAt);
 
     List<AttemptRecord> recentAttempts(UUID userId, int limit);

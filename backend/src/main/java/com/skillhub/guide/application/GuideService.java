@@ -18,8 +18,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 /** "Gece Rehberi": tries the LLM first, always falls back to the deterministic rule engine. */
 @Service
@@ -72,8 +72,8 @@ public class GuideService {
         return generate(userId);
     }
 
-    /** A new attempt changes the learner's sky, so the cached advice is stale. */
-    @EventListener
+    /** A new attempt changes the learner's sky, so the cached advice is stale once the attempt is committed. */
+    @TransactionalEventListener(fallbackExecution = true)
     void onAttemptCompleted(AttemptCompleted event) {
         cache.remove(event.userId());
     }
