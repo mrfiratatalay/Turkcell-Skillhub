@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { LineChart, lineClasses } from '@mui/x-charts/LineChart';
-import { gold, ink } from '@/app/theme/tokens';
+import { gold, ink, line } from '@/app/theme/tokens';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { useXpHistory } from './api';
 
@@ -38,15 +38,15 @@ export function XpChart() {
             hideLegend
             sx={{
               [`& .${lineClasses.area}`]: { fill: 'url(#xp-area-gradient)' },
-              [`& .${lineClasses.line}`]: { strokeWidth: 3, filter: `drop-shadow(0 0 6px ${gold})` },
-              '& .MuiChartsAxis-line, & .MuiChartsAxis-tick': { stroke: 'rgba(172,227,253,.25)' },
+              [`& .${lineClasses.line}`]: { strokeWidth: 3 },
+              '& .MuiChartsAxis-line, & .MuiChartsAxis-tick': { stroke: line.strong },
               '& .MuiChartsAxis-tickLabel': { fill: ink.secondary },
-              '& .MuiChartsGrid-line': { stroke: 'rgba(172,227,253,.08)' },
+              '& .MuiChartsGrid-line': { stroke: line.default },
             }}
           >
             <defs>
               <linearGradient id="xp-area-gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={gold} stopOpacity={0.38} />
+                <stop offset="0%" stopColor={gold} stopOpacity={0.28} />
                 <stop offset="100%" stopColor={gold} stopOpacity={0} />
               </linearGradient>
             </defs>

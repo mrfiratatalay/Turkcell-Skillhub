@@ -6,7 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { ink, neon, signal } from '@/app/theme/tokens';
+import { ink, signal } from '@/app/theme/tokens';
 import type { ReviewItem } from './api';
 
 /** Every answer explained, so a failed attempt still teaches something. */
@@ -40,7 +40,7 @@ export function ReviewList({ review }: { review: ReviewItem[] }) {
                 </Box>
               );
             })}
-            <Typography sx={{ mt: 1, color: neon[100] }}>💡 {item.explanation}</Typography>
+            <Typography sx={{ mt: 1, color: ink.secondary }}>💡 {item.explanation}</Typography>
           </AccordionDetails>
         </Accordion>
       ))}

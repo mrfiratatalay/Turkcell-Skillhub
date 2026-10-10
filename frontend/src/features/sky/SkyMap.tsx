@@ -53,13 +53,9 @@ export function SkyMap({ sky }: { sky: Sky }) {
             <stop offset="100%" stopColor={gold} stopOpacity="0" />
           </radialGradient>
           <radialGradient id="sky-open-halo">
-            <stop offset="0%" stopColor={neon[100]} stopOpacity="0.6" />
+            <stop offset="0%" stopColor={neon[100]} stopOpacity="0.35" />
             <stop offset="100%" stopColor={neon[300]} stopOpacity="0" />
           </radialGradient>
-          <linearGradient id="sky-lit-line" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor={gold} />
-            <stop offset="100%" stopColor={neon[100]} />
-          </linearGradient>
         </defs>
 
         {background.map((d) => (
@@ -89,8 +85,8 @@ export function SkyMap({ sky }: { sky: Sky }) {
             <motion.line
               key={`${link.from}-${link.to}`}
               x1={from.x} y1={from.y} x2={to.x} y2={to.y}
-              stroke={link.lit ? 'url(#sky-lit-line)' : neon[300]}
-              strokeOpacity={link.lit ? 0.85 : 0.3}
+              stroke={link.lit ? gold : neon[300]}
+              strokeOpacity={link.lit ? 0.75 : 0.3}
               strokeWidth={link.lit ? 2.2 : 1.4}
               strokeDasharray={link.lit ? undefined : link.crossConstellation ? '2 8' : '5 7'}
               strokeLinecap="round"
@@ -117,16 +113,15 @@ export function SkyMap({ sky }: { sky: Sky }) {
 
 export function SkyLegend() {
   const items = [
-    { label: 'Yanan yıldız', color: gold, glow: true },
-    { label: 'Keşfe açık', color: '#fff', glow: true },
-    ...(!isDemoMode ? [{ label: 'Kilitli', color: 'rgba(132,148,196,.6)', glow: false }] : []),
+    { label: 'Yanan yıldız', color: gold },
+    { label: 'Keşfe açık', color: ink.primary },
+    ...(!isDemoMode ? [{ label: 'Kilitli', color: ink.muted }] : []),
   ];
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2.5 }}>
       {items.map((item) => (
         <Box key={item.label} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: item.color,
-            boxShadow: item.glow ? `0 0 10px ${item.color}` : 'none' }} />
+          <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: item.color }} />
           <Typography variant="body2" sx={{ color: ink.secondary }}>
             {item.label}
           </Typography>

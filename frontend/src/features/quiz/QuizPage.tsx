@@ -6,15 +6,15 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router';
-import { glass } from '@/app/theme/tokens';
+import { line } from '@/app/theme/tokens';
 import { useDocumentTitle } from '@/shared/lib/useDocumentTitle';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
-import { NightSky } from '@/shared/ui/NightSky';
+import { AppBackdrop } from '@/shared/ui/AppBackdrop';
 import { useQuiz, useSubmitAttempt } from './api';
 import { QuestionStep } from './QuestionStep';
 import { QuizResult } from './QuizResult';
 
-/** Focus mode: no navigation chrome, just the question and the night sky. */
+/** Focus mode: no navigation chrome, just the question on the calm night canvas. */
 export default function QuizPage() {
   const { slug = '' } = useParams();
   const quiz = useQuiz(slug);
@@ -32,10 +32,10 @@ export default function QuizPage() {
 
   return (
     <Box sx={{ minHeight: '100vh', position: 'relative' }}>
-      <NightSky rain={0.05} />
+      <AppBackdrop />
       <Box component="header" sx={{ position: 'sticky', top: 0, zIndex: 5, display: 'flex', alignItems: 'center', gap: 2,
-        px: { xs: 2, md: 4 }, height: 68, background: 'rgba(1, 11, 75, 0.72)', backdropFilter: 'blur(14px)',
-        boxShadow: `0 1px 0 ${glass.hairline}` }}>
+        px: { xs: 2, md: 4 }, height: 68, background: 'rgba(13, 18, 34, 0.88)', backdropFilter: 'blur(12px)',
+        boxShadow: `0 1px 0 ${line.hairline}` }}>
         <Tooltip title="Quiz'den çık">
           <IconButton component={RouterLink} to={`/dersler/${slug}`} aria-label="Quiz'den çık">
             <CloseRounded />

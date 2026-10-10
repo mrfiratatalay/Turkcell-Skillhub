@@ -8,21 +8,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import type { ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { glow, gold, ink, neon } from '@/app/theme/tokens';
+import { gold, ink, line, neon } from '@/app/theme/tokens';
 import { AppIcon } from '@/shared/ui/icons';
 import { DifficultyChip, StatusChip } from '@/shared/ui/LessonChips';
 import type { LessonCardData } from './api';
 
-const SHADOW = {
-  COMPLETED: '0 0 0 1px rgba(253,196,11,.55), 0 0 24px rgba(253,196,11,.18)',
-  AVAILABLE: glow.neon,
-  LOCKED: '0 0 0 1px rgba(132,148,196,.25)',
-} as const;
-
 function Meta({ icon, text }: { icon: ReactNode; text: string }) {
   return (
     <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, color: ink.secondary, fontSize: 13,
-      '& svg': { fontSize: 16, color: neon[300] } }}>
+      '& svg': { fontSize: 16, color: ink.muted } }}>
       {icon}
       {text}
     </Box>
@@ -43,11 +37,10 @@ export function LessonCard({ lesson }: { lesson: LessonCardData }) {
         height: '100%',
         textDecoration: 'none',
         color: 'inherit',
-        boxShadow: SHADOW[lesson.status],
         opacity: locked ? 0.78 : 1,
-        transition: 'transform .2s ease, box-shadow .2s ease, opacity .2s',
-        '&:hover': { transform: 'translateY(-4px)', boxShadow: locked ? SHADOW.LOCKED : glow.neonStrong, opacity: 1 },
-        '&:focus-visible': { outline: `3px solid ${gold}`, outlineOffset: 3 },
+        transition: 'transform .2s ease, border-color .2s ease, opacity .2s',
+        '&:hover': { transform: 'translateY(-3px)', borderColor: line.hover, opacity: 1 },
+        '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 3 },
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>

@@ -2,20 +2,20 @@ import { createTheme } from '@mui/material/styles';
 import { controls } from './overrides/controls';
 import { feedback } from './overrides/feedback';
 import { surfaces } from './overrides/surfaces';
-import { fonts, glass, gold, ink, neon, night, signal } from './tokens';
+import { fonts, gold, ink, line, neon, signal, surface } from './tokens';
 
 export const theme = createTheme({
   palette: {
     mode: 'dark',
-    primary: { main: gold, contrastText: night[900] },
-    secondary: { main: neon[300], contrastText: night[900] },
-    success: { main: signal.success, contrastText: night[900] },
+    primary: { main: gold, contrastText: surface.canvas },
+    secondary: { main: neon[300], contrastText: surface.canvas },
+    success: { main: signal.success, contrastText: surface.canvas },
     error: { main: signal.error },
     warning: { main: gold },
     info: { main: neon[300] },
-    background: { default: night[900], paper: night[800] },
+    background: { default: surface.canvas, paper: surface.card },
     text: { primary: ink.primary, secondary: ink.secondary, disabled: ink.muted },
-    divider: glass.hairline,
+    divider: line.default,
   },
   shape: { borderRadius: 14 },
   typography: {

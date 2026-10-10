@@ -55,7 +55,7 @@ export default function LessonsPage() {
               {constellations.map((c) => (
                 <Box component="section" key={c.slug}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5, flexWrap: 'wrap' }}>
-                    <AppIcon name={c.icon} sx={{ color: neon[100], filter: `drop-shadow(0 0 8px ${neon[500]})` }} />
+                    <AppIcon name={c.icon} sx={{ color: neon[300] }} />
                     <Typography variant="h5" component="h2">{c.name}</Typography>
                     <Typography variant="overline" sx={{ color: neon[300] }}>{c.constellation} takımyıldızı</Typography>
                     <Box sx={{ ml: { sm: 'auto' }, width: { xs: '100%', sm: 220 }, display: 'flex', alignItems: 'center', gap: 1.5 }}>

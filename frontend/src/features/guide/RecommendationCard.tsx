@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
-import { glow, gold, neon } from '@/app/theme/tokens';
+import { gold, neon, outline, surface, tint } from '@/app/theme/tokens';
 import { AppIcon } from '@/shared/ui/icons';
 import { KIND_META, type Recommendation } from './api';
 
@@ -20,11 +20,10 @@ export function RecommendationCard({ recommendation, highlight = false, fill = f
   const meta = KIND_META[recommendation.kind];
   return (
     <Card sx={{ p: 3, display: 'grid', gap: 1.5, height: fill ? '100%' : 'auto', alignContent: 'start',
-      boxShadow: highlight ? glow.gold : undefined }}>
+      ...(highlight && { borderColor: outline.reward }) }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <Box sx={{ width: 46, height: 46, borderRadius: '14px', display: 'grid', placeItems: 'center',
-          color: highlight ? gold : neon[100], background: highlight ? 'rgba(253,196,11,.12)' : 'rgba(92,163,238,.14)',
-          boxShadow: `0 0 20px ${highlight ? 'rgba(253,196,11,.3)' : 'rgba(2,99,204,.4)'}` }}>
+          color: highlight ? gold : neon[300], background: highlight ? tint.gold : surface.raised }}>
           <AppIcon name={meta.icon} />
         </Box>
         <Chip size="small" variant="outlined" label={meta.label} />

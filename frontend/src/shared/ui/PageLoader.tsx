@@ -11,7 +11,8 @@ export function PageLoader() {
       <Box
         component="svg"
         viewBox="0 0 48 48"
-        sx={{ width: 56, height: 56, animation: `${pulse} 1.6s ease-in-out infinite`, filter: `drop-shadow(0 0 14px ${gold})` }}
+        sx={{ width: 56, height: 56, animation: `${pulse} 1.6s ease-in-out infinite`,
+          filter: 'drop-shadow(0 0 10px rgba(253, 196, 11, 0.35))', '@media (prefers-reduced-motion: reduce)': { animation: 'none' } }}
       >
         <path d="M30 4A20 20 0 1 0 44 34 16 16 0 1 1 30 4Z" fill={gold} />
       </Box>

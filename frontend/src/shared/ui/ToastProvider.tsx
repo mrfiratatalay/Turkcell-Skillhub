@@ -1,6 +1,7 @@
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { shadow } from '@/app/theme/tokens';
 
 type Severity = 'success' | 'error' | 'info' | 'warning';
 
@@ -30,7 +31,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         {toast ? (
-          <Alert severity={toast.severity} variant="standard" onClose={() => setToast(null)} sx={{ minWidth: 280 }}>
+          <Alert severity={toast.severity} variant="standard" onClose={() => setToast(null)}
+            sx={{ minWidth: 280, boxShadow: shadow.floating }}>
             {toast.message}
           </Alert>
         ) : undefined}

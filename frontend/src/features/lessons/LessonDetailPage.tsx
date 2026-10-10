@@ -71,7 +71,7 @@ export default function LessonDetailPage() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
                   <Chip variant="outlined" icon={<AppIcon name={data.category.icon} />}
                     label={`${data.category.name} · ${data.category.constellation}`}
-                    sx={{ '& .MuiChip-icon': { color: neon[100] } }} />
+                    sx={{ '& .MuiChip-icon': { color: neon[300] } }} />
                   <StatusChip status={data.status} />
                   <DifficultyChip difficulty={data.difficulty} />
                   <Chip size="small" icon={<AccessTimeRounded />} label={`${data.durationMin} dk`} />

@@ -48,3 +48,14 @@ taşınmaz. Gerçek moda geçtiğinde backend üzerinden giriş veya kayıt yap�
 Yerel geliştirmede `frontend/.env.example` dosyasını `.env.local` olarak kopyalayabilirsin.
 Gerçek backend ile yerelde çalışmak için `VITE_DATA_MODE=api` kullan; `VITE_API_BASE_URL`
 boş bırakıldığında Vite `/api` isteklerini `http://localhost:8080` adresine yönlendirir.
+
+## Tasarım: Sakin Gece
+
+Arayüz, Code Night'ın gece kimliğini koruyan ama uzun kullanımda göz yormayan **Sakin Gece** diliyle
+çizilir. Çalışma yüzeyleri doygunluğu düşürülmüş mürekkep laciverti (`#0D1222`) üzerindedir. Code Night
+laciverti yalnızca geceye açılan "pencerelerde" kullanılır: giriş görseli, Gökyüzü Haritası ve Şehir
+Işıkları haritası. Parıltı bir ödüldür: altın ve neon yalnızca kazanılmış ya da seçili öğelerde yanar.
+Ekranın alt kenarındaki şafak ışığı, öğrencinin Gece Saati ilerledikçe güçlenir.
+
+Renk token'ları `src/app/theme/tokens.ts` dosyasındadır. Konsept görselleri, önceki tasarımın ekran
+görüntüleri ve görselleri üreten Codex talimatları `../tasarim/sakin-gece/` klasöründedir.

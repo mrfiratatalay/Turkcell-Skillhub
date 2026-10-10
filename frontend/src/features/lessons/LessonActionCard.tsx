@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
-import { glow, gold, ink, neon } from '@/app/theme/tokens';
+import { gold, ink, neon, outline, tint } from '@/app/theme/tokens';
 import { isDemoMode } from '@/shared/config/runtime';
 import type { LessonRef } from '@/shared/domain/types';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
@@ -23,7 +23,7 @@ function RefList({ title, items }: { title: string; items: LessonRef[] }) {
         {items.map((item) => (
           <Box key={item.slug} component={RouterLink} to={`/dersler/${item.slug}`}
             sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, textDecoration: 'none',
-              color: 'inherit', p: 1, borderRadius: '12px', '&:hover': { background: 'rgba(92,163,238,.10)' } }}>
+              color: 'inherit', p: 1, borderRadius: '12px', '&:hover': { background: tint.hover } }}>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.title}</Typography>
             <StatusChip status={item.status} />
           </Box>
@@ -41,7 +41,7 @@ export function LessonActionCard({ lesson }: { lesson: LessonDetail }) {
 
   return (
     <Card sx={{ p: 3, display: 'grid', gap: 2.5, position: { lg: 'sticky' }, top: { lg: 32 },
-      boxShadow: lesson.status === 'COMPLETED' ? glow.gold : glow.neon }}>
+      ...(lesson.status === 'COMPLETED' && { borderColor: outline.reward }) }}>
       {lesson.status === 'LOCKED' ? (
         <>
           <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
@@ -54,7 +54,7 @@ export function LessonActionCard({ lesson }: { lesson: LessonDetail }) {
           <Box component="ol" sx={{ m: 0, pl: 3, display: 'grid', gap: 1 }}>
             {lesson.unlockPath.map((step) => (
               <li key={step.slug}>
-                <Box component={RouterLink} to={`/dersler/${step.slug}`} sx={{ color: neon[100], fontWeight: 600 }}>
+                <Box component={RouterLink} to={`/dersler/${step.slug}`} sx={{ color: neon[300], fontWeight: 600 }}>
                   {step.title}
                 </Box>
               </li>

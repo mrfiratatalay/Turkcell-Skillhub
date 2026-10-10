@@ -22,7 +22,7 @@ export function PageHeader({ title, highlight, subtitle, eyebrow, actions }: Pag
     >
       <Box sx={{ minWidth: 0 }}>
         {eyebrow && <Box sx={{ mb: 1.5 }}>{eyebrow}</Box>}
-        <Typography variant="h3" component="h1" sx={{ fontSize: { xs: 32, md: 44 }, textShadow: '0 0 28px rgba(92,163,238,.35)' }}>
+        <Typography variant="h3" component="h1" sx={{ fontSize: { xs: 32, md: 44 } }}>
           {title}{' '}
           {highlight && (
             <Box component="span" sx={{ color: gold }}>

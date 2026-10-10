@@ -1,13 +1,11 @@
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { type FormEvent, useState } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { neon } from '@/app/theme/tokens';
 import { ApiError } from '@/shared/api/ApiError';
 import { isDemoMode } from '@/shared/config/runtime';
 import { useDocumentTitle } from '@/shared/lib/useDocumentTitle';
@@ -40,9 +38,9 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout>
-      <Card component="form" onSubmit={onSubmit} noValidate sx={{ p: { xs: 3, sm: 4 }, display: 'grid', gap: 2.25 }}>
+      <Box component="form" onSubmit={onSubmit} noValidate sx={{ display: 'grid', gap: 2.25 }}>
         <Box>
-          <Typography variant="h4" component="h1">
+          <Typography variant="h3" component="h1" sx={{ fontSize: { xs: 30, sm: 36 } }}>
             {isDemoMode ? 'Demo profilini oluştur' : 'Gökyüzüne katıl'}
           </Typography>
           <Typography color="text.secondary" sx={{ mt: 0.5 }}>
@@ -93,11 +91,11 @@ export default function RegisterPage() {
         </Button>
         <Typography sx={{ textAlign: 'center' }} color="text.secondary">
           Zaten hesabın var mı?{' '}
-          <Link component={RouterLink} to="/giris" sx={{ color: neon[100], fontWeight: 700 }}>
+          <Link component={RouterLink} to="/giris" color="secondary" sx={{ fontWeight: 700 }}>
             Giriş yap
           </Link>
         </Typography>
-      </Card>
+      </Box>
     </AuthLayout>
   );
 }

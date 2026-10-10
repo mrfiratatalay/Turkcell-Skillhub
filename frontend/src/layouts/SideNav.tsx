@@ -10,7 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useLocation } from 'react-router';
-import { glass, glow, gold, ink, neon, night } from '@/app/theme/tokens';
+import { gold, ink, line, neon, scrim, shadow, surface, tint } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { useSession } from '@/shared/auth/useSession';
 import { isDemoMode } from '@/shared/config/runtime';
@@ -55,15 +55,13 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
             width: SIDEBAR_WIDTH,
             maxWidth: 'calc(100vw - 24px)',
             height: '100dvh',
-            background: isDesktop ? 'rgba(1, 11, 75, 0.72)' : glass.strong,
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderRight: `1px solid ${glass.hairline}`,
-            boxShadow: isDesktop ? 'none' : '16px 0 64px rgba(0, 4, 28, 0.45)',
+            background: surface.sidebar,
+            borderRight: `1px solid ${line.hairline}`,
+            boxShadow: isDesktop ? 'none' : shadow.floating,
           },
         },
         backdrop: {
-          sx: { backgroundColor: 'rgba(1, 7, 40, 0.64)', backdropFilter: 'blur(4px)' },
+          sx: { backgroundColor: scrim, backdropFilter: 'blur(2px)' },
         },
       }}
     >
@@ -99,19 +97,23 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
                 onClick={onNavigate}
                 aria-current={selected ? 'page' : undefined}
                 sx={{
+                  position: 'relative',
                   justifyContent: 'flex-start',
                   gap: 1.75,
                   px: 2,
                   py: 1.4,
-                  borderRadius: '14px',
-                  fontWeight: 700,
+                  borderRadius: '12px',
+                  fontWeight: selected ? 700 : 600,
                   fontSize: 15,
-                  color: selected ? night[900] : ink.secondary,
-                  background: selected ? gold : 'transparent',
-                  boxShadow: selected ? '0 6px 24px rgba(253,196,11,.30)' : 'none',
+                  color: selected ? ink.primary : ink.secondary,
+                  background: selected ? surface.raised : 'transparent',
                   transition: 'background .15s, color .15s',
-                  '&:hover': { background: selected ? gold : 'rgba(92,163,238,.12)', color: selected ? night[900] : '#fff' },
-                  '&:focus-visible': { outline: `3px solid ${gold}`, outlineOffset: 2 },
+                  '& .MuiSvgIcon-root': { color: selected ? gold : 'inherit' },
+                  // The active page is marked by a slim gold bar, not a gold slab.
+                  '&::before': { content: '""', position: 'absolute', left: 0, top: 10, bottom: 10, width: 3,
+                    borderRadius: 3, background: gold, opacity: selected ? 1 : 0, transition: 'opacity .15s' },
+                  '&:hover': { background: selected ? surface.raised : tint.hover, color: ink.primary },
+                  '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 },
                 }}
               >
                 {item.icon}
@@ -123,8 +125,9 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
         <Box sx={{ mt: 'auto', display: 'grid', gap: 2 }}>
           {isDemoMode && (
             <Box sx={{ px: 0.5 }}>
-              <Chip label="Etkileşimli demo" size="small" variant="outlined" sx={{ color: neon[100], borderColor: glass.hairline }} />
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.75, fontSize: 12 }}>
+              <Chip label="Etkileşimli demo" size="small" variant="outlined"
+                sx={{ color: neon[300], borderColor: 'rgba(92, 163, 238, 0.35)' }} />
+              <Typography variant="body2" sx={{ mt: 0.75, fontSize: 12, color: ink.muted }}>
                 Örnek veriler. İlerlemen bu tarayıcıda saklanır.
               </Typography>
             </Box>
@@ -134,8 +137,9 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
               component={RouterLink}
               to="/profil"
               onClick={onNavigate}
-              sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, borderRadius: '18px', background: glass.surface,
-                boxShadow: glow.neon, textDecoration: 'none', color: 'inherit' }}
+              sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, borderRadius: '18px', background: surface.card,
+                border: `1px solid ${line.default}`, textDecoration: 'none', color: 'inherit', transition: 'border-color .15s',
+                '&:hover': { borderColor: line.strong }, '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 } }}
             >
               <NightClockRing progress={clock.nightProgress} time={clock.time} size={64} />
               <Box sx={{ minWidth: 0 }}>
@@ -153,7 +157,7 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
           )}
           {user && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, px: 0.5 }}>
-              <Avatar sx={{ width: 38, height: 38, bgcolor: neon[500], color: '#fff', fontSize: 15 }}>
+              <Avatar sx={{ width: 38, height: 38, bgcolor: surface.avatar, color: ink.primary, fontSize: 15 }}>
                 {initials(user.displayName)}
               </Avatar>
               <Box sx={{ minWidth: 0, flex: 1 }}>

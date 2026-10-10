@@ -6,7 +6,7 @@ import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { motion, useReducedMotion } from 'motion/react';
 import { Link as RouterLink } from 'react-router';
-import { glow, gold, neon } from '@/app/theme/tokens';
+import { gold, neon, outline } from '@/app/theme/tokens';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
 import { AppIcon } from '@/shared/ui/icons';
 import { SectionTitle } from '@/shared/ui/SectionTitle';
@@ -26,7 +26,7 @@ export function QuizResult({ result, onRetry }: { result: AttemptResult; onRetry
   return (
     <Box sx={{ display: 'grid', gap: 4 }}>
       <Card sx={{ p: { xs: 3, md: 5 }, textAlign: 'center', display: 'grid', justifyItems: 'center', gap: 2,
-        boxShadow: result.passed ? glow.gold : glow.neon }}>
+        ...(result.passed && { borderColor: outline.reward }) }}>
         <Box sx={{ position: 'relative', display: 'grid', placeItems: 'center' }}>
           {result.passed && <Celebration />}
           <NightClockRing progress={result.score / 100} time={`%${result.score}`} caption="Skor" size={200} />
@@ -48,7 +48,7 @@ export function QuizResult({ result, onRetry }: { result: AttemptResult; onRetry
             sx={{ '& .MuiChip-icon': { color: gold } }} />
         )}
         {result.leveledUp && (
-          <Typography sx={{ color: neon[100], fontWeight: 700 }}>
+          <Typography sx={{ color: neon[300], fontWeight: 700 }}>
             Yeni seviye: {result.nightClockAfter.title} 🌙
           </Typography>
         )}
@@ -67,8 +67,8 @@ export function QuizResult({ result, onRetry }: { result: AttemptResult; onRetry
               <motion.div key={badge.code} initial={reduceMotion ? false : { rotateY: 90, opacity: 0 }}
                 animate={{ rotateY: 0, opacity: 1 }} transition={{ delay: 0.5 + i * 0.25, duration: 0.6 }}>
                 <Card sx={{ p: 2.5, display: 'flex', gap: 2, alignItems: 'center',
-                  boxShadow: badge.tier === 'GOLD' ? glow.gold : glow.neonStrong }}>
-                  <AppIcon name={badge.icon} sx={{ fontSize: 42, color: badge.tier === 'GOLD' ? gold : neon[100] }} />
+                  borderColor: badge.tier === 'GOLD' ? outline.reward : outline.neon }}>
+                  <AppIcon name={badge.icon} sx={{ fontSize: 42, color: badge.tier === 'GOLD' ? gold : neon[300] }} />
                   <Box>
                     <Typography sx={{ fontWeight: 800 }}>{badge.name}</Typography>
                     <Typography variant="body2" color="text.secondary">{badge.description}</Typography>
@@ -87,7 +87,7 @@ export function QuizResult({ result, onRetry }: { result: AttemptResult; onRetry
             {result.unlockedLessons.map((lesson) => (
               <Chip key={lesson.slug} component={RouterLink} to={`/dersler/${lesson.slug}`} clickable
                 icon={<AutoAwesomeRounded />} label={lesson.title} variant="outlined"
-                sx={{ height: 40, '& .MuiChip-icon': { color: neon[100] } }} />
+                sx={{ height: 40, '& .MuiChip-icon': { color: neon[300] } }} />
             ))}
           </Box>
         </Box>

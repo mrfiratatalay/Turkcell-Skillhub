@@ -21,7 +21,7 @@ function SourceChip({ guide }: { guide: Guide }) {
       sx={{ '& .MuiChip-icon': { color: gold } }} />
   ) : (
     <Chip icon={<RuleRounded />} label="Kural tabanlı rehber" variant="outlined"
-      sx={{ '& .MuiChip-icon': { color: neon[100] } }} />
+      sx={{ '& .MuiChip-icon': { color: neon[300] } }} />
   );
 }
 

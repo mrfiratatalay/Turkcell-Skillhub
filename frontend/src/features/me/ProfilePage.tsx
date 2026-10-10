@@ -13,7 +13,7 @@ import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { gold, neon, night } from '@/app/theme/tokens';
+import { gold, surface } from '@/app/theme/tokens';
 import { useSession } from '@/shared/auth/useSession';
 import { formatDate, formatNumber, initials } from '@/shared/lib/format';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
@@ -31,8 +31,8 @@ function ProfileCard({ me, onEdit, onSignOut }: { me: Me; onEdit: () => void; on
   const { user, progress } = me;
   return (
     <Card sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: 3, alignItems: 'center' }}>
-      <Avatar sx={{ width: 96, height: 96, fontSize: 36, color: night[900],
-        background: `linear-gradient(135deg, ${gold}, #FFE58A)`, boxShadow: `0 0 0 4px rgba(253,196,11,.25), 0 0 40px rgba(253,196,11,.35)` }}>
+      <Avatar sx={{ width: 96, height: 96, fontSize: 36, color: surface.canvas,
+        background: `linear-gradient(135deg, ${gold}, #FFE58A)`, boxShadow: '0 0 0 4px rgba(253, 196, 11, 0.18)' }}>
         {initials(user.displayName)}
       </Avatar>
       <Box sx={{ flex: 1, minWidth: 240 }}>
@@ -49,7 +49,7 @@ function ProfileCard({ me, onEdit, onSignOut }: { me: Me; onEdit: () => void; on
           caption={progress.nightClock.title} size={120} />
         <Box sx={{ display: 'grid', gap: 1 }}>
           <Button variant="outlined" startIcon={<EditRounded />} onClick={onEdit}>Düzenle</Button>
-          <Button variant="text" startIcon={<LogoutRounded />} onClick={onSignOut} sx={{ color: neon[100] }}>Çıkış yap</Button>
+          <Button variant="text" startIcon={<LogoutRounded />} onClick={onSignOut}>Çıkış yap</Button>
         </Box>
       </Box>
     </Card>

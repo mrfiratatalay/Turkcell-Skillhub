@@ -3,7 +3,8 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
-import { NightSky } from '@/shared/ui/NightSky';
+import { useMe } from '@/features/me/api';
+import { AppBackdrop } from '@/shared/ui/AppBackdrop';
 import { AppTopBar, BottomNav } from './MobileChrome';
 import { DRAWER_DURATION, SIDEBAR_WIDTH, SideNav } from './SideNav';
 
@@ -22,6 +23,7 @@ export function AppShell() {
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   const { key: locationKey } = useLocation();
+  const me = useMe();
   const [desktopOpen, setDesktopOpen] = useState(readSidebarPreference);
   const [mobileOpen, setMobileOpen] = useState(false);
   const drawerOpen = isDesktop ? desktopOpen : mobileOpen;
@@ -46,7 +48,7 @@ export function AppShell() {
 
   return (
     <Box sx={{ minHeight: '100vh', position: 'relative' }}>
-      <NightSky />
+      <AppBackdrop dawn={me.data?.progress.nightClock.nightProgress ?? 0} withBottomNav />
       <SideNav
         open={drawerOpen}
         isDesktop={isDesktop}

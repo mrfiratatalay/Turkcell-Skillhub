@@ -7,7 +7,7 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect } from 'react';
-import { fonts, glow, gold, ink, neon, night } from '@/app/theme/tokens';
+import { fonts, gold, ink, line, neon, surface, tint } from '@/app/theme/tokens';
 import type { Quiz } from './api';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
@@ -53,7 +53,7 @@ export function QuestionStep({ quiz, index, answers, submitting, onAnswer, onInd
         <Box sx={{ display: 'flex', gap: 1 }} aria-hidden>
           {quiz.questions.map((q, i) => (
             <Box key={q.id} sx={{ width: i === index ? 28 : 10, height: 10, borderRadius: 99, transition: 'all .25s',
-              background: answers[q.id] !== undefined ? gold : 'rgba(172,227,253,.18)',
+              background: answers[q.id] !== undefined ? gold : line.strong,
               boxShadow: i === index ? `0 0 0 2px ${neon[300]}` : 'none' }} />
           ))}
         </Box>
@@ -81,20 +81,20 @@ export function QuestionStep({ quiz, index, answers, submitting, onAnswer, onInd
                     onClick={() => onAnswer(question.id, option.id)}
                     sx={{
                       justifyContent: 'flex-start', gap: 2, p: 2, borderRadius: '16px', textAlign: 'left',
-                      background: selected ? 'rgba(253,196,11,.10)' : 'rgba(1,13,60,.45)',
-                      boxShadow: selected ? glow.gold : `0 0 0 1px rgba(92,163,238,.30)`,
+                      background: selected ? tint.gold : surface.input,
+                      boxShadow: `inset 0 0 0 1px ${selected ? 'rgba(253,196,11,.6)' : line.default}`,
                       transition: 'box-shadow .15s, background .15s, transform .1s',
-                      '&:hover': { boxShadow: selected ? glow.gold : glow.neon },
+                      '&:hover': { boxShadow: `inset 0 0 0 1px ${selected ? 'rgba(253,196,11,.6)' : line.hover}` },
                       '&:active': { transform: 'scale(.99)' },
-                      '&:focus-visible': { outline: `3px solid ${gold}`, outlineOffset: 2 },
+                      '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 },
                     }}
                   >
                     <Box sx={{ width: 36, height: 36, flexShrink: 0, borderRadius: '11px', display: 'grid', placeItems: 'center',
-                      fontWeight: 800, fontFamily: fonts.mono, background: selected ? gold : 'rgba(92,163,238,.16)',
-                      color: selected ? night[900] : neon[100] }}>
+                      fontWeight: 800, fontFamily: fonts.mono, background: selected ? gold : surface.raised,
+                      color: selected ? surface.canvas : ink.secondary }}>
                       {LETTERS[i]}
                     </Box>
-                    <Typography sx={{ fontSize: 17, fontWeight: selected ? 700 : 500, color: selected ? '#fff' : ink.primary }}>
+                    <Typography sx={{ fontSize: 17, fontWeight: selected ? 700 : 500, color: ink.primary }}>
                       {option.label}
                     </Typography>
                   </ButtonBase>

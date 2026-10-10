@@ -1,42 +1,43 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { glass, glow, gold, ink, neon, signal } from '../tokens';
+import { gold, ink, line, neon, signal, surface, tint } from '../tokens';
+
+const tinted = (color: string) => `linear-gradient(${color}, ${color}), ${surface.card}`;
 
 /** Progress, skeletons, alerts and navigation chrome. */
 export const feedback: Components<Omit<Theme, 'components'>> = {
   MuiLinearProgress: {
     styleOverrides: {
-      root: { height: 8, borderRadius: 99, backgroundColor: 'rgba(172, 227, 253, 0.14)' },
-      bar: { borderRadius: 99, boxShadow: `0 0 14px ${gold}` },
+      root: { height: 6, borderRadius: 99, backgroundColor: line.default },
+      bar: { borderRadius: 99 },
     },
   },
   MuiSkeleton: {
     styleOverrides: {
-      root: { backgroundColor: 'rgba(172, 227, 253, 0.08)', borderRadius: 14 },
+      root: { backgroundColor: 'rgba(174, 182, 200, 0.07)', borderRadius: 14 },
     },
   },
   MuiAlert: {
     styleOverrides: {
       root: {
         borderRadius: 14,
-        backdropFilter: 'blur(10px)',
         alignItems: 'center',
         color: ink.primary,
         variants: [
           {
             props: { variant: 'standard', severity: 'error' },
-            style: { background: 'rgba(255, 122, 147, 0.12)', boxShadow: `0 0 0 1px ${signal.error}55` },
+            style: { background: tinted('rgba(255, 122, 147, 0.10)'), border: `1px solid ${signal.error}59` },
           },
           {
             props: { variant: 'standard', severity: 'success' },
-            style: { background: 'rgba(94, 230, 168, 0.12)', boxShadow: `0 0 0 1px ${signal.success}55` },
+            style: { background: tinted('rgba(94, 230, 168, 0.10)'), border: `1px solid ${signal.success}59` },
           },
           {
             props: { variant: 'standard', severity: 'info' },
-            style: { background: glass.surface, boxShadow: glow.neon },
+            style: { background: surface.card, border: `1px solid ${line.default}`, '& .MuiAlert-icon': { color: neon[300] } },
           },
           {
             props: { variant: 'standard', severity: 'warning' },
-            style: { background: 'rgba(253, 196, 11, 0.10)', boxShadow: `0 0 0 1px ${gold}55` },
+            style: { background: tinted(tint.gold), border: `1px solid ${gold}59` },
           },
         ],
       },
@@ -44,12 +45,7 @@ export const feedback: Components<Omit<Theme, 'components'>> = {
   },
   MuiBottomNavigation: {
     styleOverrides: {
-      root: {
-        height: 68,
-        background: 'rgba(1, 11, 75, 0.82)',
-        backdropFilter: 'blur(16px)',
-        boxShadow: `0 -1px 0 ${glass.hairline}, 0 -10px 30px rgba(1, 7, 40, 0.5)`,
-      },
+      root: { height: 68, background: surface.sidebar, boxShadow: `0 -1px 0 ${line.hairline}` },
     },
   },
   MuiBottomNavigationAction: {
@@ -69,16 +65,16 @@ export const feedback: Components<Omit<Theme, 'components'>> = {
   },
   MuiTab: {
     styleOverrides: {
-      root: { textTransform: 'none', fontWeight: 600, color: ink.secondary, '&.Mui-selected': { color: neon[100] } },
+      root: { textTransform: 'none', fontWeight: 600, color: ink.secondary, '&.Mui-selected': { color: ink.primary } },
     },
   },
   MuiAccordion: {
     defaultProps: { disableGutters: true, elevation: 0 },
     styleOverrides: {
       root: {
-        background: glass.surface,
+        background: surface.card,
+        border: `1px solid ${line.default}`,
         borderRadius: '16px !important',
-        boxShadow: glow.neon,
         '&::before': { display: 'none' },
         marginBottom: 12,
       },

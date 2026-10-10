@@ -43,7 +43,7 @@ export function TurkeyNightMap({ cities, selectedCityId, onSelect }: TurkeyNight
           <feGaussianBlur stdDeviation="4" />
         </filter>
       </defs>
-      <path d={TURKEY_PATH} fill="none" stroke={neon[500]} strokeWidth="6" opacity="0.35" filter="url(#coast-glow)" />
+      <path d={TURKEY_PATH} fill="none" stroke={neon[500]} strokeWidth="6" opacity="0.25" filter="url(#coast-glow)" />
       <path d={TURKEY_PATH} fill="url(#land)" stroke={neon[300]} strokeWidth="1.2" strokeOpacity="0.6" />
 
       {cities.filter((c) => c.learners === 0).map((city) => {

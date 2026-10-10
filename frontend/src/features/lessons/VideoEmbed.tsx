@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Chip from '@mui/material/Chip';
 import { useState } from 'react';
-import { glow, gold, night } from '@/app/theme/tokens';
+import { gold, ink, line, shadow, surface } from '@/app/theme/tokens';
 
 /**
  * Click-to-load YouTube player on the privacy-enhanced domain: until the learner chooses to watch,
@@ -12,8 +12,8 @@ import { glow, gold, night } from '@/app/theme/tokens';
 export function VideoEmbed({ videoId, title }: { videoId: string; title: string }) {
   const [playing, setPlaying] = useState(false);
   return (
-    <Box sx={{ position: 'relative', aspectRatio: '16 / 9', borderRadius: '18px', overflow: 'hidden', boxShadow: glow.neon,
-      background: night[950] }}>
+    <Box sx={{ position: 'relative', aspectRatio: '16 / 9', borderRadius: '18px', overflow: 'hidden',
+      border: `1px solid ${line.default}`, background: surface.sidebar }}>
       {playing ? (
         <Box
           component="iframe"
@@ -30,7 +30,7 @@ export function VideoEmbed({ videoId, title }: { videoId: string; title: string 
           sx={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: `linear-gradient(180deg, rgba(1,13,60,.15), rgba(1,13,60,.65)),
+            backgroundImage: `linear-gradient(180deg, rgba(13,18,34,.1), rgba(13,18,34,.6)),
               url(https://i.ytimg.com/vi/${videoId}/hqdefault.jpg)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -38,11 +38,11 @@ export function VideoEmbed({ videoId, title }: { videoId: string; title: string 
           }}
         >
           <Box className="play" sx={{ width: 76, height: 76, borderRadius: '50%', display: 'grid', placeItems: 'center',
-            background: gold, color: night[900], boxShadow: '0 0 40px rgba(253,196,11,.55)', transition: 'transform .2s' }}>
+            background: gold, color: surface.canvas, boxShadow: shadow.goldButtonHover, transition: 'transform .2s' }}>
             <PlayArrowRounded sx={{ fontSize: 44 }} />
           </Box>
           <Chip label="İngilizce kaynak" size="small"
-            sx={{ position: 'absolute', top: 14, left: 14, background: 'rgba(1,13,60,.75)', color: '#fff' }} />
+            sx={{ position: 'absolute', top: 14, left: 14, background: 'rgba(13,18,34,.8)', color: ink.primary }} />
         </ButtonBase>
       )}
     </Box>

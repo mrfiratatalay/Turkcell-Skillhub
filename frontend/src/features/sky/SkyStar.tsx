@@ -27,7 +27,7 @@ export function SkyStar({ star, index, reduceMotion, onOpen }: SkyStarProps) {
   const size = 9 + (star.xpReward - 100) / 25;
   const lit = star.status === 'COMPLETED';
   const open = star.status === 'AVAILABLE';
-  const labelColor = lit ? '#FFE58A' : open ? '#fff' : ink.muted;
+  const labelColor = lit ? '#FFE58A' : open ? ink.primary : ink.muted;
   const tooltip = (
     <>
       <Typography sx={{ fontWeight: 700, fontSize: 14 }}>{star.title}</Typography>
@@ -74,10 +74,9 @@ export function SkyStar({ star, index, reduceMotion, onOpen }: SkyStarProps) {
             cx={star.x}
             cy={star.y}
             r={open ? size * 0.62 : size * 0.38}
-            fill={open ? '#fff' : 'rgba(132,148,196,.45)'}
+            fill={open ? '#fff' : 'rgba(125,135,158,.45)'}
             stroke={open ? neon[300] : 'none'}
             strokeWidth={open ? 2.5 : 0}
-            filter={open ? 'url(#sky-glow)' : undefined}
           />
         )}
         <text x={star.x} y={star.y + size + 20} textAnchor="middle" fill={labelColor}

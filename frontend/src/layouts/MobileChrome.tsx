@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useLocation } from 'react-router';
-import { glass, gold, neon } from '@/app/theme/tokens';
+import { gold, ink, line, neon, surface, tint } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { useSession } from '@/shared/auth/useSession';
 import { isDemoMode } from '@/shared/config/runtime';
@@ -48,9 +48,9 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
         px: { xs: 1.5, sm: 2, md: 3 },
         alignItems: 'center',
         gap: 1,
-        background: 'rgba(1, 11, 75, 0.78)',
-        backdropFilter: 'blur(16px)',
-        boxShadow: `0 1px 0 ${glass.hairline}`,
+        background: 'rgba(13, 18, 34, 0.88)',
+        backdropFilter: 'blur(12px)',
+        boxShadow: `0 1px 0 ${line.hairline}`,
         transition: (theme) => theme.transitions.create('left', { duration: DRAWER_DURATION }),
         '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
       }}
@@ -63,8 +63,8 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
           aria-controls="app-navigation"
           sx={{
             width: 44, height: 44, flexShrink: 0, borderRadius: '14px',
-            color: neon[100], background: glass.surface, border: `1px solid ${glass.hairline}`,
-            '&:hover': { background: glass.raised, borderColor: neon[300] },
+            color: ink.secondary, background: surface.card, border: `1px solid ${line.default}`,
+            '&:hover': { background: surface.raised, borderColor: line.strong, color: ink.primary },
           }}
         >
           {open ? <MenuOpenRounded /> : <MenuRounded />}
@@ -74,13 +74,13 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
         <Logo size={18} />
         {isDemoMode && (
           <Tooltip title="Kurgusal örnek veriler. İlerlemen bu tarayıcıda saklanır.">
-            <Typography sx={{ color: neon[100], fontSize: 9, lineHeight: 1.2, letterSpacing: 1.5, mt: 0.25 }}>
+            <Typography sx={{ color: neon[300], fontSize: 9, lineHeight: 1.2, letterSpacing: 1.5, mt: 0.25 }}>
               DEMO
             </Typography>
           </Tooltip>
         )}
       </Box>
-      <Typography noWrap sx={{ display: { xs: 'none', md: 'block' }, fontWeight: 700, color: 'text.secondary', mr: 'auto' }}>
+      <Typography noWrap sx={{ display: { xs: 'none', md: 'block' }, fontWeight: 600, color: 'text.secondary', mr: 'auto' }}>
         {pageTitle}
       </Typography>
       {progress && progress.streakDays > 0 && (
@@ -92,14 +92,15 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
         />
       )}
       {progress && (
-        <Chip size="small" label={`${formatNumber(progress.totalXp)} XP`} sx={{ display: { xs: 'none', sm: 'inline-flex' }, color: gold, fontWeight: 800 }} />
+        <Chip size="small" label={`${formatNumber(progress.totalXp)} XP`} sx={{ display: { xs: 'none', sm: 'inline-flex' }, color: gold, background: tint.gold, fontWeight: 800 }} />
       )}
       {user && (
         <Avatar
           component={RouterLink}
           to="/profil"
           aria-label="Profil"
-          sx={{ width: 34, height: 34, bgcolor: neon[500], color: '#fff', fontSize: 13, textDecoration: 'none' }}
+          sx={{ width: 34, height: 34, bgcolor: surface.avatar, color: ink.primary, fontSize: 13, textDecoration: 'none',
+            '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 } }}
         >
           {initials(user.displayName)}
         </Avatar>
@@ -113,7 +114,7 @@ export function BottomNav() {
   const active = activeNav(pathname) ?? false;
   return (
     <Box sx={{ display: { xs: 'block', md: 'none' }, position: 'fixed', inset: 'auto 0 0 0', zIndex: 10,
-      pb: 'env(safe-area-inset-bottom)', background: 'rgba(1, 11, 75, 0.82)' }}>
+      pb: 'env(safe-area-inset-bottom)', background: surface.sidebar }}>
       <BottomNavigation value={active} showLabels component="nav" aria-label="Alt menü">
         {NAV_ITEMS.filter((item) => item.inBottomNav).map((item) => (
           <BottomNavigationAction

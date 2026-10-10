@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
-import { gold, ink, signal } from '@/app/theme/tokens';
+import { gold, ink, signal, tint } from '@/app/theme/tokens';
 import { relativeTime } from '@/shared/lib/format';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { useAttempts } from './api';
@@ -22,7 +22,7 @@ export function AttemptList({ limit }: { limit: number }) {
             {data.map((attempt) => (
               <Box key={attempt.attemptId} component={RouterLink} to={`/dersler/${attempt.lessonSlug}`}
                 sx={{ display: 'flex', gap: 1.5, alignItems: 'center', textDecoration: 'none', color: 'inherit',
-                  borderRadius: '12px', p: 0.5, '&:hover': { background: 'rgba(92,163,238,.08)' } }}>
+                  borderRadius: '12px', p: 0.5, '&:hover': { background: tint.hover } }}>
                 {attempt.passed
                   ? <CheckCircleRounded sx={{ color: signal.success }} />
                   : <ReplayRounded sx={{ color: ink.muted }} />}

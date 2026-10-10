@@ -1,7 +1,9 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { fonts, glass, glow, gold, ink, neon, night, radius } from '../tokens';
+import { fonts, ink, line, neon, outline, radius, shadow, surface, tint } from '../tokens';
 
-/** Buttons, chips and form fields. */
+const focusVisible = { outline: `2px solid ${neon[300]}`, outlineOffset: 2 };
+
+/** Buttons, chips and form fields. Gold fill is reserved for the one primary action on screen. */
 export const controls: Components<Omit<Theme, 'components'>> = {
   MuiButton: {
     defaultProps: { disableElevation: true },
@@ -10,15 +12,15 @@ export const controls: Components<Omit<Theme, 'components'>> = {
         borderRadius: radius.control,
         padding: '11px 22px',
         fontSize: 15,
-        transition: 'transform .15s ease, box-shadow .15s ease, background-color .15s ease',
-        '&:focus-visible': { outline: `3px solid ${gold}`, outlineOffset: 3 },
+        transition: 'transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease',
+        '&:focus-visible': focusVisible,
         variants: [
           {
             props: { variant: 'contained', color: 'primary' },
             style: {
-              color: night[900],
-              boxShadow: glow.goldButton,
-              '&:hover': { backgroundColor: gold, transform: 'translateY(-2px)', boxShadow: '0 12px 36px rgba(253,196,11,.5)' },
+              color: surface.canvas,
+              boxShadow: shadow.goldButton,
+              '&:hover': { backgroundColor: '#FFD03A', transform: 'translateY(-1px)', boxShadow: shadow.goldButtonHover },
             },
           },
         ],
@@ -27,31 +29,55 @@ export const controls: Components<Omit<Theme, 'components'>> = {
       sizeSmall: { padding: '7px 14px', fontSize: 13 },
       outlined: {
         color: ink.primary,
-        borderColor: glass.line,
-        background: glass.surface,
-        boxShadow: glow.neon,
-        '&:hover': { borderColor: neon[100], background: glass.raised, transform: 'translateY(-2px)' },
+        borderColor: line.strong,
+        background: 'transparent',
+        '&:hover': { borderColor: line.hover, background: tint.hover },
       },
-      text: { color: neon[100], '&:hover': { background: 'rgba(92,163,238,.10)' } },
+      text: { color: neon[300], '&:hover': { background: tint.neon } },
     },
   },
   MuiIconButton: {
     styleOverrides: {
-      root: { '&:focus-visible': { outline: `3px solid ${gold}`, outlineOffset: 2 } },
+      root: { '&:focus-visible': focusVisible },
+    },
+  },
+  MuiLink: {
+    styleOverrides: {
+      root: { color: neon[300], textDecorationColor: 'rgba(92, 163, 238, 0.4)', '&:hover': { textDecorationColor: neon[300] } },
     },
   },
   MuiChip: {
     styleOverrides: {
-      root: { borderRadius: radius.pill, fontWeight: 600, fontSize: 13 },
-      outlined: { borderColor: glass.line, color: neon[100], background: 'rgba(2, 20, 110, 0.25)' },
-      filled: { background: 'rgba(92, 163, 238, 0.16)', color: ink.primary },
-      colorPrimary: { color: night[900] },
-      clickable: { '&:hover': { boxShadow: glow.neon } },
+      root: {
+        borderRadius: radius.pill,
+        fontWeight: 600,
+        fontSize: 13,
+        // Only neutral chips are restyled; colored ones (e.g. the gold "Sen" chip) keep their palette.
+        variants: [
+          {
+            props: { variant: 'filled', color: 'default' },
+            style: { background: surface.raised, color: ink.primary, '&.MuiChip-clickable:hover': { background: '#222C4C' } },
+          },
+          {
+            props: { variant: 'outlined', color: 'default' },
+            style: {
+              borderColor: line.strong,
+              color: ink.secondary,
+              background: 'transparent',
+              '&.MuiChip-clickable:hover': { borderColor: line.hover, background: tint.hover },
+            },
+          },
+          {
+            props: { color: 'default' },
+            style: { '& .MuiChip-icon': { color: ink.secondary } },
+          },
+        ],
+      },
     },
   },
   MuiToggleButtonGroup: {
     styleOverrides: {
-      root: { background: glass.surface, borderRadius: radius.control, boxShadow: glow.neon, padding: 4, gap: 4 },
+      root: { background: surface.card, border: `1px solid ${line.default}`, borderRadius: radius.control, padding: 4, gap: 4 },
     },
   },
   MuiToggleButton: {
@@ -63,7 +89,13 @@ export const controls: Components<Omit<Theme, 'components'>> = {
         textTransform: 'none',
         fontWeight: 600,
         padding: '6px 14px',
-        '&.Mui-selected': { background: gold, color: night[900], '&:hover': { background: gold } },
+        '&:hover': { background: tint.hover, color: ink.primary },
+        '&.Mui-selected': {
+          background: surface.raised,
+          color: ink.primary,
+          boxShadow: `inset 0 0 0 1px ${outline.reward}`,
+          '&:hover': { background: surface.raised },
+        },
       },
     },
   },
@@ -71,18 +103,23 @@ export const controls: Components<Omit<Theme, 'components'>> = {
     styleOverrides: {
       root: {
         borderRadius: radius.control,
-        background: 'rgba(1, 13, 60, 0.55)',
-        '& .MuiOutlinedInput-notchedOutline': { borderColor: glass.line },
-        '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: neon[100] },
-        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: gold, borderWidth: 2 },
-        '&.Mui-focused': { boxShadow: '0 0 0 4px rgba(253, 196, 11, 0.12)' },
+        background: surface.input,
+        transition: 'box-shadow .15s ease',
+        '& .MuiOutlinedInput-notchedOutline': { borderColor: line.input },
+        '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: line.hover },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: neon[300], borderWidth: 1 },
+        '&.Mui-focused': { boxShadow: shadow.focusRing },
+        '&.Mui-error .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 122, 147, 0.7)' },
       },
-      input: { padding: '14px 16px' },
+      input: { padding: '14px 16px', '&::placeholder': { color: ink.muted, opacity: 1 } },
     },
+  },
+  MuiInputAdornment: {
+    styleOverrides: { root: { color: ink.muted } },
   },
   MuiInputLabel: {
     styleOverrides: {
-      root: { color: ink.secondary, '&.Mui-focused': { color: gold } },
+      root: { color: ink.secondary, '&.Mui-focused': { color: neon[300] } },
     },
   },
   MuiFormHelperText: {
@@ -90,8 +127,8 @@ export const controls: Components<Omit<Theme, 'components'>> = {
   },
   MuiAutocomplete: {
     styleOverrides: {
-      paper: { background: glass.strong, boxShadow: glow.neon, borderRadius: radius.control },
-      option: { '&[aria-selected="true"]': { background: 'rgba(253, 196, 11, 0.16) !important' } },
+      paper: { background: surface.raised, border: `1px solid ${line.strong}`, boxShadow: shadow.floating, borderRadius: radius.control },
+      option: { '&[aria-selected="true"]': { background: `${tint.gold} !important` } },
     },
   },
   MuiSwitch: {

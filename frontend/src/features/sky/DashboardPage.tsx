@@ -1,11 +1,11 @@
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { type Me, useMe } from '@/features/me/api';
 import { firstName, greeting } from '@/shared/lib/format';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { PageHeader } from '@/shared/ui/PageHeader';
 import { SectionTitle } from '@/shared/ui/SectionTitle';
+import { SkyWindow } from '@/shared/ui/SkyWindow';
 import { useSky } from './api';
 import { DashboardHighlights } from './DashboardHighlights';
 import { DashboardStats } from './DashboardStats';
@@ -45,12 +45,12 @@ export default function DashboardPage() {
         <SectionTitle action={<SkyLegend />}>Gökyüzü haritan</SectionTitle>
         <AsyncView query={sky} skeleton={<SkeletonBlock height={420} />}>
           {(data) => (
-            <Card sx={{ p: { xs: 1.5, sm: 3 } }}>
+            <SkyWindow sx={{ p: { xs: 1.5, sm: 3 } }}>
               <SkyMap sky={data} />
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
                 {data.completed}/{data.total} yıldız yandı · Bir yıldıza dokunarak dersine git
               </Typography>
-            </Card>
+            </SkyWindow>
           )}
         </AsyncView>
       </Box>

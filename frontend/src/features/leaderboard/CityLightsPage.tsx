@@ -1,7 +1,6 @@
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import PlaceRounded from '@mui/icons-material/PlaceRounded';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
@@ -9,6 +8,7 @@ import { gold } from '@/app/theme/tokens';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { PageHeader } from '@/shared/ui/PageHeader';
 import { SectionTitle } from '@/shared/ui/SectionTitle';
+import { SkyWindow } from '@/shared/ui/SkyWindow';
 import { useCityLights, useLeaderboard } from './api';
 import { CityRanking } from './CityRanking';
 import { Podium } from './Podium';
@@ -33,12 +33,12 @@ export default function CityLightsPage() {
       <AsyncView query={lights} skeleton={<SkeletonBlock height={380} />}>
         {(data) => (
           <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', lg: 'minmax(0, 2.2fr) 1fr' } }}>
-            <Card sx={{ p: { xs: 1.5, sm: 3 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <SkyWindow sx={{ p: { xs: 1.5, sm: 3 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <TurkeyNightMap cities={data.cities} selectedCityId={cityId} onSelect={setCityId} />
               <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mt: 1 }}>
                 Bir şehre dokunarak o şehrin sıralamasını gör
               </Typography>
-            </Card>
+            </SkyWindow>
             <Box>
               <SectionTitle>Şehirler</SectionTitle>
               <CityRanking cities={data.cities} selectedCityId={cityId} onSelect={setCityId} />

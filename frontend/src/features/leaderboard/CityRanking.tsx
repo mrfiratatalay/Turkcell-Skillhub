@@ -3,7 +3,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { fonts, gold, ink } from '@/app/theme/tokens';
+import { fonts, gold, ink, tint } from '@/app/theme/tokens';
 import { formatNumber } from '@/shared/lib/format';
 import type { CityTotal } from './api';
 
@@ -26,8 +26,8 @@ export function CityRanking({ cities, selectedCityId, onSelect }: CityRankingPro
             onClick={() => onSelect(selected ? null : city.cityId)}
             aria-pressed={selected}
             sx={{ display: 'grid', gridTemplateColumns: '34px minmax(0, 1fr)', gap: 1, alignItems: 'center', textAlign: 'left',
-              p: 1.25, borderRadius: '12px', background: selected ? 'rgba(253,196,11,.10)' : 'transparent',
-              '&:hover': { background: 'rgba(92,163,238,.10)' } }}
+              p: 1.25, borderRadius: '12px', background: selected ? tint.gold : 'transparent',
+              '&:hover': { background: selected ? tint.gold : tint.hover } }}
           >
             <Typography sx={{ fontFamily: fonts.mono, fontWeight: 800, color: city.rank <= 3 ? gold : ink.secondary }}>
               {city.rank}

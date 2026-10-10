@@ -1,21 +1,16 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { fonts, glass, glow, gold, ink, night, radius } from '../tokens';
+import { fonts, gold, ink, line, radius, scrim, shadow, surface } from '../tokens';
 
-/** Cards, dialogs and floating layers share the "neon glass" look of the Code Night visuals. */
+/** Cards, dialogs and floating layers: flat ink surfaces with a hairline edge, never a glow. */
 export const surfaces: Components<Omit<Theme, 'components'>> = {
   MuiCssBaseline: {
     styleOverrides: {
       html: { WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' },
-      body: {
-        minHeight: '100vh',
-        backgroundColor: night[900],
-        backgroundImage: `radial-gradient(ellipse 80% 50% at 50% -10%, rgba(2, 99, 204, 0.35), transparent 70%),
-          linear-gradient(180deg, ${night[950]} 0%, ${night[900]} 45%, ${night[800]} 100%)`,
-        backgroundAttachment: 'fixed',
-      },
-      '::selection': { background: gold, color: night[900] },
+      body: { minHeight: '100vh', backgroundColor: surface.canvas },
+      '::selection': { background: gold, color: surface.canvas },
       '*::-webkit-scrollbar': { width: 10, height: 10 },
-      '*::-webkit-scrollbar-thumb': { background: 'rgba(92, 163, 238, 0.28)', borderRadius: 8 },
+      '*::-webkit-scrollbar-thumb': { background: line.strong, borderRadius: 8 },
+      '*::-webkit-scrollbar-thumb:hover': { background: line.hover },
       '*::-webkit-scrollbar-track': { background: 'transparent' },
       a: { color: 'inherit' },
     },
@@ -27,11 +22,10 @@ export const surfaces: Components<Omit<Theme, 'components'>> = {
     defaultProps: { elevation: 0 },
     styleOverrides: {
       root: {
-        background: glass.surface,
+        background: surface.card,
+        border: `1px solid ${line.default}`,
         borderRadius: radius.card,
-        boxShadow: glow.neon,
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        boxShadow: shadow.card,
         overflow: 'visible',
       },
     },
@@ -42,39 +36,40 @@ export const surfaces: Components<Omit<Theme, 'components'>> = {
   MuiDialog: {
     styleOverrides: {
       paper: {
-        background: glass.strong,
+        background: surface.card,
+        border: `1px solid ${line.strong}`,
         borderRadius: radius.card,
-        boxShadow: glow.neonStrong,
-        backdropFilter: 'blur(18px)',
+        boxShadow: shadow.floating,
       },
-      backdrop: { backgroundColor: 'rgba(1, 7, 40, 0.72)' },
+      backdrop: { backgroundColor: scrim },
     },
   },
   MuiPopover: {
     styleOverrides: {
-      paper: { background: glass.strong, boxShadow: glow.neon, borderRadius: radius.control },
+      paper: { background: surface.raised, border: `1px solid ${line.strong}`, boxShadow: shadow.floating, borderRadius: radius.control },
     },
   },
   MuiMenu: {
     styleOverrides: {
-      paper: { background: glass.strong, boxShadow: glow.neon, borderRadius: radius.control },
+      paper: { background: surface.raised, border: `1px solid ${line.strong}`, boxShadow: shadow.floating, borderRadius: radius.control },
     },
   },
   MuiTooltip: {
     styleOverrides: {
       tooltip: {
-        background: glass.strong,
-        boxShadow: glow.neon,
+        background: surface.raised,
+        border: `1px solid ${line.strong}`,
+        boxShadow: shadow.floating,
         borderRadius: 10,
         fontSize: 13,
         padding: '8px 12px',
         color: ink.primary,
       },
-      arrow: { color: night[900] },
+      arrow: { color: surface.raised, '&::before': { border: `1px solid ${line.strong}` } },
     },
   },
   MuiDivider: {
-    styleOverrides: { root: { borderColor: glass.hairline } },
+    styleOverrides: { root: { borderColor: line.default } },
   },
   MuiAvatar: {
     styleOverrides: {
