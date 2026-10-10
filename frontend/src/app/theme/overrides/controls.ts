@@ -1,7 +1,7 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { fonts, ink, line, neon, outline, radius, shadow, surface, tint } from '../tokens';
+import { accent, fonts, ink, line, onGold, outline, radius, shadow, signal, surface, tint } from '../tokens';
 
-const focusVisible = { outline: `2px solid ${neon[300]}`, outlineOffset: 2 };
+const focusVisible = { outline: `2px solid ${accent.neon}`, outlineOffset: 2 };
 
 /** Buttons, chips and form fields. Gold fill is reserved for the one primary action on screen. */
 export const controls: Components<Omit<Theme, 'components'>> = {
@@ -18,7 +18,7 @@ export const controls: Components<Omit<Theme, 'components'>> = {
           {
             props: { variant: 'contained', color: 'primary' },
             style: {
-              color: surface.canvas,
+              color: onGold,
               boxShadow: shadow.goldButton,
               '&:hover': { backgroundColor: '#FFD03A', transform: 'translateY(-1px)', boxShadow: shadow.goldButtonHover },
             },
@@ -33,7 +33,7 @@ export const controls: Components<Omit<Theme, 'components'>> = {
         background: 'transparent',
         '&:hover': { borderColor: line.hover, background: tint.hover },
       },
-      text: { color: neon[300], '&:hover': { background: tint.neon } },
+      text: { color: accent.neon, '&:hover': { background: tint.neon } },
     },
   },
   MuiIconButton: {
@@ -43,7 +43,7 @@ export const controls: Components<Omit<Theme, 'components'>> = {
   },
   MuiLink: {
     styleOverrides: {
-      root: { color: neon[300], textDecorationColor: 'rgba(92, 163, 238, 0.4)', '&:hover': { textDecorationColor: neon[300] } },
+      root: { color: accent.neon, textDecorationColor: outline.neon, '&:hover': { textDecorationColor: accent.neon } },
     },
   },
   MuiChip: {
@@ -56,7 +56,7 @@ export const controls: Components<Omit<Theme, 'components'>> = {
         variants: [
           {
             props: { variant: 'filled', color: 'default' },
-            style: { background: surface.raised, color: ink.primary, '&.MuiChip-clickable:hover': { background: '#222C4C' } },
+            style: { background: surface.raised, color: ink.primary, '&.MuiChip-clickable:hover': { background: surface.raisedHover } },
           },
           {
             props: { variant: 'outlined', color: 'default' },
@@ -107,9 +107,9 @@ export const controls: Components<Omit<Theme, 'components'>> = {
         transition: 'box-shadow .15s ease',
         '& .MuiOutlinedInput-notchedOutline': { borderColor: line.input },
         '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: line.hover },
-        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: neon[300], borderWidth: 1 },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: accent.neon, borderWidth: 1 },
         '&.Mui-focused': { boxShadow: shadow.focusRing },
-        '&.Mui-error .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 122, 147, 0.7)' },
+        '&.Mui-error .MuiOutlinedInput-notchedOutline': { borderColor: signal.error },
       },
       input: { padding: '14px 16px', '&::placeholder': { color: ink.muted, opacity: 1 } },
     },
@@ -119,7 +119,7 @@ export const controls: Components<Omit<Theme, 'components'>> = {
   },
   MuiInputLabel: {
     styleOverrides: {
-      root: { color: ink.secondary, '&.Mui-focused': { color: neon[300] } },
+      root: { color: ink.secondary, '&.Mui-focused': { color: accent.neon } },
     },
   },
   MuiFormHelperText: {
@@ -132,7 +132,7 @@ export const controls: Components<Omit<Theme, 'components'>> = {
     },
   },
   MuiSwitch: {
-    styleOverrides: { track: { backgroundColor: neon[300] } },
+    styleOverrides: { track: { backgroundColor: accent.neon } },
   },
   MuiTypography: {
     variants: [{ props: { variant: 'overline' }, style: { fontFamily: fonts.mono } }],

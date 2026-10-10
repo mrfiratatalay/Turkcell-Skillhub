@@ -3,7 +3,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { fonts, gold, ink, tint } from '@/app/theme/tokens';
+import { accent, fonts, ink, tint } from '@/app/theme/tokens';
 import { formatNumber } from '@/shared/lib/format';
 import type { CityTotal } from './api';
 
@@ -29,13 +29,13 @@ export function CityRanking({ cities, selectedCityId, onSelect }: CityRankingPro
               p: 1.25, borderRadius: '12px', background: selected ? tint.gold : 'transparent',
               '&:hover': { background: selected ? tint.gold : tint.hover } }}
           >
-            <Typography sx={{ fontFamily: fonts.mono, fontWeight: 800, color: city.rank <= 3 ? gold : ink.secondary }}>
+            <Typography sx={{ fontFamily: fonts.mono, fontWeight: 800, color: city.rank <= 3 ? accent.gold : ink.secondary }}>
               {city.rank}
             </Typography>
             <Box sx={{ minWidth: 0 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1 }}>
                 <Typography sx={{ fontWeight: 700 }} noWrap>{city.name}</Typography>
-                <Typography variant="body2" sx={{ color: gold, fontWeight: 700, whiteSpace: 'nowrap' }}>
+                <Typography variant="body2" sx={{ color: accent.gold, fontWeight: 700, whiteSpace: 'nowrap' }}>
                   {formatNumber(city.xp)} XP
                 </Typography>
               </Box>

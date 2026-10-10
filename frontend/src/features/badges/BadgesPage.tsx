@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { gold } from '@/app/theme/tokens';
+import { accent } from '@/app/theme/tokens';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { PageHeader } from '@/shared/ui/PageHeader';
 import { useBadges } from './api';
@@ -21,7 +21,7 @@ export default function BadgesPage() {
         {(data) => (
           <>
             <Card sx={{ p: 3, mb: 4, display: 'flex', alignItems: 'center', gap: 3, flexWrap: 'wrap' }}>
-              <Typography sx={{ fontSize: 40, fontWeight: 800, color: gold, lineHeight: 1 }}>
+              <Typography sx={{ fontSize: 40, fontWeight: 800, color: accent.gold, lineHeight: 1 }}>
                 {data.earnedCount}
                 <Box component="span" sx={{ fontSize: 22, color: 'text.secondary' }}>/{data.total}</Box>
               </Typography>

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
-import { gold, ink, neon } from '@/app/theme/tokens';
+import { accent, ink } from '@/app/theme/tokens';
 import { isDemoMode } from '@/shared/config/runtime';
 import { relativeTime } from '@/shared/lib/format';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
@@ -18,10 +18,10 @@ import { RecommendationCard } from './RecommendationCard';
 function SourceChip({ guide }: { guide: Guide }) {
   return guide.source === 'AI' ? (
     <Chip icon={<AutoAwesomeRounded />} label="Claude ile üretildi" variant="outlined"
-      sx={{ '& .MuiChip-icon': { color: gold } }} />
+      sx={{ '& .MuiChip-icon': { color: accent.gold } }} />
   ) : (
     <Chip icon={<RuleRounded />} label="Kural tabanlı rehber" variant="outlined"
-      sx={{ '& .MuiChip-icon': { color: neon[300] } }} />
+      sx={{ '& .MuiChip-icon': { color: accent.neon } }} />
   );
 }
 
@@ -70,7 +70,7 @@ export default function GuidePage() {
               </Box>
             )}
             <Card sx={{ p: 3, mt: 4, display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-              <AutoAwesomeRounded sx={{ color: neon[300], mt: 0.25 }} />
+              <AutoAwesomeRounded sx={{ color: accent.neon, mt: 0.25 }} />
               <Typography variant="body2" color="text.secondary">
                 {isDemoMode ? (
                   'Bu demoda rehber; tamamladığın dersler, skorların ve serin üzerinden öneri sunar. '

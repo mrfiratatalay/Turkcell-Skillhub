@@ -2,7 +2,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { LineChart, lineClasses } from '@mui/x-charts/LineChart';
-import { gold, ink, line } from '@/app/theme/tokens';
+import { darkScheme, lightScheme } from '@/app/theme/schemes';
+import { ink, line } from '@/app/theme/tokens';
+import { useResolvedScheme } from '@/app/theme/useResolvedScheme';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { useXpHistory } from './api';
 
@@ -11,6 +13,7 @@ const dayFormat = new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'sho
 /** Cumulative XP over the last 30 days: the night clock's journey as a curve. */
 export function XpChart() {
   const history = useXpHistory(30);
+  const color = (useResolvedScheme() === 'light' ? lightScheme : darkScheme).accent.gold;
   return (
     <AsyncView query={history} skeleton={<SkeletonBlock height={280} />}>
       {(data) => (
@@ -31,7 +34,7 @@ export function XpChart() {
               area: true,
               showMark: false,
               curve: 'monotoneX',
-              color: gold,
+              color,
               label: 'Toplam XP',
             }]}
             grid={{ horizontal: true }}
@@ -46,8 +49,8 @@ export function XpChart() {
           >
             <defs>
               <linearGradient id="xp-area-gradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={gold} stopOpacity={0.28} />
-                <stop offset="100%" stopColor={gold} stopOpacity={0} />
+                <stop offset="0%" stopColor={color} stopOpacity={0.28} />
+                <stop offset="100%" stopColor={color} stopOpacity={0} />
               </linearGradient>
             </defs>
           </LineChart>

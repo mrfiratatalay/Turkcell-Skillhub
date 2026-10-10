@@ -1,6 +1,7 @@
 // "Sakin Gece" design tokens (concept and brief: tasarim/sakin-gece/).
-// Brand colors are measured from the official Turkcell Code Night visuals. Working surfaces use a
-// desaturated ink navy instead, so the brand light (gold, neon, the night sky) is what stands out.
+// Brand colors are measured from the official Turkcell Code Night visuals and never change. Every other
+// token is a CSS variable whose value comes from the active color scheme (schemes.ts).
+import { cssVar, darkScheme, type SchemeTokens } from './schemes';
 
 /** Brand night. Reserved for "windows" onto the sky: the login hero, the sky map, the city-lights map. */
 export const night = {
@@ -10,6 +11,7 @@ export const night = {
   700: '#011472',
 } as const;
 
+/** Raw brand neon, for drawings inside the night windows. Text and icons use `accent.neon`. */
 export const neon = {
   600: '#011CCB',
   500: '#0263CC',
@@ -17,61 +19,39 @@ export const neon = {
   100: '#ACE3FD',
 } as const;
 
-/** The single primary accent: primary actions, XP, lit stars, the active page. */
+/** Brand gold as a fill: primary buttons, progress, lit stars. Gold text and icons use `accent.gold`. */
 export const gold = '#FDC40B';
 
-/** Calm ink-navy layers, darkest to lightest. */
-export const surface = {
-  sidebar: '#0A0E1B',
-  canvas: '#0D1222',
-  input: '#11172A',
-  card: '#141B30',
-  raised: '#1B2440',
-  avatar: '#24304F',
-} as const;
+/** Text on a gold fill, in both schemes. */
+export const onGold = '#0D1222';
 
-export const line = {
-  hairline: '#1A2135',
-  default: '#232B42',
-  input: '#262F48',
-  strong: '#2C3654',
-  hover: '#3A4566',
-} as const;
-
-export const ink = {
+/** Text inside the night windows, which stay dark in both schemes. */
+export const onNight = {
   primary: '#EEF2FA',
   secondary: '#AEB6C8',
-  /** 5.2:1 on the canvas and 4.7:1 on cards; keep it off raised surfaces. */
   muted: '#7D879E',
 } as const;
 
-export const signal = {
-  success: '#5EE6A8',
-  error: '#FF7A93',
-} as const;
+type TokenGroup<G extends keyof SchemeTokens> = { readonly [K in keyof SchemeTokens[G]]: string };
 
-/** Translucent fills for chips, icon wells and selected rows. */
-export const tint = {
-  gold: 'rgba(253, 196, 11, 0.12)',
-  neon: 'rgba(92, 163, 238, 0.10)',
-  hover: 'rgba(174, 182, 200, 0.06)',
-} as const;
+function scheme<G extends keyof SchemeTokens>(group: G): TokenGroup<G> {
+  return Object.fromEntries(Object.keys(darkScheme[group]).map((key) => [key, cssVar(group, key)])) as TokenGroup<G>;
+}
 
+/** Ink-navy layers by night, paper-white layers by day. */
+export const surface = scheme('surface');
+export const line = scheme('line');
+export const ink = scheme('ink');
+export const accent = scheme('accent');
+export const signal = scheme('signal');
+/** Translucent fills for chips, icon wells, selected rows and skeletons. */
+export const tint = scheme('tint');
 /** Light is a reward: only earned or selected things get a gold or neon outline, never a glow. */
-export const outline = {
-  reward: 'rgba(253, 196, 11, 0.45)',
-  neon: 'rgba(92, 163, 238, 0.45)',
-} as const;
-
-export const shadow = {
-  card: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)',
-  floating: '0 18px 48px rgba(3, 6, 16, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
-  goldButton: '0 6px 20px rgba(253, 196, 11, 0.18)',
-  goldButtonHover: '0 10px 28px rgba(253, 196, 11, 0.28)',
-  focusRing: '0 0 0 3px rgba(92, 163, 238, 0.25)',
-} as const;
-
-export const scrim = 'rgba(5, 8, 18, 0.72)';
+export const outline = scheme('outline');
+export const shadow = scheme('shadow');
+export const medal = scheme('medal');
+export const highlight = scheme('highlight');
+export const atmosphere = scheme('atmosphere');
 
 export const fonts = {
   display: '"Outfit Variable", system-ui, -apple-system, "Segoe UI", sans-serif',

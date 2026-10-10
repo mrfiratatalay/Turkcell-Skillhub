@@ -57,5 +57,13 @@ laciverti yalnızca geceye açılan "pencerelerde" kullanılır: giriş görseli
 Işıkları haritası. Parıltı bir ödüldür: altın ve neon yalnızca kazanılmış ya da seçili öğelerde yanar.
 Ekranın alt kenarındaki şafak ışığı, öğrencinin Gece Saati ilerledikçe güçlenir.
 
-Renk token'ları `src/app/theme/tokens.ts` dosyasındadır. Konsept görselleri, önceki tasarımın ekran
-görüntüleri ve görselleri üreten Codex talimatları `../tasarim/sakin-gece/` klasöründedir.
+Arayüzün iki renk şeması vardır: varsayılan **Gece** (koyu) ve gündüz için **Şafak** (açık). Üst bardaki
+güneş / ay düğmesi şemayı değiştirir; seçim tarayıcıda saklanır. Şemalar MUI'nin `colorSchemes` ve CSS
+değişkenleri altyapısıyla çalışır: geçişte `<html data-theme>` niteliği değişir ve bileşenlerin neredeyse
+tamamı yeniden çizilmeden, CSS değişkenleri üzerinden renk değiştirir. Açık şemada altın renk yazı olarak kullanılmaz (beyaz üstünde 1.6:1); altın yalnızca dolgu
+ve vurgu çizgisi olur, metinler kontrastı kontrol edilmiş koyu tonlara geçer. Gökyüzü pencereleri iki
+şemada da gecedir.
+
+Şema değerleri `src/app/theme/schemes.ts`, bileşenlerin kullandığı token'lar `src/app/theme/tokens.ts`
+dosyasındadır. Konsept görselleri, önceki tasarımın ekran görüntüleri ve görselleri üreten Codex
+talimatları `../tasarim/sakin-gece/` klasöründedir.

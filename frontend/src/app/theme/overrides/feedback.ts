@@ -1,6 +1,7 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { gold, ink, line, neon, signal, surface, tint } from '../tokens';
+import { accent, gold, ink, line, outline, signal, surface, tint } from '../tokens';
 
+// Alerts also float as toasts, so each tint is layered over an opaque card color.
 const tinted = (color: string) => `linear-gradient(${color}, ${color}), ${surface.card}`;
 
 /** Progress, skeletons, alerts and navigation chrome. */
@@ -13,7 +14,7 @@ export const feedback: Components<Omit<Theme, 'components'>> = {
   },
   MuiSkeleton: {
     styleOverrides: {
-      root: { backgroundColor: 'rgba(174, 182, 200, 0.07)', borderRadius: 14 },
+      root: { backgroundColor: tint.skeleton, borderRadius: 14 },
     },
   },
   MuiAlert: {
@@ -25,19 +26,19 @@ export const feedback: Components<Omit<Theme, 'components'>> = {
         variants: [
           {
             props: { variant: 'standard', severity: 'error' },
-            style: { background: tinted('rgba(255, 122, 147, 0.10)'), border: `1px solid ${signal.error}59` },
+            style: { background: tinted(signal.errorTint), border: `1px solid ${signal.errorLine}` },
           },
           {
             props: { variant: 'standard', severity: 'success' },
-            style: { background: tinted('rgba(94, 230, 168, 0.10)'), border: `1px solid ${signal.success}59` },
+            style: { background: tinted(signal.successTint), border: `1px solid ${signal.successLine}` },
           },
           {
             props: { variant: 'standard', severity: 'info' },
-            style: { background: surface.card, border: `1px solid ${line.default}`, '& .MuiAlert-icon': { color: neon[300] } },
+            style: { background: surface.card, border: `1px solid ${line.default}`, '& .MuiAlert-icon': { color: accent.neon } },
           },
           {
             props: { variant: 'standard', severity: 'warning' },
-            style: { background: tinted(tint.gold), border: `1px solid ${gold}59` },
+            style: { background: tinted(tint.gold), border: `1px solid ${outline.reward}` },
           },
         ],
       },
@@ -54,7 +55,7 @@ export const feedback: Components<Omit<Theme, 'components'>> = {
         color: ink.muted,
         minWidth: 0,
         padding: '6px 4px',
-        '&.Mui-selected': { color: gold },
+        '&.Mui-selected': { color: accent.gold },
         '& .MuiBottomNavigationAction-label': { fontSize: 11, fontWeight: 600, marginTop: 2 },
         '& .MuiBottomNavigationAction-label.Mui-selected': { fontSize: 11 },
       },

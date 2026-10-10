@@ -10,7 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useLocation } from 'react-router';
-import { gold, ink, line, neon, scrim, shadow, surface, tint } from '@/app/theme/tokens';
+import { accent, atmosphere, gold, ink, line, outline, shadow, surface, tint } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { useSession } from '@/shared/auth/useSession';
 import { isDemoMode } from '@/shared/config/runtime';
@@ -61,7 +61,7 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
           },
         },
         backdrop: {
-          sx: { backgroundColor: scrim, backdropFilter: 'blur(2px)' },
+          sx: { backgroundColor: atmosphere.scrim, backdropFilter: 'blur(2px)' },
         },
       }}
     >
@@ -108,12 +108,12 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
                   color: selected ? ink.primary : ink.secondary,
                   background: selected ? surface.raised : 'transparent',
                   transition: 'background .15s, color .15s',
-                  '& .MuiSvgIcon-root': { color: selected ? gold : 'inherit' },
+                  '& .MuiSvgIcon-root': { color: selected ? accent.gold : 'inherit' },
                   // The active page is marked by a slim gold bar, not a gold slab.
                   '&::before': { content: '""', position: 'absolute', left: 0, top: 10, bottom: 10, width: 3,
                     borderRadius: 3, background: gold, opacity: selected ? 1 : 0, transition: 'opacity .15s' },
                   '&:hover': { background: selected ? surface.raised : tint.hover, color: ink.primary },
-                  '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 },
+                  '&:focus-visible': { outline: `2px solid ${accent.neon}`, outlineOffset: 2 },
                 }}
               >
                 {item.icon}
@@ -126,7 +126,7 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
           {isDemoMode && (
             <Box sx={{ px: 0.5 }}>
               <Chip label="Etkileşimli demo" size="small" variant="outlined"
-                sx={{ color: neon[300], borderColor: 'rgba(92, 163, 238, 0.35)' }} />
+                sx={{ color: accent.neon, borderColor: outline.neon }} />
               <Typography variant="body2" sx={{ mt: 0.75, fontSize: 12, color: ink.muted }}>
                 Örnek veriler. İlerlemen bu tarayıcıda saklanır.
               </Typography>
@@ -139,17 +139,17 @@ export function SideNav({ open, isDesktop, reducedMotion, onClose, onNavigate }:
               onClick={onNavigate}
               sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5, borderRadius: '18px', background: surface.card,
                 border: `1px solid ${line.default}`, textDecoration: 'none', color: 'inherit', transition: 'border-color .15s',
-                '&:hover': { borderColor: line.strong }, '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 } }}
+                '&:hover': { borderColor: line.strong }, '&:focus-visible': { outline: `2px solid ${accent.neon}`, outlineOffset: 2 } }}
             >
               <NightClockRing progress={clock.nightProgress} time={clock.time} size={64} />
               <Box sx={{ minWidth: 0 }}>
-                <Typography variant="overline" sx={{ color: neon[300], fontSize: 10, display: 'block' }}>
+                <Typography variant="overline" sx={{ color: accent.neon, fontSize: 10, display: 'block' }}>
                   Gece Saati
                 </Typography>
                 <Typography sx={{ fontWeight: 700, lineHeight: 1.2 }} noWrap>
                   {clock.title}
                 </Typography>
-                <Typography variant="body2" sx={{ color: gold, fontWeight: 700 }}>
+                <Typography variant="body2" sx={{ color: accent.gold, fontWeight: 700 }}>
                   {formatNumber(me.data.progress.totalXp)} XP
                 </Typography>
               </Box>

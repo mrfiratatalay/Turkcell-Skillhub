@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import { gold, neon } from '@/app/theme/tokens';
+import { accent } from '@/app/theme/tokens';
 import type { ProgressSummary } from '@/features/me/api';
 import { formatNumber } from '@/shared/lib/format';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
@@ -18,7 +18,7 @@ export function NightClockCard({ progress }: { progress: ProgressSummary }) {
       gap: 3, height: '100%' }}>
       <NightClockRing progress={clock.nightProgress} time={clock.time} caption={clock.dawn ? 'Şafak' : 'Gece Saati'} size={176} />
       <Box sx={{ flex: 1, width: '100%', minWidth: 0 }}>
-        <Typography variant="overline" sx={{ color: neon[300] }}>
+        <Typography variant="overline" sx={{ color: accent.neon }}>
           Seviye {clock.level}/{LEVELS}
         </Typography>
         <Typography variant="h4" component="p" sx={{ mt: 0.5 }}>
@@ -31,7 +31,7 @@ export function NightClockCard({ progress }: { progress: ProgressSummary }) {
         </Typography>
         <Box sx={{ mt: 2.5 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-            <Typography variant="body2" sx={{ color: gold, fontWeight: 700 }}>
+            <Typography variant="body2" sx={{ color: accent.gold, fontWeight: 700 }}>
               {formatNumber(progress.totalXp)} XP
             </Typography>
             <Typography variant="body2" color="text.secondary">

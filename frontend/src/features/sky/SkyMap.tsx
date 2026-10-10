@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import { motion, useReducedMotion } from 'motion/react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
-import { fonts, gold, ink, neon } from '@/app/theme/tokens';
+import { fonts, gold, ink, neon, onNight } from '@/app/theme/tokens';
 import { isDemoMode } from '@/shared/config/runtime';
 import type { Sky, Star } from './api';
 import { SkyStar } from './SkyStar';
@@ -103,7 +103,7 @@ export function SkyMap({ sky }: { sky: Sky }) {
           )),
         )}
       </Box>
-      <Typography variant="body2" sx={{ display: { xs: 'block', sm: 'none' }, textAlign: 'center', color: ink.muted,
+      <Typography variant="body2" sx={{ display: { xs: 'block', sm: 'none' }, textAlign: 'center', color: onNight.muted,
         position: 'sticky', left: 0, width: '100%', mt: 0.5 }}>
         ← Haritayı kaydırarak keşfet →
       </Typography>
@@ -113,15 +113,16 @@ export function SkyMap({ sky }: { sky: Sky }) {
 
 export function SkyLegend() {
   const items = [
-    { label: 'Yanan yıldız', color: gold },
-    { label: 'Keşfe açık', color: ink.primary },
-    ...(!isDemoMode ? [{ label: 'Kilitli', color: ink.muted }] : []),
+    { label: 'Yanan yıldız', color: gold, ring: null },
+    { label: 'Keşfe açık', color: '#FFFFFF', ring: neon[300] },
+    ...(!isDemoMode ? [{ label: 'Kilitli', color: 'rgba(125, 135, 158, 0.6)', ring: null }] : []),
   ];
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2.5 }}>
       {items.map((item) => (
         <Box key={item.label} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: item.color }} />
+          <Box sx={{ width: 10, height: 10, borderRadius: '50%', background: item.color,
+            boxShadow: item.ring ? `inset 0 0 0 2px ${item.ring}` : 'none' }} />
           <Typography variant="body2" sx={{ color: ink.secondary }}>
             {item.label}
           </Typography>

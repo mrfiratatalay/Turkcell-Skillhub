@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
-import { gold, ink, neon, outline, tint } from '@/app/theme/tokens';
+import { accent, ink, outline, tint } from '@/app/theme/tokens';
 import { isDemoMode } from '@/shared/config/runtime';
 import type { LessonRef } from '@/shared/domain/types';
 import { NightClockRing } from '@/shared/ui/NightClockRing';
@@ -18,7 +18,7 @@ function RefList({ title, items }: { title: string; items: LessonRef[] }) {
   if (items.length === 0) return null;
   return (
     <Box>
-      <Typography variant="overline" sx={{ color: neon[300] }}>{title}</Typography>
+      <Typography variant="overline" sx={{ color: accent.neon }}>{title}</Typography>
       <Box sx={{ display: 'grid', gap: 1, mt: 0.5 }}>
         {items.map((item) => (
           <Box key={item.slug} component={RouterLink} to={`/dersler/${item.slug}`}
@@ -54,7 +54,7 @@ export function LessonActionCard({ lesson }: { lesson: LessonDetail }) {
           <Box component="ol" sx={{ m: 0, pl: 3, display: 'grid', gap: 1 }}>
             {lesson.unlockPath.map((step) => (
               <li key={step.slug}>
-                <Box component={RouterLink} to={`/dersler/${step.slug}`} sx={{ color: neon[300], fontWeight: 600 }}>
+                <Box component={RouterLink} to={`/dersler/${step.slug}`} sx={{ color: accent.neon, fontWeight: 600 }}>
                   {step.title}
                 </Box>
               </li>
@@ -78,7 +78,7 @@ export function LessonActionCard({ lesson }: { lesson: LessonDetail }) {
                 {lesson.questionCount} soru · %70 ile geçersin
                 {lesson.attempts > 0 ? ` · ${lesson.attempts} deneme` : ''}
               </Typography>
-              <Typography variant="body2" sx={{ color: gold, fontWeight: 700, mt: 0.5 }}>
+              <Typography variant="body2" sx={{ color: accent.gold, fontWeight: 700, mt: 0.5 }}>
                 {remainingXp > 0 ? `+${remainingXp} XP kazanılabilir` : 'Tüm XP toplandı'}
               </Typography>
             </Box>

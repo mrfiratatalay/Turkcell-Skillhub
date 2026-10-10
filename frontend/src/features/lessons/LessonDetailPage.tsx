@@ -8,7 +8,7 @@ import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useParams } from 'react-router';
-import { gold, neon } from '@/app/theme/tokens';
+import { accent } from '@/app/theme/tokens';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { AppIcon } from '@/shared/ui/icons';
 import { DifficultyChip, StatusChip } from '@/shared/ui/LessonChips';
@@ -26,7 +26,7 @@ function LessonBody({ lesson }: { lesson: LessonDetail }) {
         <Card sx={{ p: 3, display: 'grid', gap: 1.5, gridTemplateColumns: { sm: '1fr 1fr' } }}>
           {lesson.objectives.map((objective) => (
             <Box key={objective} sx={{ display: 'flex', gap: 1.25, alignItems: 'flex-start' }}>
-              <CheckCircleOutlineRounded sx={{ color: gold, mt: '2px' }} />
+              <CheckCircleOutlineRounded sx={{ color: accent.gold, mt: '2px' }} />
               <Typography>{objective}</Typography>
             </Box>
           ))}
@@ -71,11 +71,12 @@ export default function LessonDetailPage() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
                   <Chip variant="outlined" icon={<AppIcon name={data.category.icon} />}
                     label={`${data.category.name} · ${data.category.constellation}`}
-                    sx={{ '& .MuiChip-icon': { color: neon[300] } }} />
+                    sx={{ '& .MuiChip-icon': { color: accent.neon } }} />
                   <StatusChip status={data.status} />
                   <DifficultyChip difficulty={data.difficulty} />
                   <Chip size="small" icon={<AccessTimeRounded />} label={`${data.durationMin} dk`} />
-                  <Chip size="small" icon={<BoltRounded />} label={`${data.xpReward} XP`} sx={{ color: gold }} />
+                  <Chip size="small" icon={<BoltRounded />} label={`${data.xpReward} XP`}
+                    sx={{ color: accent.gold, '& .MuiChip-icon': { color: accent.gold } }} />
                 </Box>
               }
             />

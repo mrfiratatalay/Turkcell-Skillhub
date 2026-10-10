@@ -1,12 +1,12 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { ReactNode } from 'react';
-import { gold } from '@/app/theme/tokens';
 import { useDocumentTitle } from '@/shared/lib/useDocumentTitle';
+import { highlightSx } from './highlight';
 
 interface PageHeaderProps {
   title: string;
-  /** Word(s) of the title rendered in Code Night yellow. */
+  /** Word(s) of the title rendered in Code Night gold (a gold marker stroke by day). */
   highlight?: string;
   subtitle?: ReactNode;
   eyebrow?: ReactNode;
@@ -25,7 +25,7 @@ export function PageHeader({ title, highlight, subtitle, eyebrow, actions }: Pag
         <Typography variant="h3" component="h1" sx={{ fontSize: { xs: 32, md: 44 } }}>
           {title}{' '}
           {highlight && (
-            <Box component="span" sx={{ color: gold }}>
+            <Box component="span" sx={highlightSx}>
               {highlight}
             </Box>
           )}

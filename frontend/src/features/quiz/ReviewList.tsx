@@ -32,7 +32,7 @@ export function ReviewList({ review }: { review: ReviewItem[] }) {
               return (
                 <Box key={option.id} sx={{ px: 1.5, py: 1, borderRadius: '10px',
                   color: isCorrect ? signal.success : isWrongPick ? signal.error : ink.secondary,
-                  background: isCorrect ? 'rgba(94,230,168,.08)' : isWrongPick ? 'rgba(255,122,147,.08)' : 'transparent',
+                  background: isCorrect ? signal.successTint : isWrongPick ? signal.errorTint : 'transparent',
                   fontWeight: isCorrect || isWrongPick ? 700 : 400 }}>
                   {option.label}
                   {isCorrect && ' · doğru cevap'}

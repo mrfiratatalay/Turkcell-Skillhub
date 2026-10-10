@@ -32,12 +32,12 @@ export function NightClockRing({ progress, time, caption, size = 180 }: NightClo
           <stop offset="100%" stopColor={DAWN} />
         </linearGradient>
       </defs>
-      <circle cx="60" cy="60" r="50" fill="none" stroke={line.default} strokeWidth="7" />
+      <circle cx="60" cy="60" r="50" fill="none" strokeWidth="7" style={{ stroke: line.default }} />
       {Array.from({ length: 8 }, (_, i) => {
         const angle = (i / 8) * 2 * Math.PI - Math.PI / 2;
         return (
-          <circle key={i} cx={60 + Math.cos(angle) * 39} cy={60 + Math.sin(angle) * 39} r="1.1" fill={ink.muted}
-            opacity="0.7" />
+          <circle key={i} cx={60 + Math.cos(angle) * 39} cy={60 + Math.sin(angle) * 39} r="1.1" opacity="0.7"
+            style={{ fill: ink.muted }} />
         );
       })}
       <circle
@@ -53,13 +53,13 @@ export function NightClockRing({ progress, time, caption, size = 180 }: NightClo
         transform="rotate(-90 60 60)"
         style={{ transition: 'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)' }}
       />
-      <text x="60" y={caption ? 63 : 67} textAnchor="middle" fill={ink.primary}
-        style={{ font: `800 22px ${fonts.display}` }}>
+      <text x="60" y={caption ? 63 : 67} textAnchor="middle"
+        style={{ fill: ink.primary, font: `800 22px ${fonts.display}` }}>
         {time}
       </text>
       {caption && (
-        <text x="60" y="77" textAnchor="middle" fill={ink.muted}
-          style={{ font: `700 6px ${fonts.mono}`, letterSpacing: '.4px' }}>
+        <text x="60" y="77" textAnchor="middle"
+          style={{ fill: ink.muted, font: `700 6px ${fonts.mono}`, letterSpacing: '.4px' }}>
           {caption.toLocaleUpperCase('tr-TR')}
         </text>
       )}

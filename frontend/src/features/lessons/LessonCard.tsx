@@ -8,7 +8,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import type { ReactNode } from 'react';
 import { Link as RouterLink } from 'react-router';
-import { gold, ink, line, neon } from '@/app/theme/tokens';
+import { accent, ink, line } from '@/app/theme/tokens';
 import { AppIcon } from '@/shared/ui/icons';
 import { DifficultyChip, StatusChip } from '@/shared/ui/LessonChips';
 import type { LessonCardData } from './api';
@@ -40,11 +40,11 @@ export function LessonCard({ lesson }: { lesson: LessonCardData }) {
         opacity: locked ? 0.78 : 1,
         transition: 'transform .2s ease, border-color .2s ease, opacity .2s',
         '&:hover': { transform: 'translateY(-3px)', borderColor: line.hover, opacity: 1 },
-        '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 3 },
+        '&:focus-visible': { outline: `2px solid ${accent.neon}`, outlineOffset: 3 },
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, color: neon[300], minWidth: 0 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, color: accent.neon, minWidth: 0 }}>
           <AppIcon name={lesson.category.icon} sx={{ fontSize: 18 }} />
           <Typography variant="body2" noWrap sx={{ color: ink.secondary, fontWeight: 600 }}>
             {lesson.category.name}
@@ -71,7 +71,7 @@ export function LessonCard({ lesson }: { lesson: LessonCardData }) {
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.75 }}>
             <Typography variant="body2" color="text.secondary">En iyi skorun</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 800, color: lesson.bestScore >= 70 ? gold : ink.secondary }}>
+            <Typography variant="body2" sx={{ fontWeight: 800, color: lesson.bestScore >= 70 ? accent.gold : ink.secondary }}>
               %{lesson.bestScore}
             </Typography>
           </Box>

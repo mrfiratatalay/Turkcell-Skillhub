@@ -2,7 +2,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { keyframes } from '@mui/material/styles';
 import { motion } from 'motion/react';
-import { fonts, gold, ink, neon } from '@/app/theme/tokens';
+import { fonts, gold, ink, neon, onNight } from '@/app/theme/tokens';
 import { difficultyLabel, statusLabel } from '@/shared/lib/labels';
 import type { Star } from './api';
 
@@ -27,7 +27,8 @@ export function SkyStar({ star, index, reduceMotion, onOpen }: SkyStarProps) {
   const size = 9 + (star.xpReward - 100) / 25;
   const lit = star.status === 'COMPLETED';
   const open = star.status === 'AVAILABLE';
-  const labelColor = lit ? '#FFE58A' : open ? ink.primary : ink.muted;
+  // Labels sit inside the night window, so they keep night colors in both schemes.
+  const labelColor = lit ? '#FFE58A' : open ? onNight.primary : onNight.muted;
   const tooltip = (
     <>
       <Typography sx={{ fontWeight: 700, fontSize: 14 }}>{star.title}</Typography>

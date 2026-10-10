@@ -10,12 +10,13 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink, useLocation } from 'react-router';
-import { gold, ink, line, neon, surface, tint } from '@/app/theme/tokens';
+import { accent, atmosphere, ink, line, surface, tint } from '@/app/theme/tokens';
 import { useMe } from '@/features/me/api';
 import { useSession } from '@/shared/auth/useSession';
 import { isDemoMode } from '@/shared/config/runtime';
 import { formatNumber, initials } from '@/shared/lib/format';
 import { Logo } from '@/shared/ui/Logo';
+import { ThemeModeToggle } from '@/shared/ui/ThemeModeToggle';
 import { activeNav, NAV_ITEMS } from './navigation';
 import { DRAWER_DURATION, SIDEBAR_WIDTH } from './SideNav';
 
@@ -48,7 +49,7 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
         px: { xs: 1.5, sm: 2, md: 3 },
         alignItems: 'center',
         gap: 1,
-        background: 'rgba(13, 18, 34, 0.88)',
+        background: atmosphere.bar,
         backdropFilter: 'blur(12px)',
         boxShadow: `0 1px 0 ${line.hairline}`,
         transition: (theme) => theme.transitions.create('left', { duration: DRAWER_DURATION }),
@@ -74,7 +75,7 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
         <Logo size={18} />
         {isDemoMode && (
           <Tooltip title="Kurgusal örnek veriler. İlerlemen bu tarayıcıda saklanır.">
-            <Typography sx={{ color: neon[300], fontSize: 9, lineHeight: 1.2, letterSpacing: 1.5, mt: 0.25 }}>
+            <Typography sx={{ color: accent.neon, fontSize: 9, lineHeight: 1.2, letterSpacing: 1.5, mt: 0.25 }}>
               DEMO
             </Typography>
           </Tooltip>
@@ -83,16 +84,17 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
       <Typography noWrap sx={{ display: { xs: 'none', md: 'block' }, fontWeight: 600, color: 'text.secondary', mr: 'auto' }}>
         {pageTitle}
       </Typography>
+      <ThemeModeToggle />
       {progress && progress.streakDays > 0 && (
         <Chip
           size="small"
           icon={<LocalFireDepartmentRounded />}
           label={progress.streakDays}
-          sx={{ display: { xs: 'none', sm: 'inline-flex' }, '& .MuiChip-icon': { color: '#FF9F43' }, fontWeight: 800 }}
+          sx={{ display: { xs: 'none', sm: 'inline-flex' }, '& .MuiChip-icon': { color: accent.flame }, fontWeight: 800 }}
         />
       )}
       {progress && (
-        <Chip size="small" label={`${formatNumber(progress.totalXp)} XP`} sx={{ display: { xs: 'none', sm: 'inline-flex' }, color: gold, background: tint.gold, fontWeight: 800 }} />
+        <Chip size="small" label={`${formatNumber(progress.totalXp)} XP`} sx={{ display: { xs: 'none', sm: 'inline-flex' }, color: accent.gold, background: tint.gold, fontWeight: 800 }} />
       )}
       {user && (
         <Avatar
@@ -100,7 +102,7 @@ export function AppTopBar({ open, desktopOpen, onMenuToggle }: AppTopBarProps) {
           to="/profil"
           aria-label="Profil"
           sx={{ width: 34, height: 34, bgcolor: surface.avatar, color: ink.primary, fontSize: 13, textDecoration: 'none',
-            '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 } }}
+            '&:focus-visible': { outline: `2px solid ${accent.neon}`, outlineOffset: 2 } }}
         >
           {initials(user.displayName)}
         </Avatar>

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
-import { fonts, gold, ink, outline, surface, tint } from '@/app/theme/tokens';
+import { accent, fonts, gold, ink, onGold, outline, surface, tint } from '@/app/theme/tokens';
 import { formatNumber, initials } from '@/shared/lib/format';
 import type { LeaderboardEntry } from './api';
 
@@ -22,10 +22,10 @@ function Row({ entry }: { entry: LeaderboardEntry }) {
         boxShadow: entry.me ? `inset 0 0 0 1px ${outline.reward}` : 'none',
       }}
     >
-      <Typography sx={{ fontFamily: fonts.mono, fontWeight: 800, color: entry.rank <= 3 ? gold : ink.secondary }}>
+      <Typography sx={{ fontFamily: fonts.mono, fontWeight: 800, color: entry.rank <= 3 ? accent.gold : ink.secondary }}>
         #{entry.rank}
       </Typography>
-      <Avatar sx={{ width: 40, height: 40, bgcolor: entry.me ? gold : surface.avatar, color: entry.me ? surface.canvas : ink.primary,
+      <Avatar sx={{ width: 40, height: 40, bgcolor: entry.me ? gold : surface.avatar, color: entry.me ? onGold : ink.primary,
         fontSize: 14 }}>
         {initials(entry.displayName)}
       </Avatar>
@@ -38,7 +38,7 @@ function Row({ entry }: { entry: LeaderboardEntry }) {
           {entry.cityName} · {entry.levelTitle} · {entry.completedLessons} yıldız
         </Typography>
       </Box>
-      <Typography sx={{ fontWeight: 800, color: entry.me ? gold : ink.primary, whiteSpace: 'nowrap' }}>
+      <Typography sx={{ fontWeight: 800, color: entry.me ? accent.gold : ink.primary, whiteSpace: 'nowrap' }}>
         {formatNumber(entry.xp)} XP
       </Typography>
     </Box>

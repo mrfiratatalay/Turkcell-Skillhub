@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import type { ReactNode } from 'react';
-import { gold, neon, surface } from '@/app/theme/tokens';
+import { accent, surface } from '@/app/theme/tokens';
 
 interface StatTileProps {
   icon: ReactNode;
@@ -11,7 +11,7 @@ interface StatTileProps {
   accent?: 'gold' | 'neon';
 }
 
-export function StatTile({ icon, value, label, accent = 'neon' }: StatTileProps) {
+export function StatTile({ icon, value, label, accent: tone = 'neon' }: StatTileProps) {
   return (
     <Card sx={{ p: 2.25, display: 'flex', alignItems: 'center', gap: 1.75, minWidth: 0 }}>
       <Box
@@ -22,7 +22,7 @@ export function StatTile({ icon, value, label, accent = 'neon' }: StatTileProps)
           borderRadius: '14px',
           display: 'grid',
           placeItems: 'center',
-          color: accent === 'gold' ? gold : neon[300],
+          color: tone === 'gold' ? accent.gold : accent.neon,
           background: surface.raised,
         }}
       >

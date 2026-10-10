@@ -5,7 +5,9 @@ import { RouterProvider } from 'react-router';
 import { ApiError } from '@/shared/api/ApiError';
 import { ToastProvider } from '@/shared/ui/ToastProvider';
 import { router } from './router';
+import { MODE_STORAGE_KEY } from './theme/schemes';
 import { theme } from './theme/theme';
+import { ThemeColorMeta } from './theme/ThemeColorMeta';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,8 +23,9 @@ const queryClient = new QueryClient({
 
 export function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme} defaultMode="dark" modeStorageKey={MODE_STORAGE_KEY} noSsr disableTransitionOnChange>
       <CssBaseline />
+      <ThemeColorMeta />
       <QueryClientProvider client={queryClient}>
         <ToastProvider>
           <RouterProvider router={router} />

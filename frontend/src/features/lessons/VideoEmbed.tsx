@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Chip from '@mui/material/Chip';
 import { useState } from 'react';
-import { gold, ink, line, shadow, surface } from '@/app/theme/tokens';
+import { gold, line, onGold, onNight, shadow, surface } from '@/app/theme/tokens';
 
 /**
  * Click-to-load YouTube player on the privacy-enhanced domain: until the learner chooses to watch,
@@ -38,11 +38,11 @@ export function VideoEmbed({ videoId, title }: { videoId: string; title: string 
           }}
         >
           <Box className="play" sx={{ width: 76, height: 76, borderRadius: '50%', display: 'grid', placeItems: 'center',
-            background: gold, color: surface.canvas, boxShadow: shadow.goldButtonHover, transition: 'transform .2s' }}>
+            background: gold, color: onGold, boxShadow: shadow.goldButtonHover, transition: 'transform .2s' }}>
             <PlayArrowRounded sx={{ fontSize: 44 }} />
           </Box>
           <Chip label="İngilizce kaynak" size="small"
-            sx={{ position: 'absolute', top: 14, left: 14, background: 'rgba(13,18,34,.8)', color: ink.primary }} />
+            sx={{ position: 'absolute', top: 14, left: 14, background: 'rgba(13,18,34,.8)', color: onNight.primary }} />
         </ButtonBase>
       )}
     </Box>

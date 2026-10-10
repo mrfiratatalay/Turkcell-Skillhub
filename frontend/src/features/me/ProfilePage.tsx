@@ -13,7 +13,7 @@ import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { gold, surface } from '@/app/theme/tokens';
+import { accent, gold, onGold } from '@/app/theme/tokens';
 import { useSession } from '@/shared/auth/useSession';
 import { formatDate, formatNumber, initials } from '@/shared/lib/format';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
@@ -31,7 +31,7 @@ function ProfileCard({ me, onEdit, onSignOut }: { me: Me; onEdit: () => void; on
   const { user, progress } = me;
   return (
     <Card sx={{ p: { xs: 3, md: 4 }, display: 'flex', flexWrap: 'wrap', gap: 3, alignItems: 'center' }}>
-      <Avatar sx={{ width: 96, height: 96, fontSize: 36, color: surface.canvas,
+      <Avatar sx={{ width: 96, height: 96, fontSize: 36, color: onGold,
         background: `linear-gradient(135deg, ${gold}, #FFE58A)`, boxShadow: '0 0 0 4px rgba(253, 196, 11, 0.18)' }}>
         {initials(user.displayName)}
       </Avatar>
@@ -39,7 +39,7 @@ function ProfileCard({ me, onEdit, onSignOut }: { me: Me; onEdit: () => void; on
         <Typography variant="h4" component="p">{user.displayName}</Typography>
         <Typography color="text.secondary">{user.email}</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1.5 }}>
-          <Chip size="small" icon={<PlaceRounded />} label={user.city.name} sx={{ '& .MuiChip-icon': { color: gold } }} />
+          <Chip size="small" icon={<PlaceRounded />} label={user.city.name} sx={{ '& .MuiChip-icon': { color: accent.gold } }} />
           {user.university && <Chip size="small" icon={<SchoolRounded />} label={user.university} />}
           <Chip size="small" variant="outlined" label={`Üyelik: ${formatDate(user.memberSince)}`} />
         </Box>

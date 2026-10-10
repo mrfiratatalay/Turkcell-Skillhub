@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import { memo } from 'react';
+import { atmosphere } from '@/app/theme/tokens';
 
 const STARS = [
   'radial-gradient(1.2px 1.2px at 8% 22%, rgba(255,255,255,.55), transparent)',
@@ -20,15 +21,15 @@ interface AppBackdropProps {
 }
 
 /**
- * The calm night behind every page: a few faint stars near the top and a warm dawn on the horizon.
- * The real night sky only appears inside "windows" (see SkyWindow). Decorative only.
+ * The calm backdrop behind every page: a few faint stars near the top (night scheme only) and a warm
+ * dawn on the horizon. The real night sky only appears inside "windows" (see SkyWindow). Decorative only.
  */
 export const AppBackdrop = memo(function AppBackdrop({ dawn = 0, withBottomNav = false }: AppBackdropProps) {
   const strength = (0.035 + 0.05 * Math.min(1, Math.max(0, dawn))).toFixed(3);
   return (
     <Box aria-hidden sx={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
       <Box sx={{ position: 'absolute', inset: 0, backgroundImage: STARS, backgroundSize: '460px 320px',
-        maskImage: fadeOut, WebkitMaskImage: fadeOut }} />
+        maskImage: fadeOut, WebkitMaskImage: fadeOut, opacity: atmosphere.stars }} />
       <Box
         sx={{
           position: 'absolute',

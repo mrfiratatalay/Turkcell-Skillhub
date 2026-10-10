@@ -1,21 +1,32 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, type PaletteOptions } from '@mui/material/styles';
 import { controls } from './overrides/controls';
 import { feedback } from './overrides/feedback';
 import { surfaces } from './overrides/surfaces';
-import { fonts, gold, ink, line, neon, signal, surface } from './tokens';
+import { COLOR_SCHEME_ATTRIBUTE, darkScheme, lightScheme, type SchemeTokens } from './schemes';
+import { fonts, gold, ink, onGold } from './tokens';
+
+/** MUI's own palette needs raw colors (it derives channels from them), so it reads the scheme values. */
+function palette(scheme: SchemeTokens, mode: 'light' | 'dark'): PaletteOptions {
+  return {
+    mode,
+    primary: { main: gold, contrastText: onGold },
+    secondary: { main: scheme.accent.neon, contrastText: mode === 'dark' ? onGold : '#FFFFFF' },
+    success: { main: scheme.signal.success },
+    error: { main: scheme.signal.error },
+    warning: { main: scheme.accent.gold },
+    info: { main: scheme.accent.neon },
+    background: { default: scheme.surface.canvas, paper: scheme.surface.card },
+    text: { primary: scheme.ink.primary, secondary: scheme.ink.secondary, disabled: scheme.ink.muted },
+    divider: scheme.line.default,
+  };
+}
 
 export const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: { main: gold, contrastText: surface.canvas },
-    secondary: { main: neon[300], contrastText: surface.canvas },
-    success: { main: signal.success, contrastText: surface.canvas },
-    error: { main: signal.error },
-    warning: { main: gold },
-    info: { main: neon[300] },
-    background: { default: surface.canvas, paper: surface.card },
-    text: { primary: ink.primary, secondary: ink.secondary, disabled: ink.muted },
-    divider: line.default,
+  cssVariables: { colorSchemeSelector: COLOR_SCHEME_ATTRIBUTE },
+  defaultColorScheme: 'dark',
+  colorSchemes: {
+    dark: { palette: palette(darkScheme, 'dark') },
+    light: { palette: palette(lightScheme, 'light') },
   },
   shape: { borderRadius: 14 },
   typography: {

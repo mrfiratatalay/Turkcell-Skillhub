@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { onNight } from '@/app/theme/tokens';
 import { type Me, useMe } from '@/features/me/api';
 import { firstName, greeting } from '@/shared/lib/format';
 import { AsyncView, SkeletonBlock } from '@/shared/ui/AsyncView';
@@ -47,7 +48,7 @@ export default function DashboardPage() {
           {(data) => (
             <SkyWindow sx={{ p: { xs: 1.5, sm: 3 } }}>
               <SkyMap sky={data} />
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1, textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ mt: 1, textAlign: 'center', color: onNight.secondary }}>
                 {data.completed}/{data.total} yıldız yandı · Bir yıldıza dokunarak dersine git
               </Typography>
             </SkyWindow>

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
-import { gold, ink, signal, tint } from '@/app/theme/tokens';
+import { accent, ink, signal, tint } from '@/app/theme/tokens';
 import { relativeTime } from '@/shared/lib/format';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { useAttempts } from './api';
@@ -33,7 +33,7 @@ export function AttemptList({ limit }: { limit: number }) {
                 <Box sx={{ textAlign: 'right' }}>
                   <Typography sx={{ fontWeight: 800 }}>%{attempt.score}</Typography>
                   {attempt.xpEarned > 0 && (
-                    <Typography variant="body2" sx={{ color: gold, fontWeight: 700 }}>+{attempt.xpEarned} XP</Typography>
+                    <Typography variant="body2" sx={{ color: accent.gold, fontWeight: 700 }}>+{attempt.xpEarned} XP</Typography>
                   )}
                 </Box>
               </Box>

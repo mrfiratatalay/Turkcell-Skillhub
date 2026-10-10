@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router';
-import { gold, neon, surface } from '@/app/theme/tokens';
+import { accent, surface } from '@/app/theme/tokens';
 import { useBadges } from '@/features/badges/api';
 import { useGuide } from '@/features/guide/api';
 import { RecommendationCard } from '@/features/guide/RecommendationCard';
@@ -49,7 +49,7 @@ function RecentBadges() {
             <Card sx={{ p: 2.5, display: 'grid', gap: 2, gridTemplateColumns: 'minmax(0, 1fr)' }}>
               {recent.map((badge) => (
                 <Box key={badge.code} sx={{ display: 'flex', gap: 1.75, alignItems: 'center' }}>
-                  <Box sx={{ color: badge.tier === 'GOLD' ? gold : neon[300], display: 'grid', placeItems: 'center',
+                  <Box sx={{ color: badge.tier === 'GOLD' ? accent.gold : accent.neon, display: 'grid', placeItems: 'center',
                     width: 44, height: 44, flexShrink: 0, borderRadius: '50%', background: surface.raised }}>
                     <AppIcon name={badge.icon} />
                   </Box>

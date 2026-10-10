@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import { useDeferredValue, useState } from 'react';
-import { neon } from '@/app/theme/tokens';
+import { accent } from '@/app/theme/tokens';
 import { useSky } from '@/features/sky/api';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { AppIcon } from '@/shared/ui/icons';
@@ -55,9 +55,9 @@ export default function LessonsPage() {
               {constellations.map((c) => (
                 <Box component="section" key={c.slug}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5, flexWrap: 'wrap' }}>
-                    <AppIcon name={c.icon} sx={{ color: neon[300] }} />
+                    <AppIcon name={c.icon} sx={{ color: accent.neon }} />
                     <Typography variant="h5" component="h2">{c.name}</Typography>
-                    <Typography variant="overline" sx={{ color: neon[300] }}>{c.constellation} takımyıldızı</Typography>
+                    <Typography variant="overline" sx={{ color: accent.neon }}>{c.constellation} takımyıldızı</Typography>
                     <Box sx={{ ml: { sm: 'auto' }, width: { xs: '100%', sm: 220 }, display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <LinearProgress variant="determinate" value={(c.completed / c.total) * 100} sx={{ flex: 1 }}
                         aria-label={`${c.name} ilerlemesi`} />

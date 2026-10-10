@@ -1,13 +1,17 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { fonts, gold, ink, line, radius, scrim, shadow, surface } from '../tokens';
+import { cssVariables, darkScheme, lightScheme, schemeSelector } from '../schemes';
+import { atmosphere, fonts, gold, ink, line, onGold, radius, shadow, surface } from '../tokens';
 
-/** Cards, dialogs and floating layers: flat ink surfaces with a hairline edge, never a glow. */
+/** Cards, dialogs and floating layers: flat surfaces with a hairline edge, never a glow. */
 export const surfaces: Components<Omit<Theme, 'components'>> = {
   MuiCssBaseline: {
     styleOverrides: {
+      // The design tokens of both schemes; the light block wins whenever <html data-theme="light">.
+      [schemeSelector('dark')]: cssVariables(darkScheme),
+      [schemeSelector('light')]: cssVariables(lightScheme),
       html: { WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' },
-      body: { minHeight: '100vh', backgroundColor: surface.canvas },
-      '::selection': { background: gold, color: surface.canvas },
+      body: { minHeight: '100vh', backgroundColor: surface.canvas, color: ink.primary },
+      '::selection': { background: gold, color: onGold },
       '*::-webkit-scrollbar': { width: 10, height: 10 },
       '*::-webkit-scrollbar-thumb': { background: line.strong, borderRadius: 8 },
       '*::-webkit-scrollbar-thumb:hover': { background: line.hover },
@@ -41,7 +45,7 @@ export const surfaces: Components<Omit<Theme, 'components'>> = {
         borderRadius: radius.card,
         boxShadow: shadow.floating,
       },
-      backdrop: { backgroundColor: scrim },
+      backdrop: { backgroundColor: atmosphere.scrim },
     },
   },
   MuiPopover: {

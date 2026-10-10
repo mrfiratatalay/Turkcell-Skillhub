@@ -7,7 +7,7 @@ import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect } from 'react';
-import { fonts, gold, ink, line, neon, surface, tint } from '@/app/theme/tokens';
+import { accent, fonts, gold, ink, line, onGold, outline, surface, tint } from '@/app/theme/tokens';
 import type { Quiz } from './api';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
@@ -47,14 +47,14 @@ export function QuestionStep({ quiz, index, answers, submitting, onAnswer, onInd
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-        <Typography sx={{ fontFamily: fonts.mono, color: neon[300], fontWeight: 700 }}>
+        <Typography sx={{ fontFamily: fonts.mono, color: accent.neon, fontWeight: 700 }}>
           SORU {index + 1}/{quiz.questions.length}
         </Typography>
         <Box sx={{ display: 'flex', gap: 1 }} aria-hidden>
           {quiz.questions.map((q, i) => (
             <Box key={q.id} sx={{ width: i === index ? 28 : 10, height: 10, borderRadius: 99, transition: 'all .25s',
               background: answers[q.id] !== undefined ? gold : line.strong,
-              boxShadow: i === index ? `0 0 0 2px ${neon[300]}` : 'none' }} />
+              boxShadow: i === index ? `0 0 0 2px ${accent.neon}` : 'none' }} />
           ))}
         </Box>
       </Box>
@@ -82,16 +82,16 @@ export function QuestionStep({ quiz, index, answers, submitting, onAnswer, onInd
                     sx={{
                       justifyContent: 'flex-start', gap: 2, p: 2, borderRadius: '16px', textAlign: 'left',
                       background: selected ? tint.gold : surface.input,
-                      boxShadow: `inset 0 0 0 1px ${selected ? 'rgba(253,196,11,.6)' : line.default}`,
+                      boxShadow: `inset 0 0 0 1px ${selected ? outline.reward : line.default}`,
                       transition: 'box-shadow .15s, background .15s, transform .1s',
-                      '&:hover': { boxShadow: `inset 0 0 0 1px ${selected ? 'rgba(253,196,11,.6)' : line.hover}` },
+                      '&:hover': { boxShadow: `inset 0 0 0 1px ${selected ? outline.reward : line.hover}` },
                       '&:active': { transform: 'scale(.99)' },
-                      '&:focus-visible': { outline: `2px solid ${neon[300]}`, outlineOffset: 2 },
+                      '&:focus-visible': { outline: `2px solid ${accent.neon}`, outlineOffset: 2 },
                     }}
                   >
                     <Box sx={{ width: 36, height: 36, flexShrink: 0, borderRadius: '11px', display: 'grid', placeItems: 'center',
                       fontWeight: 800, fontFamily: fonts.mono, background: selected ? gold : surface.raised,
-                      color: selected ? surface.canvas : ink.secondary }}>
+                      color: selected ? onGold : ink.secondary }}>
                       {LETTERS[i]}
                     </Box>
                     <Typography sx={{ fontSize: 17, fontWeight: selected ? 700 : 500, color: ink.primary }}>

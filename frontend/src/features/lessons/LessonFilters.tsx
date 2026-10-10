@@ -5,7 +5,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { gold, ink, outline, surface } from '@/app/theme/tokens';
+import { accent, ink, outline, surface } from '@/app/theme/tokens';
 import type { Constellation } from '@/features/sky/api';
 import type { Difficulty } from '@/shared/domain/types';
 import { AppIcon } from '@/shared/ui/icons';
@@ -42,7 +42,7 @@ export function LessonFilters({ filter, constellations, onChange }: LessonFilter
                 height: 38,
                 px: 0.5,
                 ...(selected && { background: surface.raised, color: ink.primary, borderColor: outline.reward,
-                  '& .MuiChip-icon': { color: gold }, '&.MuiChip-clickable:hover': { background: surface.raised } }),
+                  '& .MuiChip-icon': { color: accent.gold }, '&.MuiChip-clickable:hover': { background: surface.raised } }),
               }}
             />
           );

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { gold } from '@/app/theme/tokens';
+import { accent, onNight } from '@/app/theme/tokens';
 import { AsyncView, EmptyState, SkeletonBlock } from '@/shared/ui/AsyncView';
 import { PageHeader } from '@/shared/ui/PageHeader';
 import { SectionTitle } from '@/shared/ui/SectionTitle';
@@ -35,7 +35,7 @@ export default function CityLightsPage() {
           <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', lg: 'minmax(0, 2.2fr) 1fr' } }}>
             <SkyWindow sx={{ p: { xs: 1.5, sm: 3 }, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <TurkeyNightMap cities={data.cities} selectedCityId={cityId} onSelect={setCityId} />
-              <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mt: 1 }}>
+              <Typography variant="body2" sx={{ textAlign: 'center', mt: 1, color: onNight.secondary }}>
                 Bir şehre dokunarak o şehrin sıralamasını gör
               </Typography>
             </SkyWindow>
@@ -51,7 +51,7 @@ export default function CityLightsPage() {
         <SectionTitle
           action={cityName && (
             <Chip icon={<PlaceRounded />} label={cityName} onDelete={() => setCityId(null)} deleteIcon={<CloseRounded />}
-              sx={{ '& .MuiChip-icon': { color: gold } }} />
+              sx={{ '& .MuiChip-icon': { color: accent.gold } }} />
           )}
         >
           {cityName ? `${cityName} sıralaması` : 'Türkiye sıralaması'}
