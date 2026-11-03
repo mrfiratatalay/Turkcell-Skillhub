@@ -11,9 +11,10 @@ target/
 
 # IDE & OS
 .idea/
+.vscode/
 *.iml
 .DS_Store
 Thumbs.db
 
-# Official Turkcell Code Night visuals: local design reference only, never published
-tasarim/referanslar/
+# Local design workspace (official Code Night reference visuals, concept drafts): never published
+tasarim/

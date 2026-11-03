@@ -1,4 +1,4 @@
-// "Sakin Gece" design tokens (concept and brief: tasarim/sakin-gece/).
+// "Sakin Gece" design tokens (the reasoning behind them: docs/08-arayuz-ve-tasarim.md).
 // Brand colors are measured from the official Turkcell Code Night visuals and never change. Every other
 // token is a CSS variable whose value comes from the active color scheme (schemes.ts).
 import { cssVar, darkScheme, type SchemeTokens } from './schemes';
